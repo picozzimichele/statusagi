@@ -20,7 +20,7 @@ import {
 
 export const description = "A bar chart";
 
-const chartData = [
+const chartDataExample = [
     { month: "January", desktop: 186 },
     { month: "February", desktop: 305 },
     { month: "March", desktop: 237 },
@@ -29,14 +29,20 @@ const chartData = [
     { month: "June", desktop: 214 },
 ];
 
-const chartConfig = {
+const chartConfigExample = {
     desktop: {
         label: "Desktop",
         color: "#60a5fa",
     },
 } satisfies ChartConfig;
 
-export function ChartBarDefault() {
+export function ChartBarDefault({
+    chartData = chartDataExample,
+    chartConfig = chartConfigExample,
+}: {
+    chartData?: typeof chartDataExample;
+    chartConfig?: typeof chartConfigExample;
+}) {
     return (
         <Card>
             <CardHeader>
