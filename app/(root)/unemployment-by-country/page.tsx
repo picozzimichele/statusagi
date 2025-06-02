@@ -31,7 +31,12 @@ export default async function Page() {
 
         for (const key in target) {
             // Check if key is a year and value is a valid number
-            if (/^\d{4}$/.test(key) && target[key] && !isNaN(Number(target[key]))) {
+            if (
+                /^\d{4}$/.test(key) &&
+                target[key] &&
+                !isNaN(Number(target[key])) &&
+                target[key] !== "NA"
+            ) {
                 result.push({
                     year: key,
                     rate: parseFloat(target[key]),
@@ -102,7 +107,7 @@ export default async function Page() {
     const chartConfig = {
         desktop: {
             label: "Unemployment Rate",
-            color: "#60a5fa",
+            color: "#BDDDE4",
         },
     };
 
@@ -116,6 +121,8 @@ export default async function Page() {
                     dataKeyBar="rate"
                     chartData={unemploymentRates1}
                     chartConfig={chartConfig}
+                    cardTitle="Unemployment Rate in the United States"
+                    cardDescription="From 1980 to 2024 in % of the total labor force"
                 />
             </div>
         </div>

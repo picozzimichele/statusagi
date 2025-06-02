@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
     Card,
@@ -17,8 +17,6 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-
-export const description = "A bar chart";
 
 const chartDataExample = [
     { month: "1980", desktop: 7.175 },
@@ -37,11 +35,15 @@ const chartConfigExample = {
 } satisfies ChartConfig;
 
 export function ChartBarDefault({
+    cardTitle,
+    cardDescription,
     dataKeyXAxis,
     dataKeyBar,
     chartData,
     chartConfig,
 }: {
+    cardTitle?: string;
+    cardDescription?: string;
     dataKeyXAxis: string;
     dataKeyBar: string;
     chartData?: any[];
@@ -50,8 +52,8 @@ export function ChartBarDefault({
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Bar Chart</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>{cardTitle}</CardTitle>
+                <CardDescription>{cardDescription}</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
@@ -66,7 +68,13 @@ export function ChartBarDefault({
                             tickFormatter={(value) => value.slice(0, 4)}
                         />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Bar dataKey={dataKeyBar} fill="var(--color-desktop)" radius={6} />
+                        <Bar dataKey={dataKeyBar} fill="var(--color-desktop)" radius={6}>
+                            <LabelList
+                                position="top"
+                                offset={12}
+                                className="fill-foreground hidden md:block text-[8px]"
+                            />
+                        </Bar>
                     </BarChart>
                 </ChartContainer>
             </CardContent>
