@@ -41,6 +41,7 @@ export function ChartBarDefault({
     dataKeyBar,
     chartData,
     chartConfig,
+    percentageChange,
 }: {
     cardTitle?: string;
     cardDescription?: string;
@@ -48,6 +49,7 @@ export function ChartBarDefault({
     dataKeyBar: string;
     chartData?: any[];
     chartConfig: ChartConfig;
+    percentageChange?: number;
 }) {
     return (
         <Card>
@@ -80,10 +82,16 @@ export function ChartBarDefault({
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 leading-none font-medium">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                    {percentageChange && (
+                        <span>
+                            Trending {percentageChange > 0 ? "up" : "down"}️ by{" "}
+                            {percentageChange.toFixed(1)}%
+                        </span>
+                    )}
+                    <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="text-muted-foreground leading-none">
-                    Showing total visitors for the last 6 months
+                    Compared to the previous period
                 </div>
             </CardFooter>
         </Card>

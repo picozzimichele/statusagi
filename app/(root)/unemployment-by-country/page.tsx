@@ -2,6 +2,7 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
+import { calculatePercentageChange } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -49,7 +50,14 @@ export default async function Page() {
     }
 
     const unemploymentRates = getUnemploymentRatesByCountry(data, "United States");
-    console.log("Unemployment Rates for United States:", unemploymentRates);
+
+    const percentageChangeOverLastYear =
+        unemploymentRates[unemploymentRates.length - 1]?.rate -
+        unemploymentRates[unemploymentRates.length - 2]?.rate;
+
+    console.log("Percentage Change Over Last Year:", percentageChangeOverLastYear);
+
+    //console.log("Unemployment Rates for United States:", unemploymentRates);
 
     const chartConfig = {
         desktop: {
@@ -70,6 +78,7 @@ export default async function Page() {
                     chartConfig={chartConfig}
                     cardTitle="Unemployment Rate in the United States"
                     cardDescription="From 1980 to 2024 in % of the total labor force"
+                    percentageChange={percentageChangeOverLastYear}
                 />
             </div>
         </div>
