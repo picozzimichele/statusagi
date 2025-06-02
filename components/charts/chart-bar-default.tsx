@@ -69,7 +69,17 @@ export function ChartBarDefault({
                             axisLine={false}
                             tickFormatter={(value) => value.slice(0, 4)}
                         />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                        <ChartTooltip
+                            cursor={true}
+                            content={
+                                <ChartTooltipContent
+                                    className="w-[150px]"
+                                    nameKey="views"
+                                    labelKey="year"
+                                    hideLabel
+                                />
+                            }
+                        />
                         <Bar dataKey={dataKeyBar} fill="var(--color-desktop)" radius={6}>
                             <LabelList
                                 position="top"

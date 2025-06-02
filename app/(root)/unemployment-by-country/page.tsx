@@ -61,7 +61,7 @@ export default async function Page() {
 
     const chartConfig = {
         desktop: {
-            label: "Unemployment Rate",
+            label: "rate",
             color: "#BDDDE4",
         },
     };
