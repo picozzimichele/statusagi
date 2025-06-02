@@ -21,7 +21,7 @@ import {
 export const description = "A bar chart";
 
 const chartDataExample = [
-    { month: "January", desktop: 186 },
+    { month: "1980", desktop: 7.175 },
     { month: "February", desktop: 305 },
     { month: "March", desktop: 237 },
     { month: "April", desktop: 73 },
@@ -37,11 +37,15 @@ const chartConfigExample = {
 } satisfies ChartConfig;
 
 export function ChartBarDefault({
-    chartData = chartDataExample,
-    chartConfig = chartConfigExample,
+    dataKeyXAxis,
+    dataKeyBar,
+    chartData,
+    chartConfig,
 }: {
-    chartData?: typeof chartDataExample;
-    chartConfig?: typeof chartConfigExample;
+    dataKeyXAxis: string;
+    dataKeyBar: string;
+    chartData?: any[];
+    chartConfig: ChartConfig;
 }) {
     return (
         <Card>
@@ -54,14 +58,15 @@ export function ChartBarDefault({
                     <BarChart accessibilityLayer data={chartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            //the dataKey prop is used to specify which key in the data objects should be used for the x-axis
+                            dataKey={dataKeyXAxis}
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
+                            tickFormatter={(value) => value.slice(0, 4)}
                         />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+                        <Bar dataKey={dataKeyBar} fill="var(--color-desktop)" radius={6} />
                     </BarChart>
                 </ChartContainer>
             </CardContent>
