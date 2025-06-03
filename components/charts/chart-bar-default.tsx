@@ -72,7 +72,11 @@ export function ChartBarDefault({
                         <ChartTooltip
                             cursor={true}
                             content={
-                                <ChartTooltipContent className="w-[200px]" hideLabel={false} />
+                                <ChartTooltipContent
+                                    className="w-[200px]"
+                                    hideLabel={false}
+                                    valueFormatter={(value) => `${value}%`}
+                                />
                             }
                         />
                         <Bar dataKey={dataKeyBar} fill="var(--color-rate)" radius={6}>
