@@ -77,7 +77,7 @@ export default async function Page({ searchParams }: Props) {
         <div>
             Unemployment by country
             <div>
-                <Combobox initialValue="Select Country..." />
+                <Combobox initialValue="Select Country..." searchParams={searchParams} />
                 <ChartBarDefault
                     dataKeyXAxis="year"
                     dataKeyBar="rate"

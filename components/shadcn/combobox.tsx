@@ -41,9 +41,11 @@ const frameworks = [
 export function Combobox({
     initialValue,
     dropDownData = frameworks,
+    searchParams,
 }: {
     initialValue: string;
     dropDownData?: { value: string; label: string }[];
+    searchParams: { [key: string]: string | string[] | undefined };
 }) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("");
