@@ -12,15 +12,25 @@ type UnemploymentEntry = {
     rate: number;
 };
 
-export default async function Page() {
+type Props = {
+    searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function Page({ searchParams }: Props) {
+    // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("/lib/data/unemployment-by-country.json");
+    const selectedCountryParam = (searchParams.country as string) || "";
+
+    const chartConfig = {
+        rate: {
+            label: "Unemployment Rate",
+            color: "#BDDDE4",
+        },
+    };
 
     function getAllCountries(data: CountryData[]): string[] {
         return data.map((entry) => entry.Country).filter(Boolean);
     }
-
-    const allCountries = getAllCountries(data);
-    console.log("All Countries:", allCountries);
 
     // Function to extract unemployment rates for a specific country
     function getUnemploymentRatesByCountry(
@@ -54,18 +64,14 @@ export default async function Page() {
         return result;
     }
 
+    const allCountries = getAllCountries(data);
+    console.log("All Countries:", allCountries);
+
     const unemploymentRates = getUnemploymentRatesByCountry(data, "United States");
 
     const percentageChangeOverLastYear =
         unemploymentRates[unemploymentRates.length - 1]?.rate -
         unemploymentRates[unemploymentRates.length - 2]?.rate;
-
-    const chartConfig = {
-        rate: {
-            label: "Unemployment Rate",
-            color: "#BDDDE4",
-        },
-    };
 
     return (
         <div>
