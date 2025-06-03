@@ -74,13 +74,13 @@ export function ChartBarDefault({
                             content={
                                 <ChartTooltipContent
                                     className="w-[150px]"
-                                    nameKey="views"
+                                    nameKey="rate"
                                     labelKey="year"
                                     hideLabel
                                 />
                             }
                         />
-                        <Bar dataKey={dataKeyBar} fill="var(--color-desktop)" radius={6}>
+                        <Bar dataKey={dataKeyBar} fill="var(--color-rate)" radius={6}>
                             <LabelList
                                 position="top"
                                 offset={12}

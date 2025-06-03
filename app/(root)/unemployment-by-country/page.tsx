@@ -2,7 +2,6 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
-import { calculatePercentageChange } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -60,8 +59,8 @@ export default async function Page() {
     //console.log("Unemployment Rates for United States:", unemploymentRates);
 
     const chartConfig = {
-        desktop: {
-            label: "rate",
+        rate: {
+            label: "Unemployment Rate",
             color: "#BDDDE4",
         },
     };
