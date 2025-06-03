@@ -38,7 +38,13 @@ const frameworks = [
     },
 ];
 
-export function Combobox({ initialValue }: { initialValue: string }) {
+export function Combobox({
+    initialValue,
+    dropDownData = frameworks,
+}: {
+    initialValue: string;
+    dropDownData?: { value: string; label: string }[];
+}) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("");
 
@@ -52,7 +58,7 @@ export function Combobox({ initialValue }: { initialValue: string }) {
                     className="w-[200px] justify-between"
                 >
                     {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
+                        ? dropDownData.find((dropDownData) => dropDownData.value === value)?.label
                         : initialValue}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -63,20 +69,22 @@ export function Combobox({ initialValue }: { initialValue: string }) {
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
-                            {frameworks.map((framework) => (
+                            {dropDownData.map((dropDownData) => (
                                 <CommandItem
-                                    key={framework.value}
-                                    value={framework.value}
+                                    key={dropDownData.value}
+                                    value={dropDownData.value}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue);
                                         setOpen(false);
                                     }}
                                 >
-                                    {framework.label}
+                                    {dropDownData.label}
                                     <Check
                                         className={cn(
                                             "ml-auto",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                            value === dropDownData.value
+                                                ? "opacity-100"
+                                                : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>

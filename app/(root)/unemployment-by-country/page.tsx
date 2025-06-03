@@ -14,7 +14,13 @@ type UnemploymentEntry = {
 
 export default async function Page() {
     const data = await parseLocalJSON("/lib/data/unemployment-by-country.json");
-    //console.log("Unemployment by Country Data:", data);
+
+    function getAllCountries(data: CountryData[]): string[] {
+        return data.map((entry) => entry.Country).filter(Boolean);
+    }
+
+    const allCountries = getAllCountries(data);
+    console.log("All Countries:", allCountries);
 
     // Function to extract unemployment rates for a specific country
     function getUnemploymentRatesByCountry(
@@ -53,10 +59,6 @@ export default async function Page() {
     const percentageChangeOverLastYear =
         unemploymentRates[unemploymentRates.length - 1]?.rate -
         unemploymentRates[unemploymentRates.length - 2]?.rate;
-
-    console.log("unemploymentRates:", unemploymentRates);
-
-    //console.log("Unemployment Rates for United States:", unemploymentRates);
 
     const chartConfig = {
         rate: {
