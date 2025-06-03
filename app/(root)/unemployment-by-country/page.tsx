@@ -54,7 +54,7 @@ export default async function Page() {
         unemploymentRates[unemploymentRates.length - 1]?.rate -
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
-    console.log("Percentage Change Over Last Year:", percentageChangeOverLastYear);
+    console.log("unemploymentRates:", unemploymentRates);
 
     //console.log("Unemployment Rates for United States:", unemploymentRates);
 
