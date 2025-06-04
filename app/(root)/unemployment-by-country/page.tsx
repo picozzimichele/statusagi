@@ -5,6 +5,7 @@ import { Combobox } from "@/components/shadcn/combobox";
 import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, FolderSearch } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import Link from "next/link";
+import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 
 type CountryData = {
     [key: string]: string;
@@ -23,6 +24,7 @@ export default async function Page({ searchParams }: Props) {
     // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("/lib/data/unemployment-by-country.json");
     const { country } = await searchParams;
+    const currentLastDataYear = 2024;
 
     const chartConfig = {
         rate: {
@@ -67,6 +69,33 @@ export default async function Page({ searchParams }: Props) {
         return result;
     }
 
+    function getTopCountriesByUnemploymentRate(
+        dataset: CountryData[],
+        topN: number = 10
+    ): { country: string; rate: number }[] {
+        const countryRates: { country: string; rate: number }[] = [];
+        dataset.forEach((entry) => {
+            const countryName = entry.Country;
+            for (const key in entry) {
+                // Check if key is a year and value is a valid number
+                if (
+                    /^\d{4}$/.test(key) &&
+                    parseInt(key) === currentLastDataYear &&
+                    entry[key] &&
+                    !isNaN(Number(entry[key])) &&
+                    entry[key] !== "NA"
+                ) {
+                    countryRates.push({
+                        country: countryName,
+                        rate: parseFloat(Number(entry[key]).toFixed(1)),
+                    });
+                }
+            }
+        });
+        // Sort by rate in descending order and take the top N
+        return countryRates.sort((a, b) => b.rate - a.rate).slice(0, topN);
+    }
+
     const allCountries = getAllCountries(data);
     const allCountriesTransformed = allCountries.map((country) => ({
         value: country,
@@ -77,6 +106,9 @@ export default async function Page({ searchParams }: Props) {
         data,
         (country as string) || "United States"
     );
+    // Get the top 10 countries by unemployment rate
+    const topCountries = getTopCountriesByUnemploymentRate(data, 10);
+    console.log("Top 10 countries by unemployment rate:", topCountries);
 
     console.log(`Unemployment rates for ${country}:`, unemploymentRates);
 
@@ -142,11 +174,12 @@ export default async function Page({ searchParams }: Props) {
                         />
                     )}
                 </div>
-                <div className="flex flex-col items-start gap-2 w-full lg:w-1/4">
+                <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}
-                    <Card className="flex w-full">
+                    <Card className="flex w-full flex-1">
                         <CardHeader>
                             <CardTitle>
+                                {}
                                 {percentageChangeOverLastYear && (
                                     <span>
                                         Trending {percentageChangeOverLastYear > 0 ? "up" : "down"}️
@@ -161,7 +194,7 @@ export default async function Page({ searchParams }: Props) {
                         </CardHeader>
                     </Card>
                     {/* Source Card */}
-                    <Card className="flex w-full">
+                    <Card className="flex w-full flex-1">
                         <CardHeader>
                             <CardTitle>Used Data Source</CardTitle>
                             <CardDescription>
@@ -179,6 +212,8 @@ export default async function Page({ searchParams }: Props) {
                             </CardAction>
                         </CardHeader>
                     </Card>
+                    {/* Top Countries Chart */}
+                    <ChartBarMixed />
                 </div>
             </div>
         </div>
