@@ -2,7 +2,7 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
-import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch } from "lucide-react";
+import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, FolderSearch } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import Link from "next/link";
 
@@ -109,6 +109,7 @@ export default async function Page({ searchParams }: Props) {
             {/* Chart */}
             <div className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+                    {/* If no unemployment data is found for the selected country */}
                     {unemploymentRates.length === 0 && (
                         <Card className="flex w-full">
                             <CardHeader>
@@ -120,11 +121,12 @@ export default async function Page({ searchParams }: Props) {
                                     list
                                 </CardDescription>
                                 <CardAction>
-                                    <TrendingUp className="h-4 w-4" />
+                                    <FolderSearch className="h-4 w-4" />
                                 </CardAction>
                             </CardHeader>
                         </Card>
                     )}
+                    {/* Display the chart */}
                     {unemploymentRates.length > 0 && (
                         <ChartBarDefault
                             dataKeyXAxis="year"
