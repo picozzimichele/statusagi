@@ -94,7 +94,7 @@ export default async function Page({ searchParams }: Props) {
                     dataKeyBar="rate"
                     chartData={unemploymentRates}
                     chartConfig={chartConfig}
-                    cardTitle="Unemployment Rate in the United States"
+                    cardTitle={`Unemployment Rate in ${country as string}`}
                     cardDescription="From 1980 to 2024 in % of the total labor force"
                     percentageChange={percentageChangeOverLastYear}
                 />

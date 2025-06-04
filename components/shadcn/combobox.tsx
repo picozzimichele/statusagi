@@ -75,32 +75,34 @@ export function Combobox({
                         <CommandEmpty>No Country Found.</CommandEmpty>
                         <CommandGroup>
                             {dropDownData.map((dropDownData) => (
-                                <CommandItem
+                                <Link
                                     key={dropDownData.value}
-                                    className="cursor-pointer"
-                                    value={dropDownData.value}
-                                    onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue);
-                                        setOpen(false);
-                                    }}
+                                    className="bg-green-100 w-full"
+                                    scroll={false}
+                                    href={`?${new URLSearchParams({
+                                        country: dropDownData.value,
+                                    })}`}
                                 >
-                                    <Link
-                                        className="bg-green-100 w-full"
-                                        scroll={false}
-                                        href={`?${new URLSearchParams({ country: value })}`}
+                                    <CommandItem
+                                        className="cursor-pointer"
+                                        value={dropDownData.value}
+                                        onSelect={(currentValue) => {
+                                            setValue(currentValue === value ? "" : currentValue);
+                                            setOpen(false);
+                                        }}
                                     >
                                         {dropDownData.label}
-                                    </Link>
 
-                                    <Check
-                                        className={cn(
-                                            "ml-auto",
-                                            value === dropDownData.value
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                        )}
-                                    />
-                                </CommandItem>
+                                        <Check
+                                            className={cn(
+                                                "ml-auto",
+                                                value === dropDownData.value
+                                                    ? "opacity-100"
+                                                    : "opacity-0"
+                                            )}
+                                        />
+                                    </CommandItem>
+                                </Link>
                             ))}
                         </CommandGroup>
                     </CommandList>
