@@ -108,9 +108,6 @@ export default async function Page({ searchParams }: Props) {
     );
     // Get the top 10 countries by unemployment rate
     const topCountries = getTopCountriesByUnemploymentRate(data, 10);
-    console.log("Top 10 countries by unemployment rate:", topCountries);
-
-    console.log(`Unemployment rates for ${country}:`, unemploymentRates);
 
     const beginningYear = unemploymentRates[0]?.year || "1980";
     const previousYear = unemploymentRates[unemploymentRates.length - 2]?.year || "2023";
@@ -169,14 +166,12 @@ export default async function Page({ searchParams }: Props) {
                                 (country as string) || "United States"
                             }`}
                             cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
-                            percentageChange={percentageChangeOverLastYear}
-                            previousPeriod={`${previousYear} to ${endingYear}`}
                         />
                     )}
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}
-                    <Card className="flex w-full flex-1">
+                    <Card className="flex w-full">
                         <CardHeader>
                             <CardTitle>
                                 {/* TODO handle NaN Case */}
@@ -194,7 +189,7 @@ export default async function Page({ searchParams }: Props) {
                         </CardHeader>
                     </Card>
                     {/* Source Card */}
-                    <Card className="flex w-full flex-1">
+                    <Card className="flex w-full">
                         <CardHeader>
                             <CardTitle>Used Data Source</CardTitle>
                             <CardDescription>

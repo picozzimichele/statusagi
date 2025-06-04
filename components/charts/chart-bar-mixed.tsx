@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,7 +12,7 @@ import {
 
 export const description = "A mixed bar chart";
 
-const chartData = [
+const chartDataExample = [
     { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
     { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
     { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
@@ -53,17 +53,18 @@ export function ChartBarMixed({
 }: {
     title?: string;
     description?: string;
-    chartData?: any[];
+    chartData: any[];
 }) {
     return (
-        <Card className="flex w-full flex-1 border-0">
+        <Card className="flex w-full h-full flex-1 border-0">
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig}>
+            <CardContent className="flex-1 flex overflow-scroll scrollbar-hide">
+                <ChartContainer className="flex-1 flex" config={chartConfig}>
                     <BarChart
+                        className="flex-1 h-full flex"
                         accessibilityLayer
                         data={chartData}
                         layout="vertical"
@@ -77,11 +78,9 @@ export function ChartBarMixed({
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) =>
-                                chartConfig[value as keyof typeof chartConfig]?.label
-                            }
+                            hide
                         />
-                        <XAxis dataKey="rate" type="number" hide />
+                        <XAxis dataKey="rate" type="number" hide={false} />
                         <ChartTooltip
                             cursor={false}
                             content={
@@ -91,7 +90,21 @@ export function ChartBarMixed({
                                 />
                             }
                         />
-                        <Bar dataKey="rate" layout="vertical" radius={5} />
+                        <Bar dataKey="rate" layout="vertical" radius={5}>
+                            <LabelList
+                                dataKey="country"
+                                position="insideLeft"
+                                offset={8}
+                                className="fill-(--color-label) text-[8px]"
+                            />
+                            <LabelList
+                                className="fill-foreground text-[8px]"
+                                dataKey="rate"
+                                position="right"
+                                offset={8}
+                                formatter={(value: number) => `${value}%`}
+                            />
+                        </Bar>
                     </BarChart>
                 </ChartContainer>
             </CardContent>

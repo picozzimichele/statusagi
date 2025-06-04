@@ -34,8 +34,6 @@ export function ChartBarDefault({
     dataKeyBar,
     chartData,
     chartConfig,
-    percentageChange,
-    previousPeriod,
 }: {
     cardTitle?: string;
     cardDescription?: string;
@@ -43,8 +41,6 @@ export function ChartBarDefault({
     dataKeyBar: string;
     chartData?: any[];
     chartConfig: ChartConfig;
-    percentageChange?: number;
-    previousPeriod?: string;
 }) {
     return (
         <Card className="flex flex-1 border-0">
