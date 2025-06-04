@@ -65,7 +65,6 @@ export default async function Page({ searchParams }: Props) {
     }
 
     const allCountries = getAllCountries(data);
-    console.log("All Countries:", allCountries);
     const allCountriesTransformed = allCountries.map((country) => ({
         value: country,
         label: country,
@@ -75,6 +74,10 @@ export default async function Page({ searchParams }: Props) {
         data,
         (country as string) || "United States"
     );
+    //TODO If no unemployment rates are found for the specified country, return an empty chart
+
+    const beginningYear = unemploymentRates[0]?.year || "1980";
+    const endingYear = unemploymentRates[unemploymentRates.length - 1]?.year || "2024";
 
     const percentageChangeOverLastYear =
         unemploymentRates[unemploymentRates.length - 1]?.rate -
@@ -92,15 +95,22 @@ export default async function Page({ searchParams }: Props) {
                         country: country as string,
                     }}
                 />
-                <ChartBarDefault
-                    dataKeyXAxis="year"
-                    dataKeyBar="rate"
-                    chartData={unemploymentRates}
-                    chartConfig={chartConfig}
-                    cardTitle={`Unemployment Rate in ${(country as string) || "United States"}`}
-                    cardDescription="From 1980 to 2024 in % of the total labor force"
-                    percentageChange={percentageChangeOverLastYear}
-                />
+                {unemploymentRates.length === 0 && (
+                    <p className="text-red-500">
+                        No unemployment data found for the selected country.
+                    </p>
+                )}
+                {unemploymentRates.length > 0 && (
+                    <ChartBarDefault
+                        dataKeyXAxis="year"
+                        dataKeyBar="rate"
+                        chartData={unemploymentRates}
+                        chartConfig={chartConfig}
+                        cardTitle={`Unemployment Rate in ${(country as string) || "United States"}`}
+                        cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
+                        percentageChange={percentageChangeOverLastYear}
+                    />
+                )}
             </div>
         </div>
     );
