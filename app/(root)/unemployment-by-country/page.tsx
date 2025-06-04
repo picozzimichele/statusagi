@@ -71,7 +71,10 @@ export default async function Page({ searchParams }: Props) {
         label: country,
     }));
 
-    const unemploymentRates = getUnemploymentRatesByCountry(data, "United States");
+    const unemploymentRates = getUnemploymentRatesByCountry(
+        data,
+        (country as string) || "United States"
+    );
 
     const percentageChangeOverLastYear =
         unemploymentRates[unemploymentRates.length - 1]?.rate -
@@ -94,7 +97,7 @@ export default async function Page({ searchParams }: Props) {
                     dataKeyBar="rate"
                     chartData={unemploymentRates}
                     chartConfig={chartConfig}
-                    cardTitle={`Unemployment Rate in ${country as string}`}
+                    cardTitle={`Unemployment Rate in ${(country as string) || "United States"}`}
                     cardDescription="From 1980 to 2024 in % of the total labor force"
                     percentageChange={percentageChangeOverLastYear}
                 />
