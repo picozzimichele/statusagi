@@ -14,6 +14,7 @@ import {
     CommandList,
 } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import Link from "next/link";
 
 const frameworks = [
     {
@@ -41,14 +42,16 @@ const frameworks = [
 export function Combobox({
     initialValue,
     dropDownData = frameworks,
-    searchParams,
+    paramCountry,
+    href,
 }: {
     initialValue: string;
     dropDownData?: { value: string; label: string }[];
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    paramCountry?: string;
+    href: { [key: string]: string };
 }) {
     const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = React.useState(paramCountry || "");
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -69,18 +72,26 @@ export function Combobox({
                 <Command>
                     <CommandInput placeholder={initialValue} className="h-9" />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No Country Found.</CommandEmpty>
                         <CommandGroup>
                             {dropDownData.map((dropDownData) => (
                                 <CommandItem
                                     key={dropDownData.value}
+                                    className="cursor-pointer"
                                     value={dropDownData.value}
                                     onSelect={(currentValue) => {
                                         setValue(currentValue === value ? "" : currentValue);
                                         setOpen(false);
                                     }}
                                 >
-                                    {dropDownData.label}
+                                    <Link
+                                        className="bg-green-100 w-full"
+                                        scroll={false}
+                                        href={`?${new URLSearchParams({ country: value })}`}
+                                    >
+                                        {dropDownData.label}
+                                    </Link>
+
                                     <Check
                                         className={cn(
                                             "ml-auto",

@@ -70,7 +70,6 @@ export default async function Page({ searchParams }: Props) {
         value: country,
         label: country,
     }));
-    console.log("All Countries Transformed:", allCountriesTransformed);
 
     const unemploymentRates = getUnemploymentRatesByCountry(data, "United States");
 
@@ -82,7 +81,14 @@ export default async function Page({ searchParams }: Props) {
         <div>
             Unemployment by country
             <div>
-                <Combobox initialValue="Select Country..." searchParams={searchParams} />
+                <Combobox
+                    initialValue="Select Country..."
+                    paramCountry={country as string}
+                    dropDownData={allCountriesTransformed}
+                    href={{
+                        country: country as string,
+                    }}
+                />
                 <ChartBarDefault
                     dataKeyXAxis="year"
                     dataKeyBar="rate"
