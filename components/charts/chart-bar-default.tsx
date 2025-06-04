@@ -42,6 +42,7 @@ export function ChartBarDefault({
     chartData,
     chartConfig,
     percentageChange,
+    previousPeriod,
 }: {
     cardTitle?: string;
     cardDescription?: string;
@@ -50,6 +51,7 @@ export function ChartBarDefault({
     chartData?: any[];
     chartConfig: ChartConfig;
     percentageChange?: number;
+    previousPeriod?: string;
 }) {
     return (
         <Card>
@@ -100,7 +102,7 @@ export function ChartBarDefault({
                     <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="text-muted-foreground leading-none">
-                    Compared to the previous period
+                    {`Compared to the previous period: ${previousPeriod}`}
                 </div>
             </CardFooter>
         </Card>

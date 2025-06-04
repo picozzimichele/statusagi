@@ -2,6 +2,7 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
+import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 type CountryData = {
     [key: string]: string;
@@ -77,6 +78,7 @@ export default async function Page({ searchParams }: Props) {
     //TODO If no unemployment rates are found for the specified country, return an empty chart
 
     const beginningYear = unemploymentRates[0]?.year || "1980";
+    const previousYear = unemploymentRates[unemploymentRates.length - 2]?.year || "2023";
     const endingYear = unemploymentRates[unemploymentRates.length - 1]?.year || "2024";
 
     const percentageChangeOverLastYear =
@@ -84,8 +86,12 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div>
-            Unemployment by country
+        <div className="flex flex-col items-start gap-4 p-4 bg-green-50 max-w-7xl mx-auto">
+            {/* Title and section header */}
+            <div className="flex w-full bg-green-100">
+                <p className="font-medium">Unemployment rate by country</p>
+                <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
+            </div>
             <div>
                 <Combobox
                     initialValue="Select Country..."
@@ -109,6 +115,7 @@ export default async function Page({ searchParams }: Props) {
                         cardTitle={`Unemployment Rate in ${(country as string) || "United States"}`}
                         cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
                         percentageChange={percentageChangeOverLastYear}
+                        previousPeriod={`${previousYear} to ${endingYear}`}
                     />
                 )}
             </div>
