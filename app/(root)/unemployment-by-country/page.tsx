@@ -78,6 +78,8 @@ export default async function Page({ searchParams }: Props) {
         (country as string) || "United States"
     );
 
+    console.log(`Unemployment rates for ${country}:`, unemploymentRates);
+
     const beginningYear = unemploymentRates[0]?.year || "1980";
     const previousYear = unemploymentRates[unemploymentRates.length - 2]?.year || "2023";
     const endingYear = unemploymentRates[unemploymentRates.length - 1]?.year || "2024";
@@ -161,7 +163,12 @@ export default async function Page({ searchParams }: Props) {
                         <CardHeader>
                             <CardTitle>Used Data Source</CardTitle>
                             <CardDescription>
-                                <Link className="hover:underline" href="">
+                                <Link
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline"
+                                    href="https://www.imf.org/external/datamapper/LUR@WEO/OEMDC/ADVEC/WEOWORLD"
+                                >
                                     International Monetary Fund 2025
                                 </Link>
                             </CardDescription>
