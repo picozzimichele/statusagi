@@ -91,20 +91,6 @@ export function ChartBarDefault({
                     </BarChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                    {percentageChange && (
-                        <span>
-                            Trending {percentageChange > 0 ? "up" : "down"}️ by{" "}
-                            {percentageChange.toFixed(1)}%
-                        </span>
-                    )}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="text-muted-foreground leading-none">
-                    {`Compared to the previous period: ${previousPeriod}`}
-                </div>
-            </CardFooter>
         </Card>
     );
 }

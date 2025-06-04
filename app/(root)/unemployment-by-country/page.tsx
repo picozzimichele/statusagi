@@ -2,16 +2,9 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
-import { ChartNoAxesColumnIncreasing, TrendingUp } from "lucide-react";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardAction,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card";
+import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
+import Link from "next/link";
 
 type CountryData = {
     [key: string]: string;
@@ -84,7 +77,6 @@ export default async function Page({ searchParams }: Props) {
         data,
         (country as string) || "United States"
     );
-    //TODO If no unemployment rates are found for the specified country, return an empty chart
 
     const beginningYear = unemploymentRates[0]?.year || "1980";
     const previousYear = unemploymentRates[unemploymentRates.length - 2]?.year || "2023";
@@ -116,7 +108,20 @@ export default async function Page({ searchParams }: Props) {
             <div className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
                     {unemploymentRates.length === 0 && (
-                        <p className="">No unemployment data found for the selected country.</p>
+                        <Card className="flex w-full">
+                            <CardHeader>
+                                <CardTitle>
+                                    No unemployment data found for the selected country {country}.
+                                </CardTitle>
+                                <CardDescription>
+                                    Try a new seach by selectin another country from the available
+                                    list
+                                </CardDescription>
+                                <CardAction>
+                                    <TrendingUp className="h-4 w-4" />
+                                </CardAction>
+                            </CardHeader>
+                        </Card>
                     )}
                     {unemploymentRates.length > 0 && (
                         <ChartBarDefault
@@ -134,6 +139,7 @@ export default async function Page({ searchParams }: Props) {
                     )}
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4">
+                    {/* First Card */}
                     <Card className="flex w-full">
                         <CardHeader>
                             <CardTitle>
@@ -147,6 +153,20 @@ export default async function Page({ searchParams }: Props) {
                             <CardDescription>{`Compared to the previous period: ${previousYear} to ${endingYear}`}</CardDescription>
                             <CardAction>
                                 <TrendingUp className="h-4 w-4" />
+                            </CardAction>
+                        </CardHeader>
+                    </Card>
+                    {/* Source Card */}
+                    <Card className="flex w-full">
+                        <CardHeader>
+                            <CardTitle>Used Data Source</CardTitle>
+                            <CardDescription>
+                                <Link className="hover:underline" href="">
+                                    International Monetary Fund 2025
+                                </Link>
+                            </CardDescription>
+                            <CardAction>
+                                <TextSearch className="h-4 w-4" />
                             </CardAction>
                         </CardHeader>
                     </Card>
