@@ -175,14 +175,18 @@ export default async function Page({ searchParams }: Props) {
                         <CardHeader>
                             <CardTitle>
                                 {/* TODO handle NaN Case */}
-                                {percentageChangeOverLastYear && (
+                                {unemploymentRates.length === 0 && "No data available"}
+                                {unemploymentRates.length > 0 && percentageChangeOverLastYear && (
                                     <span>
                                         Trending {percentageChangeOverLastYear > 0 ? "up" : "down"}️
                                         by {percentageChangeOverLastYear.toFixed(1)}%
                                     </span>
                                 )}
                             </CardTitle>
-                            <CardDescription>{`Compared to the previous period: ${previousYear} to ${endingYear}`}</CardDescription>
+                            <CardDescription>
+                                {unemploymentRates.length > 0 &&
+                                    `Compared to the previous period: ${previousYear} to ${endingYear}`}
+                            </CardDescription>
                             <CardAction>
                                 <TrendingUp className="h-4 w-4" />
                             </CardAction>
