@@ -179,7 +179,7 @@ export default async function Page({ searchParams }: Props) {
                     <Card className="flex w-full flex-1">
                         <CardHeader>
                             <CardTitle>
-                                {}
+                                {/* TODO handle NaN Case */}
                                 {percentageChangeOverLastYear && (
                                     <span>
                                         Trending {percentageChangeOverLastYear > 0 ? "up" : "down"}️
@@ -213,7 +213,15 @@ export default async function Page({ searchParams }: Props) {
                         </CardHeader>
                     </Card>
                     {/* Top Countries Chart */}
-                    <ChartBarMixed />
+                    <ChartBarMixed
+                        title="Top 10 Countries"
+                        description={`By unemployment rate in ${currentLastDataYear}`}
+                        chartData={topCountries.map((entry, index) => ({
+                            country: entry.country,
+                            rate: entry.rate,
+                            fill: `var(--chart-3)`, // Assuming you have CSS variables for colors
+                        }))}
+                    />
                 </div>
             </div>
         </div>
