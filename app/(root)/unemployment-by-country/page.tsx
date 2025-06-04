@@ -2,7 +2,16 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
-import { ChartNoAxesColumnIncreasing } from "lucide-react";
+import { ChartNoAxesColumnIncreasing, TrendingUp } from "lucide-react";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardAction,
+    CardContent,
+    CardFooter,
+} from "@/components/ui/card";
 
 type CountryData = {
     [key: string]: string;
@@ -57,7 +66,7 @@ export default async function Page({ searchParams }: Props) {
             ) {
                 result.push({
                     year: key,
-                    rate: parseFloat(Number(target[key]).toFixed(2)),
+                    rate: parseFloat(Number(target[key]).toFixed(1)),
                 });
             }
         }
@@ -86,13 +95,14 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div className="flex flex-col items-start gap-4 p-4 bg-green-50 max-w-7xl mx-auto">
+        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto h-screen">
             {/* Title and section header */}
-            <div className="flex w-full bg-green-100">
+            <div className="flex w-full">
                 <p className="font-medium">Unemployment rate by country</p>
                 <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
             </div>
-            <div>
+            {/* Country Selection */}
+            <div className="flex w-full">
                 <Combobox
                     initialValue="Select Country..."
                     paramCountry={country as string}
@@ -101,23 +111,46 @@ export default async function Page({ searchParams }: Props) {
                         country: country as string,
                     }}
                 />
-                {unemploymentRates.length === 0 && (
-                    <p className="text-red-500">
-                        No unemployment data found for the selected country.
-                    </p>
-                )}
-                {unemploymentRates.length > 0 && (
-                    <ChartBarDefault
-                        dataKeyXAxis="year"
-                        dataKeyBar="rate"
-                        chartData={unemploymentRates}
-                        chartConfig={chartConfig}
-                        cardTitle={`Unemployment Rate in ${(country as string) || "United States"}`}
-                        cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
-                        percentageChange={percentageChangeOverLastYear}
-                        previousPeriod={`${previousYear} to ${endingYear}`}
-                    />
-                )}
+            </div>
+            {/* Chart */}
+            <div className="flex w-full gap-4 flex-col lg:flex-row">
+                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+                    {unemploymentRates.length === 0 && (
+                        <p className="">No unemployment data found for the selected country.</p>
+                    )}
+                    {unemploymentRates.length > 0 && (
+                        <ChartBarDefault
+                            dataKeyXAxis="year"
+                            dataKeyBar="rate"
+                            chartData={unemploymentRates}
+                            chartConfig={chartConfig}
+                            cardTitle={`Unemployment Rate in ${
+                                (country as string) || "United States"
+                            }`}
+                            cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
+                            percentageChange={percentageChangeOverLastYear}
+                            previousPeriod={`${previousYear} to ${endingYear}`}
+                        />
+                    )}
+                </div>
+                <div className="flex flex-col items-start gap-2 w-full lg:w-1/4">
+                    <Card className="flex w-full">
+                        <CardHeader>
+                            <CardTitle>
+                                {percentageChangeOverLastYear && (
+                                    <span>
+                                        Trending {percentageChangeOverLastYear > 0 ? "up" : "down"}️
+                                        by {percentageChangeOverLastYear.toFixed(1)}%
+                                    </span>
+                                )}
+                            </CardTitle>
+                            <CardDescription>{`Compared to the previous period: ${previousYear} to ${endingYear}`}</CardDescription>
+                            <CardAction>
+                                <TrendingUp className="h-4 w-4" />
+                            </CardAction>
+                        </CardHeader>
+                    </Card>
+                </div>
             </div>
         </div>
     );

@@ -54,7 +54,7 @@ export function ChartBarDefault({
     previousPeriod?: string;
 }) {
     return (
-        <Card>
+        <Card className="flex flex-1 border-0">
             <CardHeader>
                 <CardTitle>{cardTitle}</CardTitle>
                 <CardDescription>{cardDescription}</CardDescription>
