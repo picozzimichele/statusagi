@@ -95,7 +95,7 @@ export function ChartBarMixed({
                                 dataKey="country"
                                 position="insideLeft"
                                 offset={8}
-                                className="fill-(--color-label) text-[8px]"
+                                className="text-[8px] fill-white dark:fill-black"
                             />
                             <LabelList
                                 className="fill-foreground text-[8px]"
