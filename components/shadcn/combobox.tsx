@@ -45,7 +45,7 @@ export function Combobox({
 }: {
     initialValue: string;
     dropDownData?: { value: string; label: string }[];
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("");

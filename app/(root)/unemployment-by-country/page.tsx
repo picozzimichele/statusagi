@@ -13,13 +13,13 @@ type UnemploymentEntry = {
 };
 
 type Props = {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function Page({ searchParams }: Props) {
     // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("/lib/data/unemployment-by-country.json");
-    const selectedCountryParam = (searchParams.country as string) || "";
+    const { country } = await searchParams;
 
     const chartConfig = {
         rate: {
@@ -66,6 +66,11 @@ export default async function Page({ searchParams }: Props) {
 
     const allCountries = getAllCountries(data);
     console.log("All Countries:", allCountries);
+    const allCountriesTransformed = allCountries.map((country) => ({
+        value: country,
+        label: country,
+    }));
+    console.log("All Countries Transformed:", allCountriesTransformed);
 
     const unemploymentRates = getUnemploymentRatesByCountry(data, "United States");
 
