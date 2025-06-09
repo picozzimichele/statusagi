@@ -6,7 +6,7 @@ export default function WorldMapSvg({ onMouseOver, onMouseOut }: React.SVGProps<
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut}
                     fill="currentColor"
-                    id="_somaliland"
+                    id="so"
                     d="M512.674,502.797l3.526,2.403l1.046-0.052l8.757-3.008l0.994,3.206l-0.701,2.706l-1.893,1.503l-4.729-0.302l-6.769-4.158L512.674,502.797L512.674,502.797z"
                 />
                 <path
