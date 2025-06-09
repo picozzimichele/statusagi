@@ -139,11 +139,14 @@ export default async function Page({ searchParams }: Props) {
                     "Alpha-3": match["Alpha-3"],
                     "2024": entry["2024"] || null, // Use 2024 data or null if not available
                 } as MergedEntry;
+            } else {
+                return {
+                    Country: entry.Country,
+                    "Alpha-2": "No Match",
+                    "Alpha-3": entry.ISO,
+                    "2024": entry["2024"] || null, // Use 2024 data or null if not available
+                } as MergedEntry;
             }
-
-            return {
-                Country: "NO MATCH",
-            };
         });
 
         return returnMergedData;
@@ -174,8 +177,6 @@ export default async function Page({ searchParams }: Props) {
     const percentageChangeOverLastYear =
         unemploymentRates[unemploymentRates.length - 1]?.rate -
         unemploymentRates[unemploymentRates.length - 2]?.rate;
-
-    console.log(displayWorldCountryData, "displayWorldCountryData");
 
     return (
         <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto h-screen">
@@ -295,7 +296,7 @@ export default async function Page({ searchParams }: Props) {
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
                     <div className="flex w-[90%] mx-auto dark:text-cyan-600 text-slate-500">
-                        <WorldMapInteractive />
+                        <WorldMapInteractive countryData={displayWorldCountryData} />
                     </div>
                 </Card>
             </section>

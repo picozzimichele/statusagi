@@ -2,9 +2,19 @@
 import React, { useState } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
 
-export default function WorldMapInteractive() {
+export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
     const [tooltip, setTooltip] = useState<{ x: number; y: number; name: string } | null>(null);
     const hoverColor = "#80D8C3"; // Define the hover color
+
+    console.log("Country Data:", countryData);
+    function getCountryName({ countryData, countryId }: { countryData?: any; countryId?: string }) {
+        if (!countryData || !countryId) return;
+        const country = countryData.find((item) => item["Alpha-2"] === "US");
+        return country ? country["Name"] : null;
+    }
+
+    const countryTest = getCountryName({ countryData, countryId: "US" });
+    console.log("Country Test:", countryTest);
 
     const applyHoverClass = (element: Element, add: boolean) => {
         if (element.tagName === "path" || element.tagName === "PATH") {
@@ -39,7 +49,10 @@ export default function WorldMapInteractive() {
             path.classList.add(`text-[${hoverColor}]`);
         });
 
-        setTooltip({ x, y, name: countryId.toUpperCase() });
+        const countryName = getCountryName({ countryData, countryId });
+        console.log("Country ID:", countryId, "Country Name:", countryName);
+
+        setTooltip({ x, y, name: countryName || countryId.toUpperCase() });
     };
 
     const handleMouseOut = (e: React.MouseEvent<SVGElement>) => {
