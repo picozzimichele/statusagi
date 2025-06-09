@@ -1,19 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
 
 export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
+    // USE STATE
     const [tooltip, setTooltip] = useState<{
         x: number;
         y: number;
         name: string;
         rate: string;
     } | null>(null);
+
+    // CONSTANTS
     const hoverColor = "#80D8C3"; // Define the hover color
 
     function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
         const country = countryData.find((item) => item["Alpha-2"] === countryId?.toUpperCase());
-        console.log("countryselected", country);
         return country
             ? { country: country["Country"] || null, rate: country["2024"] || null }
             : null;
@@ -22,9 +24,9 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
     const applyHoverClass = (element: Element, add: boolean) => {
         if (element.tagName === "path" || element.tagName === "PATH") {
             if (add) {
-                (element as SVGPathElement).classList.add(`text-[${hoverColor}]`);
+                (element as SVGPathElement).classList.add(`text-[#80D8C3]`);
             } else {
-                (element as SVGPathElement).classList.remove(`text-[${hoverColor}]`);
+                (element as SVGPathElement).classList.remove(`text-[#80D8C3]`);
             }
         }
     };
@@ -49,7 +51,7 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         const paths = group.querySelectorAll("path");
 
         paths.forEach((path) => {
-            path.classList.add(`text-[${hoverColor}]`);
+            path.classList.add(`text-[#80D8C3]`);
         });
 
         const countryInfo = getCountryData({ countryData, countryId });
