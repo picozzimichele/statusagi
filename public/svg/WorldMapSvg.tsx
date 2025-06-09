@@ -1,6 +1,20 @@
-export default function WorldMapSvg({ onMouseOver, onMouseOut }: React.SVGProps<SVGPathElement>) {
+export default function WorldMapSvg({
+    onMouseOver,
+    onMouseOut,
+    refProp,
+}: {
+    onMouseOver: (e: React.MouseEvent<SVGElement>) => void;
+    onMouseOut: (e: React.MouseEvent<SVGElement>) => void;
+    refProp?: React.Ref<SVGSVGElement>;
+}) {
     return (
-        <svg width="100%" height="100%" viewBox="30.767 241.591 784.077 458.627" id="world-map">
+        <svg
+            ref={refProp}
+            width="100%"
+            height="100%"
+            viewBox="30.767 241.591 784.077 458.627"
+            id="world-map"
+        >
             <g className="hover:cursor-pointer">
                 <path
                     onMouseOver={onMouseOver}

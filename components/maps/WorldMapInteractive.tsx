@@ -1,8 +1,11 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useReducer, useCallback, use } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
 
 export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
+    // CONSTANTS
+    const hoverColor = "#80D8C3"; // Define the hover color
+
     // USE STATE
     const [tooltip, setTooltip] = useState<{
         x: number;
@@ -10,10 +13,14 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         name: string;
         rate: string;
     } | null>(null);
+    const [elementRect, setElementRect] = useState();
 
-    // CONSTANTS
-    const hoverColor = "#80D8C3"; // Define the hover color
+    // USE REF
+    const handleRect = useCallback((node) => {
+        setElementRect(node?.getBoundingClientRect());
+    }, []);
 
+    // FUNCTIONS
     function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
         const country = countryData.find((item) => item["Alpha-2"] === countryId?.toUpperCase());
         return country
@@ -77,6 +84,13 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         setTooltip(null);
     };
 
+    useEffect(() => {
+        console.log("TRIGGER 1");
+        if (!elementRect) return;
+        console.log("TRIGGER 2");
+        console.log("mapRef", elementRect);
+    }, [elementRect]);
+
     return (
         <>
             {tooltip && (
@@ -90,7 +104,11 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                     )}
                 </div>
             )}
-            <WorldMapSvg onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
+            <WorldMapSvg
+                refProp={handleRect}
+                onMouseOver={handleMouseOver}
+                onMouseOut={handleMouseOut}
+            />
         </>
     );
 }
