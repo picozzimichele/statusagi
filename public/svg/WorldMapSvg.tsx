@@ -169,7 +169,7 @@ export default function WorldMapSvg({ onMouseOver, onMouseOut }: React.SVGProps<
                     id="br"
                     d="M286.631,618.464l5.402-10.391l0.198-8.73l10.079-6.501h5.645l4.435-7.512l0.804-14.418l-1.815-3.855l10.684-9.751l0.406-10.761l-14.514-7.105l-17.53-5.48l-8.264-0.812l2.221-4.669l-0.604-7.104l-1.808-0.596l-2.671,5.308l-1.4,1.754l-3.595-1.59l-12.093,4.261l-4.028-5.073l0.648-5.299l-3.804,3.872l-4.201-2.265l-0.424,0.597l0.009,1.841l3.622,1.945l-5.437,5.73l-3.432-0.034l-3.475-3.535l-3.933,0.121l-0.484,4.2l2.256,2.739l-2.663,8.532l-3.112,0.241l-4.953,3.13l-1.21,6.146l4.296,4.599l0.787-0.89l3.017-0.812l2.576,4.34l7.374-3.164l2.861,0.165l1.971,6.976l10.52,3.337l1.815,5.564l4.478,0.537l2.135,5.314l-1.443,4.729l1.884,2.474l-0.276,3.683l5.048-0.477l4.625,5.844l-0.363,4.105l2.74,2.316l-6.57,9.95L286.631,618.464L286.631,618.464z"
                 />
-                <g id="bs">
+                <g id="bs" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
                     <path
                         id="bs"
                         onMouseOver={onMouseOver}
@@ -1041,16 +1041,23 @@ export default function WorldMapSvg({ onMouseOver, onMouseOut }: React.SVGProps<
                     id="is"
                     d="M366.261,340.521l-1.693-0.959l-2.283,1.443l-1.962,1.814l0.052,1.013l2.541,0.319l-0.156,1.815l-0.898,0.908l0.217,0.588l2.541,0.164v2.938l3.656,0.641l2.17,1.229l2.437,0.104l4.186-2.083l3.231-4.271l0.053-2.887l-1.963-1.66l-1.642-1.392l-0.743,0.536l-1.115,1.443l-1.271-0.164l-1.271-1.393l-1.642,0.156l-2.386,1.979l-1.437,1.547l-0.795-0.69l-0.053-1.712l0.795-0.536L366.261,340.521L366.261,340.521z"
                 />
-                <g id="it">
+                <g
+                    id="it"
+                    className="group cursor-pointer"
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut}
+                >
                     <path
                         id="it"
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
                         fill="currentColor"
+                        className="transition-colors duration-200 group-hover:text-green-500"
                         d="M423.233,409.391l-0.535,1.356l0.146,1.478l2.065,2.412l3.25-0.113l7.175,8.334l4.479,1.297l2.646,2.498l0.631,5.695l1.417-0.828l1.229-3.104l-0.303-2.229l2.101-0.19l0.304-1.263l-5.922-2.834l-5.619-5.523l-2.238-3.303l-0.545-3.137l2.861-0.684l-0.734-2.066l-1.755-1.478l-1.513-0.069l-2.108,0.58l-1.99,2.781l-1.201,0.795l-1.858-1.141L423.233,409.391L423.233,409.391z"
                     />
                     <path
                         id="it"
+                        className="transition-colors duration-200 group-hover:text-green-500"
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
                         fill="currentColor"
@@ -1060,6 +1067,7 @@ export default function WorldMapSvg({ onMouseOver, onMouseOut }: React.SVGProps<
                         id="it"
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
+                        className="transition-colors duration-200 group-hover:text-green-500"
                         fill="currentColor"
                         d="M427.806,423.566l-2.289,1.158l0.303,4.469l1.833,0.311l1.374-1.312v-4.235L427.806,423.566L427.806,423.566z"
                     />

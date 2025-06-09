@@ -11,11 +11,15 @@ export default function Page() {
         const countryId = target.id;
 
         if (countryId) {
+            target.classList.add("text-green-500");
             setHoveredCountry(countryId.toUpperCase());
         }
     };
 
-    const handleMouseOut = () => {
+    const handleMouseOut = (e: React.MouseEvent<SVGElement>) => {
+        const target = e.target as SVGElement;
+
+        target.classList.remove("text-green-500");
         setHoveredCountry(null);
     };
 
