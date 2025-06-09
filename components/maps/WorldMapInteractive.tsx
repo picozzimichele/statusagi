@@ -3,12 +3,20 @@ import React, { useState } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
 
 export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
-    const [tooltip, setTooltip] = useState<{ x: number; y: number; name: string } | null>(null);
+    const [tooltip, setTooltip] = useState<{
+        x: number;
+        y: number;
+        name: string;
+        rate: string;
+    } | null>(null);
     const hoverColor = "#80D8C3"; // Define the hover color
 
-    function getCountryName({ countryData, countryId }: { countryData?: any; countryId?: string }) {
+    function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
         const country = countryData.find((item) => item["Alpha-2"] === countryId?.toUpperCase());
-        return country ? country["Country"] : null;
+        console.log("countryselected", country);
+        return country
+            ? { country: country["Country"] || null, rate: country["2024"] || null }
+            : null;
     }
 
     const applyHoverClass = (element: Element, add: boolean) => {
@@ -44,10 +52,14 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
             path.classList.add(`text-[${hoverColor}]`);
         });
 
-        const countryName = getCountryName({ countryData, countryId });
-        console.log("Country Name:", countryName);
+        const countryInfo = getCountryData({ countryData, countryId });
 
-        setTooltip({ x, y, name: countryName || countryId.toUpperCase() });
+        setTooltip({
+            x,
+            y,
+            name: countryInfo ? countryInfo["country"] : countryId.toUpperCase(),
+            rate: countryInfo ? countryInfo["rate"] : "N/A",
+        });
     };
 
     const handleMouseOut = (e: React.MouseEvent<SVGElement>) => {
@@ -71,6 +83,9 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                     style={{ top: tooltip.y + 10, left: tooltip.x + 10 }}
                 >
                     {tooltip.name}
+                    {tooltip.rate && (
+                        <span className="ml-2">Rate: {tooltip.rate.slice(0, 4)}%</span>
+                    )}
                 </div>
             )}
             <WorldMapSvg onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} />
