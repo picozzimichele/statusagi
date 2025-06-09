@@ -1,9 +1,9 @@
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
-import React from "react";
 
 export default function Page() {
     return (
         <div>
+            <h1>SVG Map</h1>
             <WorldMapSvg />
         </div>
     );
