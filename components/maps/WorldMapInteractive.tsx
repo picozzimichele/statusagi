@@ -13,12 +13,23 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         name: string;
         rate: string;
     } | null>(null);
-    const [elementRect, setElementRect] = useState();
 
-    // USE REF
-    const handleRect = useCallback((node) => {
-        setElementRect(node?.getBoundingClientRect());
-    }, []);
+    // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
+    const initializeMap = useCallback(
+        (mapNode) => {
+            if (mapNode) {
+                console.log("Map node initialized USE CALLBACK:", mapNode);
+                mapNode.querySelectorAll("path").forEach((path) => {
+                    // Set initial color based on data
+                    const countryId = path.id;
+                    const countryInfo = getCountryData({ countryData, countryId });
+                    const rate = countryInfo ? countryInfo.rate : null;
+                    path.style.fill = getColorFromRate(rate);
+                });
+            }
+        },
+        [countryData]
+    );
 
     // FUNCTIONS
     function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
@@ -84,12 +95,13 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         setTooltip(null);
     };
 
-    useEffect(() => {
-        console.log("TRIGGER 1");
-        if (!elementRect) return;
-        console.log("TRIGGER 2");
-        console.log("mapRef", elementRect);
-    }, [elementRect]);
+    const getColorFromRate = (rate: number | null): string => {
+        if (rate === null || isNaN(rate)) return "#d1d5db"; // Tailwind gray-300
+        if (rate < 4) return "#4ade80"; // green-400
+        if (rate < 7) return "#facc15"; // yellow-400
+        if (rate < 10) return "#f97316"; // orange-400
+        return "#ef4444"; // red-500
+    };
 
     return (
         <>
@@ -105,7 +117,7 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                 </div>
             )}
             <WorldMapSvg
-                refProp={handleRect}
+                refProp={initializeMap}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
             />
