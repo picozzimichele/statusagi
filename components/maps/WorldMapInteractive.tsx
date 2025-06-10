@@ -30,7 +30,6 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         const y = e.clientY;
 
         const group = e.currentTarget;
-        const paths = group.querySelectorAll("path");
 
         const countryInfo = getCountryData({ countryData, countryId });
 
