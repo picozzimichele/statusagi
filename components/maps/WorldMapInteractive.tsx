@@ -68,6 +68,7 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                         const color = getColorFromRate(rate);
                         path.classList.add(`${color}`); // Set initial color
                         path.classList.add("hover:text-[#80D8C3]"); // Add hover color class
+                        path.classList.add("group-hover:text-[#80D8C3]"); // Add hover color class
                     }
                 });
             }
