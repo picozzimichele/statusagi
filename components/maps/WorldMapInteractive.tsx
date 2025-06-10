@@ -14,23 +14,6 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         rate: string;
     } | null>(null);
 
-    // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
-    const initializeMap = useCallback(
-        (mapNode) => {
-            if (mapNode) {
-                console.log("Map node initialized USE CALLBACK:", mapNode);
-                mapNode.querySelectorAll("path").forEach((path) => {
-                    // Set initial color based on data
-                    const countryId = path.id;
-                    const countryInfo = getCountryData({ countryData, countryId });
-                    const rate = countryInfo ? countryInfo.rate : null;
-                    path.style.fill = getColorFromRate(rate);
-                });
-            }
-        },
-        [countryData]
-    );
-
     // FUNCTIONS
     function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
         const country = countryData.find((item) => item["Alpha-2"] === countryId?.toUpperCase());
@@ -102,6 +85,22 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         if (rate < 10) return "#f97316"; // orange-400
         return "#ef4444"; // red-500
     };
+
+    // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
+    const initializeMap = useCallback(
+        (mapNode) => {
+            if (mapNode) {
+                mapNode.querySelectorAll("path").forEach((path) => {
+                    // Set initial color based on data
+                    const countryId = path.id;
+                    const countryInfo = getCountryData({ countryData, countryId });
+                    const rate = countryInfo ? countryInfo.rate : null;
+                    path.style.fill = getColorFromRate(rate);
+                });
+            }
+        },
+        [countryData]
+    );
 
     return (
         <>
