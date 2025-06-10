@@ -4,7 +4,7 @@ import WorldMapSvg from "@/public/svg/WorldMapSvg";
 
 export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
     // CONSTANTS
-    const hoverColor = "#80D8C3"; // Define the hover color
+    const hoverColor = "text-[#80D8C3]"; // Define the hover color
 
     // USE STATE
     const [tooltip, setTooltip] = useState<{
@@ -25,9 +25,9 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
     const applyHoverClass = (element: Element, add: boolean) => {
         if (element.tagName === "path" || element.tagName === "PATH") {
             if (add) {
-                (element as SVGPathElement).classList.add(`text-[#80D8C3]`);
+                (element as SVGPathElement).classList.add(`${hoverColor}`);
             } else {
-                (element as SVGPathElement).classList.remove(`text-[#80D8C3]`);
+                (element as SVGPathElement).classList.remove(`${hoverColor}`);
             }
         }
     };
@@ -52,7 +52,7 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         const paths = group.querySelectorAll("path");
 
         paths.forEach((path) => {
-            path.classList.add(`text-[#80D8C3]`);
+            path.classList.add(`${hoverColor}`);
         });
 
         const countryInfo = getCountryData({ countryData, countryId });
@@ -79,11 +79,11 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
     };
 
     const getColorFromRate = (rate: number | null): string => {
-        if (rate === null || isNaN(rate)) return "#d1d5db"; // Tailwind gray-300
-        if (rate < 4) return "#4ade80"; // green-400
-        if (rate < 7) return "#facc15"; // yellow-400
-        if (rate < 10) return "#f97316"; // orange-400
-        return "#ef4444"; // red-500
+        if (rate === null || isNaN(rate)) return "text-[#d1d5db]"; // Tailwind gray-300
+        if (rate < 4) return "text-[#4ade80]"; // green-400
+        if (rate < 7) return "text-[#facc15]"; // yellow-400
+        if (rate < 10) return "text-[#f97316]"; // orange-400
+        return "text-[#ef4444]"; // red-500
     };
 
     // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
@@ -95,7 +95,10 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                     const countryId = path.id;
                     const countryInfo = getCountryData({ countryData, countryId });
                     const rate = countryInfo ? countryInfo.rate : null;
-                    path.style.fill = getColorFromRate(rate);
+                    if (path.tagName === "path" || path.tagName === "PATH") {
+                        const color = getColorFromRate(rate);
+                        path.classList.add(`${color}`); // Set initial color
+                    }
                 });
             }
         },
