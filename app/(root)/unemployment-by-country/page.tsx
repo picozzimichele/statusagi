@@ -180,7 +180,7 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
+        <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
             <div className="flex w-full">
                 <p className="font-medium">Unemployment rate by country</p>
