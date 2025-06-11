@@ -6,6 +6,7 @@ import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, FolderSearch } fro
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import Link from "next/link";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
+import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 
 type CountryData = {
     [key: string]: string;
@@ -16,6 +17,29 @@ type UnemploymentEntry = {
     rate: number;
 };
 
+type UnemploymentEntryISO = {
+    [key: string]: string;
+    ISO: string;
+    Country: string;
+    "2024": string;
+};
+
+type MetadataEntry = {
+    Country: string;
+    "Alpha-2": string;
+    "Alpha-3": string;
+    Numeric: number;
+    Latitude?: number;
+    Longitude?: number;
+};
+
+type MergedEntry = {
+    Country: string;
+    "Alpha-2": string;
+    "Alpha-3": string;
+    "2024": string | null;
+};
+
 type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
@@ -23,8 +47,10 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
     // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("/lib/data/unemployment-by-country.json");
+    const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
     const { country } = await searchParams;
     const currentLastDataYear = 2024;
+    const startingCountry = "United States";
 
     const chartConfig = {
         rate: {
@@ -69,6 +95,7 @@ export default async function Page({ searchParams }: Props) {
         return result;
     }
 
+    // Function to get the latest unemployment rates for all countries in 2024
     function getTopCountriesByUnemploymentRate(
         dataset: CountryData[],
         topN: number = 10
@@ -96,15 +123,50 @@ export default async function Page({ searchParams }: Props) {
         return countryRates.sort((a, b) => b.rate - a.rate).slice(0, topN);
     }
 
+    function mergeUnemploymentData({
+        countryData,
+        isoCountryData,
+    }: {
+        countryData: UnemploymentEntryISO[];
+        isoCountryData: MetadataEntry[];
+    }) {
+        const returnMergedData = countryData.map((entry) => {
+            const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.ISO);
+
+            if (match) {
+                return {
+                    Country: match.Country,
+                    "Alpha-2": match["Alpha-2"],
+                    "Alpha-3": match["Alpha-3"],
+                    "2024": entry["2024"] || null, // Use 2024 data or null if not available
+                } as MergedEntry;
+            } else {
+                return {
+                    Country: entry.Country,
+                    "Alpha-2": "No Match",
+                    "Alpha-3": entry.ISO,
+                    "2024": entry["2024"] || null, // Use 2024 data or null if not available
+                } as MergedEntry;
+            }
+        });
+
+        return returnMergedData;
+    }
+
     const allCountries = getAllCountries(data);
     const allCountriesTransformed = allCountries.map((country) => ({
         value: country,
         label: country,
     }));
 
+    const displayWorldCountryData = mergeUnemploymentData({
+        countryData: data as UnemploymentEntryISO[],
+        isoCountryData: isoCountryData as MetadataEntry[],
+    });
+
     const unemploymentRates = getUnemploymentRatesByCountry(
         data,
-        (country as string) || "United States"
+        (country as string) || startingCountry
     );
     // Get the top 10 countries by unemployment rate
     const topCountries = getTopCountriesByUnemploymentRate(data, 10);
@@ -118,7 +180,7 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto h-screen">
+        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
             <div className="flex w-full">
                 <p className="font-medium">Unemployment rate by country</p>
@@ -136,7 +198,7 @@ export default async function Page({ searchParams }: Props) {
                 />
             </div>
             {/* Chart */}
-            <div className="flex w-full gap-4 flex-col lg:flex-row">
+            <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
                     {/* If no unemployment data is found for the selected country */}
                     {unemploymentRates.length === 0 && (
@@ -222,7 +284,27 @@ export default async function Page({ searchParams }: Props) {
                         }))}
                     />
                 </div>
-            </div>
+            </section>
+            {/* World Map */}
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full">
+                    <CardHeader>
+                        <CardTitle>Global Unemployment Overview</CardTitle>
+                        <CardDescription>
+                            Interactive world map showing unemployment rates by country{" "}
+                            {currentLastDataYear}
+                        </CardDescription>
+                    </CardHeader>
+                    {/* Here you would include your WorldMapInteractive component */}
+                    <div className="flex w-[90%] h-full mx-auto">
+                        <WorldMapInteractive
+                            countryData={displayWorldCountryData}
+                            labelName={"Unemployment Rate"}
+                            legend={{ show: true }}
+                        />
+                    </div>
+                </Card>
+            </section>
         </div>
     );
 }
