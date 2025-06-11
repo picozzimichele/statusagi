@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import Navbar from "@/components/header/navbar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/sidebar/side-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -30,7 +30,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f9f9f9] dark:bg-black`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f9f9f9] dark:bg-black flex flex-col min-h-screen`}
             >
                 <ThemeProvider
                     attribute="class"
@@ -38,19 +38,13 @@ export default function RootLayout({
                     enableSystem={false}
                     disableTransitionOnChange
                 >
-                    <div className="[--header-height:calc(--spacing(14))]">
-                        <SidebarProvider className="flex flex-col">
+                    <SidebarProvider>
+                        <AppSidebar />
+                        <main className="flex-1 flex flex-col">
                             <Navbar />
-                            <div className="flex flex-1">
-                                <AppSidebar />
-                                <SidebarInset>
-                                    <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
-                                </SidebarInset>
-                            </div>
-                        </SidebarProvider>
-
-                        <div className="py-5" />
-                    </div>
+                            {children}
+                        </main>
+                    </SidebarProvider>
                 </ThemeProvider>
             </body>
         </html>
