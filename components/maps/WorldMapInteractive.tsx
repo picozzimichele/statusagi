@@ -1,8 +1,19 @@
 "use client";
 import React, { useState, useEffect, useRef, useReducer, useCallback, use } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
+import { Legend } from "recharts";
+import LegendInput from "./LegendInput";
+import { ChartTooltipContent } from "../ui/chart";
 
-export default function WorldMapInteractive({ countryData }: { countryData?: any }) {
+export default function WorldMapInteractive({
+    countryData,
+    legend,
+    labelName,
+}: {
+    countryData?: any;
+    legend?: { show: boolean };
+    labelName?: string;
+}) {
     // CONSTANTS
     const hoverColor = "text-[#80D8C3]"; // Define the hover color
 
@@ -46,12 +57,12 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
         setTooltip(null);
     };
 
-    const getColorFromRate = (rate: number | null): string => {
-        if (rate === null || isNaN(rate)) return "text-[#d1d5db]"; // Tailwind gray-300
-        if (rate < 4) return "text-[#4ade80]"; // green-400
-        if (rate < 7) return "text-[#facc15]"; // yellow-400
-        if (rate < 10) return "text-[#f97316]"; // orange-400
-        return "text-[#ef4444]"; // red-500
+    const getColorFromRate = (rate: number | null, isBackground?: boolean): string => {
+        if (rate === null || isNaN(rate)) return isBackground ? "bg-gray-200" : "text-gray-200";
+        if (rate < 4) return isBackground ? "bg-green-200" : "text-green-200";
+        if (rate < 7) return isBackground ? "bg-yellow-200" : "text-yellow-200";
+        if (rate < 10) return isBackground ? "bg-orange-200" : "text-orange-300";
+        return isBackground ? "bg-red-200" : "text-red-400";
     };
 
     // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
@@ -66,8 +77,8 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
                     if (path.tagName === "path" || path.tagName === "PATH") {
                         const color = getColorFromRate(rate);
                         path.classList.add(`${color}`); // Set initial color
-                        path.classList.add("hover:text-[#80D8C3]"); // Add hover color class
-                        path.classList.add("group-hover:text-[#80D8C3]"); // Add hover color class
+                        path.classList.add("hover:text-sky-100"); // Add hover color class
+                        path.classList.add("group-hover:text-sky-100"); // Add hover color class
                     }
                 });
             }
@@ -76,23 +87,46 @@ export default function WorldMapInteractive({ countryData }: { countryData?: any
     );
 
     return (
-        <>
+        <div className="relative w-full h-full flex-col">
             {tooltip && (
-                <div
-                    className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none"
-                    style={{ top: tooltip.y + 10, left: tooltip.x + 10 }}
-                >
-                    {tooltip.name}
-                    {tooltip.rate && (
-                        <span className="ml-2">Rate: {tooltip.rate.slice(0, 4)}%</span>
-                    )}
-                </div>
+                <>
+                    <div
+                        className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none flex flex-col"
+                        style={{ top: tooltip.y + 10, left: tooltip.x + 10 }}
+                    >
+                        <p className="font-medium">{tooltip.name}</p>
+                        {tooltip.rate && (
+                            <div className="flex items-center gap-2">
+                                <div
+                                    className={`h-2.5 w-2.5 rounded-xs ${getColorFromRate(
+                                        tooltip.rate ? parseFloat(tooltip.rate) : null,
+                                        true
+                                    )}`}
+                                />
+                                <span className="ml-2 text-muted-foreground">{labelName}:</span>
+                                <span className="font-mono font-medium">
+                                    {tooltip.rate.slice(0, 4)}%
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </>
             )}
             <WorldMapSvg
                 refProp={initializeMap}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
             />
-        </>
+            {/* Legend */}
+            {legend?.show && (
+                <div className="flex gap-2 items-center pt-10 md:pt-16">
+                    <LegendInput color="bg-green-200" text="Less than 4%" />
+                    <LegendInput color="bg-yellow-200" text="Less than 7%" />
+                    <LegendInput color="bg-orange-300" text="Less than 10%" />
+                    <LegendInput color="bg-red-400" text="10% or more" />
+                    <LegendInput color="bg-gray-200" text="No data" />
+                </div>
+            )}
+        </div>
     );
 }

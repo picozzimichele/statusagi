@@ -179,7 +179,7 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto h-screen">
+        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
             <div className="flex w-full">
                 <p className="font-medium">Unemployment rate by country</p>
@@ -285,8 +285,8 @@ export default async function Page({ searchParams }: Props) {
                 </div>
             </section>
             {/* World Map */}
-            <section className="flex w-full">
-                <Card className="flex w-full">
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full">
                     <CardHeader>
                         <CardTitle>Global Unemployment Overview</CardTitle>
                         <CardDescription>
@@ -295,8 +295,12 @@ export default async function Page({ searchParams }: Props) {
                         </CardDescription>
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
-                    <div className="flex w-[90%] mx-auto dark:text-cyan-600 text-slate-500">
-                        <WorldMapInteractive countryData={displayWorldCountryData} />
+                    <div className="flex w-[90%] h-full mx-auto">
+                        <WorldMapInteractive
+                            countryData={displayWorldCountryData}
+                            labelName={"Unemployment Rate"}
+                            legend={{ show: true }}
+                        />
                     </div>
                 </Card>
             </section>

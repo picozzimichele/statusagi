@@ -15,7 +15,7 @@ export default function WorldMapSvg({
             viewBox="30.767 241.591 784.077 458.627"
             id="world-map"
         >
-            <g className="hover:cursor-pointer transition-colors duration-200">
+            <g className="hover:cursor-pointer transition-colors duration-200 dark:text-cyan-600 text-slate-500">
                 <path
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut}
