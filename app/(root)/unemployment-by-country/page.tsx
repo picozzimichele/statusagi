@@ -50,6 +50,7 @@ export default async function Page({ searchParams }: Props) {
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
     const { country } = await searchParams;
     const currentLastDataYear = 2024;
+    const startingCountry = "United States";
 
     const chartConfig = {
         rate: {
@@ -165,7 +166,7 @@ export default async function Page({ searchParams }: Props) {
 
     const unemploymentRates = getUnemploymentRatesByCountry(
         data,
-        (country as string) || "United States"
+        (country as string) || startingCountry
     );
     // Get the top 10 countries by unemployment rate
     const topCountries = getTopCountriesByUnemploymentRate(data, 10);
