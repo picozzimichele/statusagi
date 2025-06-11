@@ -1,9 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef, useReducer, useCallback, use } from "react";
+import React, { useState, useCallback } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
-import { Legend } from "recharts";
 import LegendInput from "./LegendInput";
-import { ChartTooltipContent } from "../ui/chart";
 
 export default function WorldMapInteractive({
     countryData,
@@ -48,7 +46,11 @@ export default function WorldMapInteractive({
             x,
             y,
             name: countryInfo ? countryInfo["country"] : countryId.toUpperCase(),
-            rate: countryInfo ? countryInfo["rate"] : "N/A",
+            rate: countryInfo
+                ? countryInfo["rate"] === null || isNaN(countryInfo["rate"])
+                    ? "N/A"
+                    : countryInfo["rate"]
+                : "N/A",
         });
     };
 
@@ -89,28 +91,26 @@ export default function WorldMapInteractive({
     return (
         <div className="relative w-full h-full flex-col">
             {tooltip && (
-                <>
-                    <div
-                        className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none flex flex-col"
-                        style={{ top: tooltip.y + 10, left: tooltip.x + 10 }}
-                    >
-                        <p className="font-medium">{tooltip.name}</p>
-                        {tooltip.rate && (
-                            <div className="flex items-center gap-2">
-                                <div
-                                    className={`h-2.5 w-2.5 rounded-xs ${getColorFromRate(
-                                        tooltip.rate ? parseFloat(tooltip.rate) : null,
-                                        true
-                                    )}`}
-                                />
-                                <span className="ml-2 text-muted-foreground">{labelName}:</span>
-                                <span className="font-mono font-medium">
-                                    {tooltip.rate.slice(0, 4)}%
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </>
+                <div
+                    className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none flex flex-col"
+                    style={{ top: tooltip.y + 10, left: tooltip.x + 10 }}
+                >
+                    <p className="font-medium">{tooltip.name}</p>
+                    {tooltip.rate && (
+                        <div className="flex items-center gap-2">
+                            <div
+                                className={`h-2.5 w-2.5 rounded-xs ${getColorFromRate(
+                                    tooltip.rate ? parseFloat(tooltip.rate) : null,
+                                    true
+                                )}`}
+                            />
+                            <span className="ml-2 text-muted-foreground">{labelName}:</span>
+                            <span className="font-mono font-medium">
+                                {tooltip.rate.slice(0, 4)}%
+                            </span>
+                        </div>
+                    )}
+                </div>
             )}
             <WorldMapSvg
                 refProp={initializeMap}
