@@ -300,7 +300,9 @@ export default async function Page({ searchParams }: Props) {
                         <WorldMapInteractive
                             countryData={displayWorldCountryData}
                             labelName={"Unemployment Rate"}
-                            legend={{ show: true }}
+                            legend={{
+                                show: true,
+                            }}
                         />
                     </div>
                 </Card>

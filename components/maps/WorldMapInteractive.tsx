@@ -89,7 +89,7 @@ export default function WorldMapInteractive({
     );
 
     return (
-        <div className="relative w-full h-full flex-col">
+        <div className="flex w-full h-full flex-col">
             {tooltip && (
                 <div
                     className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none flex flex-col"

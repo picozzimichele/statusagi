@@ -38,7 +38,7 @@ export default function RootLayout({
                     enableSystem={false}
                     disableTransitionOnChange
                 >
-                    <SidebarProvider>
+                    <SidebarProvider defaultOpen={false}>
                         <AppSidebar />
                         <main className="flex-1 flex flex-col">
                             <Navbar />
