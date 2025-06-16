@@ -1,7 +1,9 @@
 import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
-import { ChartNoAxesColumnIncreasing } from "lucide-react";
+import { ChartNoAxesColumnIncreasing, FolderSearch } from "lucide-react";
 import { Combobox } from "@/components/shadcn/combobox";
+import { ChartBarDefault } from "@/components/charts/chart-bar-default";
+import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 
 type CountryData = {
     [key: string]: string;
@@ -43,10 +45,10 @@ export default async function Page({ searchParams }: Props) {
         return data.map((entry) => entry["Country Name"]).filter(Boolean);
     }
 
-    function getInflationRateByCountry(data: CountryData[], country: string) {
+    function getInflationRateByCountry(data: CountryData[], country: string): InflationEntry[] {
         const basicData = data.filter((entry) => entry["Country Name"] === country);
 
-        console.log("basicData", basicData);
+        const result: InflationEntry[] = [];
 
         const transformedData = Object.entries(basicData[0])
             .filter(([key]) => /^\d{4} \[YR\d{4}\]$/.test(key))
@@ -56,7 +58,11 @@ export default async function Page({ searchParams }: Props) {
                 return { year, rate: Math.round(rate * 100) / 100 }; // round to 2 decimal places
             });
 
-        console.log("transformedData", transformedData);
+        if (transformedData.length > 0) {
+            result.push(...transformedData);
+        }
+
+        return result;
     }
 
     // Filtering the data
@@ -78,8 +84,6 @@ export default async function Page({ searchParams }: Props) {
         filteredData,
         (country as string) || (startingCountry as string)
     );
-
-    console.log("inlationRateCurrentCountry", inlationRateCurrentCountry);
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -113,7 +117,40 @@ export default async function Page({ searchParams }: Props) {
                 />
             </div>
             {/* Chart */}
-            <section className="flex w-full gap-4 flex-col lg:flex-row"></section>
+            <section className="flex w-full gap-4 flex-col lg:flex-row">
+                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+                    {/* If no unemployment data is found for the selected country */}
+                    {inlationRateCurrentCountry.length === 0 && (
+                        <Card className="flex w-full">
+                            <CardHeader>
+                                <CardTitle>
+                                    No unemployment data found for the selected country {country}.
+                                </CardTitle>
+                                <CardDescription>
+                                    Try a new seach by selectin another country from the available
+                                    list
+                                </CardDescription>
+                                <CardAction>
+                                    <FolderSearch className="h-4 w-4" />
+                                </CardAction>
+                            </CardHeader>
+                        </Card>
+                    )}
+                    {/* Display the chart */}
+                    {inlationRateCurrentCountry.length > 0 && (
+                        <ChartBarDefault
+                            dataKeyXAxis="year"
+                            dataKeyBar="rate"
+                            chartData={inlationRateCurrentCountry}
+                            chartConfig={chartConfig}
+                            cardTitle={`Unemployment Rate in ${
+                                (country as string) || "United States"
+                            }`}
+                            cardDescription={`From ${1975} to ${2024} in % of the total labor force`}
+                        />
+                    )}
+                </div>
+            </section>
         </div>
     );
 }
