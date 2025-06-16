@@ -196,7 +196,7 @@ export default async function Page({ searchParams }: Props) {
             <div className="flex w-full">
                 <Combobox
                     initialValue="Select Country..."
-                    paramCountry={country as string}
+                    currentParam={country as string}
                     dropDownData={allCountriesTransformed}
                     href={{
                         country: country as string,
