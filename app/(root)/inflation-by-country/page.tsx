@@ -1,9 +1,16 @@
 import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
-import { ChartNoAxesColumnIncreasing, FolderSearch } from "lucide-react";
+import {
+    ChartNoAxesColumnIncreasing,
+    FolderSearch,
+    Link,
+    TextSearch,
+    TrendingUp,
+} from "lucide-react";
 import { Combobox } from "@/components/shadcn/combobox";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
+import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 
 type CountryData = {
     [key: string]: string;
@@ -58,7 +65,7 @@ export default async function Page({ searchParams }: Props) {
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
-                const rate = parseFloat(rateStr.replace(",", "."));
+                const rate = parseFloat(Number(rateStr.replace(",", ".")).toFixed(1));
                 return { year, rate };
             });
 
@@ -117,6 +124,40 @@ export default async function Page({ searchParams }: Props) {
                 />
             </div>
             {/* Chart */}
+            <section className="flex w-full gap-4 flex-col lg:flex-row">
+                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+                    {/* If no unemployment data is found for the selected country */}
+                    {inlationRateCurrentCountry.length === 0 && (
+                        <Card className="flex w-full">
+                            <CardHeader>
+                                <CardTitle>
+                                    No unemployment data found for the selected country {country}.
+                                </CardTitle>
+                                <CardDescription>
+                                    Try a new seach by selectin another country from the available
+                                    list
+                                </CardDescription>
+                                <CardAction>
+                                    <FolderSearch className="h-4 w-4" />
+                                </CardAction>
+                            </CardHeader>
+                        </Card>
+                    )}
+                    {/* Display the chart */}
+                    {inlationRateCurrentCountry.length > 0 && (
+                        <ChartBarDefault
+                            dataKeyXAxis="year"
+                            dataKeyBar="rate"
+                            chartData={inlationRateCurrentCountry}
+                            chartConfig={chartConfig}
+                            cardTitle={`Unemployment Rate in ${
+                                (country as string) || "United States"
+                            }`}
+                            cardDescription={`From ${1975} to ${2024} in % of the total labor force`}
+                        />
+                    )}
+                </div>
+            </section>
         </div>
     );
 }
