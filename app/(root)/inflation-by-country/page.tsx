@@ -92,6 +92,12 @@ export default async function Page({ searchParams }: Props) {
         (country as string) || (startingCountry as string)
     );
 
+    const beginningYear = inlationRateCurrentCountry[0]?.year || "1975";
+    const previousYear =
+        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.year || "2023";
+    const endingYear =
+        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 1]?.year || "2024";
+
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {" "}
@@ -153,7 +159,7 @@ export default async function Page({ searchParams }: Props) {
                             cardTitle={`Unemployment Rate in ${
                                 (country as string) || "United States"
                             }`}
-                            cardDescription={`From ${1975} to ${2024} in % of the total labor force`}
+                            cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
                         />
                     )}
                 </div>
