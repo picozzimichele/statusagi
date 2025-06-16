@@ -60,7 +60,7 @@ export function Combobox({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="flex min-w-[200px] max-w-[400px] justify-between"
                 >
                     {value
                         ? dropDownData.find((dropDownData) => dropDownData.value === value)?.label
