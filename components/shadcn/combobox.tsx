@@ -49,7 +49,7 @@ export function Combobox({
     initialValue: string;
     dropDownData?: { value: string; label: string }[];
     currentParam?: string;
-    selectedParamName?: string;
+    selectedParamName: string;
     href: { [key: string]: string };
 }) {
     const [open, setOpen] = React.useState(false);

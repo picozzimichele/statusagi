@@ -198,6 +198,7 @@ export default async function Page({ searchParams }: Props) {
                     initialValue="Select Country..."
                     currentParam={country as string}
                     dropDownData={allCountriesTransformed}
+                    selectedParamName="country"
                     href={{
                         country: country as string,
                     }}
