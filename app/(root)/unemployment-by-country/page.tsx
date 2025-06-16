@@ -174,6 +174,7 @@ export default async function Page({ searchParams }: Props) {
         data,
         (country as string) || startingCountry
     );
+
     // Get the top 10 countries by unemployment rate
     const topCountries = getTopCountriesByUnemploymentRate(data, 10);
 

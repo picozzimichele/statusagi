@@ -7,6 +7,11 @@ type CountryData = {
     [key: string]: string;
 };
 
+type InflationEntry = {
+    year: number;
+    rate: number;
+};
+
 type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
@@ -23,7 +28,7 @@ export default async function Page({ searchParams }: Props) {
 
     const chartConfig = {
         rate: {
-            label: "Unemployment Rate",
+            label: "Inflation Rate",
             color: "#BDDDE4",
         },
     };
@@ -36,6 +41,22 @@ export default async function Page({ searchParams }: Props) {
     // This is needed for the dropdown to have the list of all countries
     function getAllCountries(data: CountryData[]): string[] {
         return data.map((entry) => entry["Country Name"]).filter(Boolean);
+    }
+
+    function getInflationRateByCountry(data: CountryData[], country: string) {
+        const basicData = data.filter((entry) => entry["Country Name"] === country);
+
+        console.log("basicData", basicData);
+
+        const transformedData = Object.entries(basicData[0])
+            .filter(([key]) => /^\d{4} \[YR\d{4}\]$/.test(key))
+            .map(([key, value]) => {
+                const year = parseInt(key.slice(0, 4), 10);
+                const rate = parseFloat(value.replace(",", "."));
+                return { year, rate: Math.round(rate * 100) / 100 }; // round to 2 decimal places
+            });
+
+        console.log("transformedData", transformedData);
     }
 
     // Filtering the data
@@ -52,6 +73,13 @@ export default async function Page({ searchParams }: Props) {
         value: country,
         label: country,
     }));
+
+    const inlationRateCurrentCountry = getInflationRateByCountry(
+        filteredData,
+        (country as string) || (startingCountry as string)
+    );
+
+    console.log("inlationRateCurrentCountry", inlationRateCurrentCountry);
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -84,6 +112,8 @@ export default async function Page({ searchParams }: Props) {
                     }}
                 />
             </div>
+            {/* Chart */}
+            <section className="flex w-full gap-4 flex-col lg:flex-row"></section>
         </div>
     );
 }
