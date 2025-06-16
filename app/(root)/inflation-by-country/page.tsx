@@ -72,6 +72,27 @@ export default async function Page({ searchParams }: Props) {
         return newTarget;
     }
 
+    function getTopCountries(dataset: CountryData[], year: string, topN: number) {
+        const newDataset = dataset.map((entry) => {
+            const countryName = entry["Country Name"];
+            const countryAlpha3 = entry["Country Code"];
+            const rate2024 = entry["2024 [YR2024]"];
+
+            return {
+                country: countryName,
+                Alpha3: countryAlpha3,
+                rate: parseFloat(Number(rate2024.replace(",", ".")).toFixed(1)),
+            };
+        });
+
+        const sorted = newDataset
+            .filter((entry) => !isNaN(entry.rate))
+            .sort((a, b) => b.rate - a.rate)
+            .slice(0, topN);
+
+        return sorted;
+    }
+
     // Filtering the data
     const allSeriesNames = getAllSeriesNames(data);
     const filteredData = data.filter((entry) => entry["Series Name"] === allSeriesNames[0]);
@@ -97,6 +118,12 @@ export default async function Page({ searchParams }: Props) {
         inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.year || "2023";
     const endingYear =
         inlationRateCurrentCountry[inlationRateCurrentCountry.length - 1]?.year || "2024";
+
+    const percentageChangeOverLastYear =
+        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 1]?.rate -
+        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.rate;
+
+    const topCountries = getTopCountries(data, currentLastDataYear.toString(), 10);
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -137,7 +164,7 @@ export default async function Page({ searchParams }: Props) {
                         <Card className="flex w-full">
                             <CardHeader>
                                 <CardTitle>
-                                    No unemployment data found for the selected country {country}.
+                                    No inflation data found for the selected country {country}.
                                 </CardTitle>
                                 <CardDescription>
                                     Try a new seach by selectin another country from the available
@@ -156,12 +183,66 @@ export default async function Page({ searchParams }: Props) {
                             dataKeyBar="rate"
                             chartData={inlationRateCurrentCountry}
                             chartConfig={chartConfig}
-                            cardTitle={`Unemployment Rate in ${
+                            cardTitle={`Inflation Rate in ${
                                 (country as string) || "United States"
                             }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
+                            cardDescription={`From ${beginningYear} to ${endingYear} in % of Consumer Prices`}
                         />
                     )}
+                </div>
+                <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
+                    {/* First Card */}
+                    <Card className="flex w-full">
+                        <CardHeader>
+                            <CardTitle>
+                                {/* TODO handle NaN Case */}
+                                {inlationRateCurrentCountry.length === 0 && "No data available"}
+                                {inlationRateCurrentCountry.length > 0 &&
+                                    percentageChangeOverLastYear && (
+                                        <span>
+                                            Trending{" "}
+                                            {percentageChangeOverLastYear > 0 ? "up" : "down"}️ by{" "}
+                                            {percentageChangeOverLastYear.toFixed(1)}%
+                                        </span>
+                                    )}
+                            </CardTitle>
+                            <CardDescription>
+                                {inlationRateCurrentCountry.length > 0 &&
+                                    `Compared to the previous period: ${previousYear} to ${endingYear}`}
+                            </CardDescription>
+                            <CardAction>
+                                <TrendingUp className="h-4 w-4" />
+                            </CardAction>
+                        </CardHeader>
+                    </Card>
+                    {/* Source Card */}
+                    <Card className="flex w-full">
+                        <CardHeader>
+                            <CardTitle>Used Data Source</CardTitle>
+                            <CardDescription>
+                                <Link
+                                    target="_blank"
+                                    className="hover:underline"
+                                    href="https://databank.worldbank.org/source/world-development-indicators"
+                                >
+                                    World Bank
+                                </Link>
+                            </CardDescription>
+                            <CardAction>
+                                <TextSearch className="h-4 w-4" />
+                            </CardAction>
+                        </CardHeader>
+                    </Card>
+                    {/* Top Countries Chart */}
+                    <ChartBarMixed
+                        title="Top 10 Countries"
+                        description={`By unemployment rate in ${currentLastDataYear}`}
+                        chartData={topCountries.map((entry, index) => ({
+                            country: entry.country,
+                            rate: entry.rate,
+                            fill: `var(--chart-3)`, // Assuming you have CSS variables for colors
+                        }))}
+                    />
                 </div>
             </section>
         </div>
