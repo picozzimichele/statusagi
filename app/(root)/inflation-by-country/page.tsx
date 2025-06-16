@@ -9,8 +9,8 @@ type CountryData = {
     [key: string]: string;
 };
 
-type InflationEntry = {
-    year: number;
+type ChartEntry = {
+    year: string;
     rate: number;
 };
 
@@ -45,24 +45,24 @@ export default async function Page({ searchParams }: Props) {
         return data.map((entry) => entry["Country Name"]).filter(Boolean);
     }
 
-    function getInflationRateByCountry(data: CountryData[], country: string): InflationEntry[] {
-        const basicData = data.filter((entry) => entry["Country Name"] === country);
+    // Function to extract unemployment rates for a specific country
+    function getInflationRateByCountry(dataset: CountryData[], countryName: string): ChartEntry[] {
+        const target = dataset.find((entry) => entry["Country Name"] === countryName);
 
-        const result: InflationEntry[] = [];
-
-        const transformedData = Object.entries(basicData[0])
-            .filter(([key]) => /^\d{4} \[YR\d{4}\]$/.test(key))
-            .map(([key, value]) => {
-                const year = parseInt(key.slice(0, 4), 10);
-                const rate = parseFloat(value.replace(",", "."));
-                return { year, rate: Math.round(rate * 100) / 100 }; // round to 2 decimal places
-            });
-
-        if (transformedData.length > 0) {
-            result.push(...transformedData);
+        if (!target) {
+            return [];
         }
 
-        return result;
+        const newTarget = Object.entries(target)
+            .slice(4, Object.keys(target).length - 1)
+            .filter(([_, rateStr]) => rateStr !== "..")
+            .map(([yearStr, rateStr]) => {
+                const year = parseInt(yearStr).toString();
+                const rate = parseFloat(rateStr.replace(",", "."));
+                return { year, rate };
+            });
+
+        return newTarget;
     }
 
     // Filtering the data
@@ -117,40 +117,6 @@ export default async function Page({ searchParams }: Props) {
                 />
             </div>
             {/* Chart */}
-            <section className="flex w-full gap-4 flex-col lg:flex-row">
-                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {inlationRateCurrentCountry.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No unemployment data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {inlationRateCurrentCountry.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={inlationRateCurrentCountry}
-                            chartConfig={chartConfig}
-                            cardTitle={`Unemployment Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${1975} to ${2024} in % of the total labor force`}
-                        />
-                    )}
-                </div>
-            </section>
         </div>
     );
 }

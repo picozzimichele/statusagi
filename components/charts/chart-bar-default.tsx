@@ -58,7 +58,6 @@ export function ChartBarDefault({
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 4)}
                         />
                         <ChartTooltip
                             cursor={true}
