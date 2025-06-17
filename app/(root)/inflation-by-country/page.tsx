@@ -49,9 +49,9 @@ export default async function Page({ searchParams }: Props) {
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
     const { country } = await searchParams;
     const { series } = await searchParams;
-    const currentLastDataYear = 2024;
+    const currentLastDataYear = 2023;
     const startingCountry = "United States";
-    const startingName = "Inflation, consumer prices (annual %)";
+    const startingSeries = "Inflation, consumer prices (annual %)";
 
     const chartConfig = {
         rate: {
