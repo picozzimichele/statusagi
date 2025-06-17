@@ -2,7 +2,13 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
-import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, FolderSearch } from "lucide-react";
+import {
+    ChartNoAxesColumnIncreasing,
+    TrendingUp,
+    TextSearch,
+    FolderSearch,
+    Info,
+} from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import Link from "next/link";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
@@ -168,6 +174,7 @@ export default async function Page({ searchParams }: Props) {
         data,
         (country as string) || startingCountry
     );
+
     // Get the top 10 countries by unemployment rate
     const topCountries = getTopCountriesByUnemploymentRate(data, 10);
 
@@ -180,7 +187,7 @@ export default async function Page({ searchParams }: Props) {
         unemploymentRates[unemploymentRates.length - 2]?.rate;
 
     return (
-        <div className="flex flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
+        <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
             <div className="flex w-full">
                 <p className="font-medium">Unemployment rate by country</p>
@@ -190,8 +197,9 @@ export default async function Page({ searchParams }: Props) {
             <div className="flex w-full">
                 <Combobox
                     initialValue="Select Country..."
-                    paramCountry={country as string}
+                    currentParam={country as string}
                     dropDownData={allCountriesTransformed}
+                    selectedParamName="country"
                     href={{
                         country: country as string,
                     }}
@@ -300,9 +308,32 @@ export default async function Page({ searchParams }: Props) {
                         <WorldMapInteractive
                             countryData={displayWorldCountryData}
                             labelName={"Unemployment Rate"}
-                            legend={{ show: true }}
+                            legend={{
+                                show: true,
+                            }}
                         />
                     </div>
+                </Card>
+            </section>
+            {/* Methodology Description */}
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full dark:bg-gray-900">
+                    <CardHeader>
+                        <CardTitle className="text-sm">
+                            <p className="flex items-center gap-1">
+                                Unemployment Rate <Info className="h-3 w-3 mb-2" />
+                            </p>
+                        </CardTitle>
+                        <CardDescription className="text-xs">
+                            This indicator is measured as a percentage of the labour force and is
+                            seasonally adjusted. Unemployment rate is the share of the labour force
+                            without work. The labour force is the total number of employees, the
+                            self-employed, unpaid family workers and the unemployed. Unemployed
+                            people are those of a working age who do not have a job, are available
+                            for work and have taken specific steps to find a job in the previous
+                            four weeks.
+                        </CardDescription>
+                    </CardHeader>
                 </Card>
             </section>
         </div>

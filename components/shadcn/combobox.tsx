@@ -42,16 +42,18 @@ const frameworks = [
 export function Combobox({
     initialValue,
     dropDownData = frameworks,
-    paramCountry,
+    currentParam,
+    selectedParamName,
     href,
 }: {
     initialValue: string;
     dropDownData?: { value: string; label: string }[];
-    paramCountry?: string;
+    currentParam?: string;
+    selectedParamName: string;
     href: { [key: string]: string };
 }) {
     const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState(paramCountry || "");
+    const [value, setValue] = React.useState(currentParam || "");
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -60,7 +62,7 @@ export function Combobox({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="flex min-w-[200px] max-w-[400px] justify-between"
                 >
                     {value
                         ? dropDownData.find((dropDownData) => dropDownData.value === value)?.label
@@ -68,7 +70,7 @@ export function Combobox({
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[200px] justify-between p-0">
                 <Command>
                     <CommandInput placeholder={initialValue} className="h-9" />
                     <CommandList>
@@ -77,10 +79,11 @@ export function Combobox({
                             {dropDownData.map((dropDownData) => (
                                 <Link
                                     key={dropDownData.value}
-                                    className="bg-green-100 w-full"
+                                    className="w-full"
                                     scroll={false}
                                     href={`?${new URLSearchParams({
-                                        country: dropDownData.value,
+                                        ...href,
+                                        [selectedParamName || ""]: dropDownData.value,
                                     })}`}
                                 >
                                     <CommandItem

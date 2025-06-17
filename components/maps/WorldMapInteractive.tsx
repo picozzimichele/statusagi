@@ -20,7 +20,7 @@ export default function WorldMapInteractive({
         x: number;
         y: number;
         name: string;
-        rate: string;
+        rate: string | number | null;
     } | null>(null);
 
     // FUNCTIONS
@@ -89,7 +89,7 @@ export default function WorldMapInteractive({
     );
 
     return (
-        <div className="relative w-full h-full flex-col">
+        <div className="flex w-full h-full flex-col">
             {tooltip && (
                 <div
                     className="fixed z-50 dark:bg-black bg-white dark:text-white text-xs px-2 py-1 rounded pointer-events-none flex flex-col"
@@ -100,13 +100,13 @@ export default function WorldMapInteractive({
                         <div className="flex items-center gap-2">
                             <div
                                 className={`h-2.5 w-2.5 rounded-xs ${getColorFromRate(
-                                    tooltip.rate ? parseFloat(tooltip.rate) : null,
+                                    tooltip.rate ? parseFloat(tooltip.rate.toString()) : null,
                                     true
                                 )}`}
                             />
                             <span className="ml-2 text-muted-foreground">{labelName}:</span>
                             <span className="font-mono font-medium">
-                                {tooltip.rate.slice(0, 4)}%
+                                {tooltip?.rate.toString().slice(0, 4)}%
                             </span>
                         </div>
                     )}
