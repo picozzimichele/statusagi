@@ -83,7 +83,7 @@ export default async function Page({ searchParams }: Props) {
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length - 1)
+            .slice(4, Object.keys(target).length)
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
@@ -143,7 +143,6 @@ export default async function Page({ searchParams }: Props) {
             }
         });
 
-        console.log("Merged Data", mergedData);
         return mergedData;
     }
 
@@ -319,6 +318,7 @@ export default async function Page({ searchParams }: Props) {
                             labelName={"Inflation Rate"}
                             legend={{
                                 show: true,
+                                legendRate: [2, 5, 7],
                             }}
                         />
                     </div>

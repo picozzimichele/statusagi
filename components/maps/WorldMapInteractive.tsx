@@ -9,7 +9,7 @@ export default function WorldMapInteractive({
     labelName,
 }: {
     countryData?: any;
-    legend?: { show: boolean };
+    legend: { show: boolean; legendRate: number[] };
     labelName?: string;
 }) {
     // CONSTANTS
@@ -59,15 +59,22 @@ export default function WorldMapInteractive({
         setTooltip(null);
     };
 
-    const getColorFromRate = (rate: number | null, isBackground?: boolean): string => {
-        if (rate === null || isNaN(rate)) return isBackground ? "bg-gray-200" : "text-gray-200";
-        if (rate < 4) return isBackground ? "bg-green-200" : "text-green-200";
-        if (rate < 7) return isBackground ? "bg-yellow-200" : "text-yellow-200";
-        if (rate < 10) return isBackground ? "bg-orange-200" : "text-orange-300";
-        return isBackground ? "bg-red-200" : "text-red-400";
-    };
-
     // USE CALLBACK https://medium.com/welldone-software/usecallback-might-be-what-you-meant-by-useref-useeffect-773bc0278ae
+
+    const getColorFromRate = useCallback(
+        (rate: number | null, isBackground?: boolean) => {
+            if (rate === null || isNaN(rate)) return isBackground ? "bg-gray-200" : "text-gray-200";
+            if (rate < legend.legendRate[0])
+                return isBackground ? "bg-green-200" : "text-green-200";
+            if (rate < legend.legendRate[1])
+                return isBackground ? "bg-yellow-200" : "text-yellow-200";
+            if (rate < legend.legendRate[2])
+                return isBackground ? "bg-orange-200" : "text-orange-300";
+            return isBackground ? "bg-red-200" : "text-red-400";
+        },
+        [legend.legendRate]
+    );
+
     const initializeMap = useCallback(
         (mapNode) => {
             if (mapNode) {
@@ -85,7 +92,7 @@ export default function WorldMapInteractive({
                 });
             }
         },
-        [countryData]
+        [countryData, getColorFromRate]
     );
 
     return (
@@ -120,10 +127,16 @@ export default function WorldMapInteractive({
             {/* Legend */}
             {legend?.show && (
                 <div className="flex gap-2 items-center pt-10 md:pt-16">
-                    <LegendInput color="bg-green-200" text="Less than 4%" />
-                    <LegendInput color="bg-yellow-200" text="Less than 7%" />
-                    <LegendInput color="bg-orange-300" text="Less than 10%" />
-                    <LegendInput color="bg-red-400" text="10% or more" />
+                    <LegendInput color="bg-green-200" text={`Less than ${legend.legendRate[0]}%`} />
+                    <LegendInput
+                        color="bg-yellow-200"
+                        text={`Less than ${legend.legendRate[1]}%`}
+                    />
+                    <LegendInput
+                        color="bg-orange-300"
+                        text={`Less than ${legend.legendRate[2]}%`}
+                    />
+                    <LegendInput color="bg-red-400" text={`${legend.legendRate[2]}% or more`} />
                     <LegendInput color="bg-gray-200" text="No data" />
                 </div>
             )}

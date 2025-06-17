@@ -310,6 +310,7 @@ export default async function Page({ searchParams }: Props) {
                             labelName={"Unemployment Rate"}
                             legend={{
                                 show: true,
+                                legendRate: [4, 7, 10],
                             }}
                         />
                     </div>
