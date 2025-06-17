@@ -18,9 +18,25 @@ type CountryData = {
     [key: string]: string;
 };
 
+type MetadataEntry = {
+    Country: string;
+    "Alpha-2": string;
+    "Alpha-3": string;
+    Numeric: number;
+    Latitude?: number;
+    Longitude?: number;
+};
+
 type ChartEntry = {
     year: string;
     rate: number;
+};
+
+type MergedEntry = {
+    Country: string;
+    "Alpha-2": string;
+    "Alpha-3": string;
+    "2024": string | null;
 };
 
 type Props = {
@@ -74,7 +90,7 @@ export default async function Page({ searchParams }: Props) {
         return newTarget;
     }
 
-    function getTopCountries(dataset: CountryData[], year: string, topN: number) {
+    function getTopCountries(dataset: CountryData[], year: string, topN?: number) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
@@ -87,12 +103,44 @@ export default async function Page({ searchParams }: Props) {
             };
         });
 
+        // Return early if no topN is specified or is less than or equal to 0
+        if (!topN || topN <= 0) {
+            return newDataset;
+        }
+
         const sorted = newDataset
             .filter((entry) => !isNaN(entry.rate))
             .sort((a, b) => b.rate - a.rate)
             .slice(0, topN);
 
         return sorted;
+    }
+
+    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: MetadataEntry[]) {
+        const cleanedData = getTopCountries(data, currentLastDataYear.toString());
+
+        const mergedData = cleanedData.map((entry) => {
+            const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.Alpha3);
+
+            if (match) {
+                return {
+                    Country: entry.country,
+                    "Alpha-2": match["Alpha-2"],
+                    "Alpha-3": match["Alpha-3"],
+                    "2024": isNaN(entry.rate) ? "N/A" : entry.rate,
+                };
+            } else {
+                return {
+                    Country: entry.country,
+                    "Alpha-2": "No Match",
+                    "Alpha-3": entry.Alpha3,
+                    "2024": isNaN(entry.rate) ? "N/A" : entry.rate,
+                };
+            }
+        });
+
+        console.log("Merged Data", mergedData);
+        return mergedData;
     }
 
     // Filtering the data
@@ -126,6 +174,8 @@ export default async function Page({ searchParams }: Props) {
         inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.rate;
 
     const topCountries = getTopCountries(data, currentLastDataYear.toString(), 10);
+
+    const mapData = mergeDataWithIsoCodes(data, isoCountryData);
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -252,17 +302,17 @@ export default async function Page({ searchParams }: Props) {
             <section className="flex flex-col w-full gap-4">
                 <Card className="flex w-full h-full">
                     <CardHeader>
-                        <CardTitle>Global Unemployment Overview</CardTitle>
+                        <CardTitle>Global Inflation Overview</CardTitle>
                         <CardDescription>
-                            Interactive world map showing unemployment rates by country{" "}
+                            Interactive world map showing Inflation rates by country{" "}
                             {currentLastDataYear}
                         </CardDescription>
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
                     <div className="flex w-[90%] h-full mx-auto">
                         <WorldMapInteractive
-                            countryData={topCountries}
-                            labelName={"Unemployment Rate"}
+                            countryData={mapData}
+                            labelName={"Inflation Rate"}
                             legend={{
                                 show: true,
                             }}

@@ -37,9 +37,9 @@ import Link from "next/link";
 // This is sample data.
 const data = {
     user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
+        name: "coming soon",
+        email: "statistics@usagi.com",
+        avatar: "/images/usagiou.png",
     },
     teams: [
         {
