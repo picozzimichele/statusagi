@@ -47,8 +47,7 @@ export default async function Page({ searchParams }: Props) {
     // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("/lib/data/inflation.json");
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
-    const { country } = await searchParams;
-    const { series } = await searchParams;
+
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
     const startingSeries = "Inflation, consumer prices (annual %)";
@@ -59,6 +58,11 @@ export default async function Page({ searchParams }: Props) {
             color: "#BDDDE4",
         },
     };
+
+    const { country } = await searchParams;
+    const { series } = (await searchParams) || startingSeries;
+
+    const seriesSelected = series && series?.length > 0 ? series : startingSeries;
 
     // This gets all the series names from the data
     function getAllSeriesNames(data: CountryData[]): string[] {
@@ -145,7 +149,7 @@ export default async function Page({ searchParams }: Props) {
 
     // Filtering the data
     const allSeriesNames = getAllSeriesNames(data);
-    const filteredData = data.filter((entry) => entry["Series Name"] === allSeriesNames[0]);
+    const filteredData = data.filter((entry) => entry["Series Name"] === seriesSelected);
     const allCountries = getAllCountries(filteredData);
 
     const allSeriesNamesTransformed = allSeriesNames.map((series) => ({
