@@ -3,7 +3,7 @@ import parseLocalJSON from "@/utils/parseLocalJSON";
 import {
     ChartNoAxesColumnIncreasing,
     FolderSearch,
-    Link,
+    Info,
     TextSearch,
     TrendingUp,
 } from "lucide-react";
@@ -11,6 +11,8 @@ import { Combobox } from "@/components/shadcn/combobox";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
+import Link from "next/link";
+import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 
 type CountryData = {
     [key: string]: string;
@@ -222,10 +224,11 @@ export default async function Page({ searchParams }: Props) {
                             <CardDescription>
                                 <Link
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     className="hover:underline"
                                     href="https://databank.worldbank.org/source/world-development-indicators"
                                 >
-                                    World Bank
+                                    World Bank Group
                                 </Link>
                             </CardDescription>
                             <CardAction>
@@ -236,7 +239,7 @@ export default async function Page({ searchParams }: Props) {
                     {/* Top Countries Chart */}
                     <ChartBarMixed
                         title="Top 10 Countries"
-                        description={`By unemployment rate in ${currentLastDataYear}`}
+                        description={`By inflation rate in ${currentLastDataYear}`}
                         chartData={topCountries.map((entry, index) => ({
                             country: entry.country,
                             rate: entry.rate,
@@ -244,6 +247,56 @@ export default async function Page({ searchParams }: Props) {
                         }))}
                     />
                 </div>
+            </section>
+            {/* World Map */}
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full">
+                    <CardHeader>
+                        <CardTitle>Global Unemployment Overview</CardTitle>
+                        <CardDescription>
+                            Interactive world map showing unemployment rates by country{" "}
+                            {currentLastDataYear}
+                        </CardDescription>
+                    </CardHeader>
+                    {/* Here you would include your WorldMapInteractive component */}
+                    <div className="flex w-[90%] h-full mx-auto">
+                        <WorldMapInteractive
+                            countryData={topCountries}
+                            labelName={"Unemployment Rate"}
+                            legend={{
+                                show: true,
+                            }}
+                        />
+                    </div>
+                </Card>
+            </section>
+            {/* Methodology Description */}
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full dark:bg-gray-900">
+                    <CardHeader>
+                        <CardTitle className="text-sm">
+                            <p className="flex items-center gap-1">
+                                Inflation Rate Consumer Price Index (CPI)
+                                <Info className="h-3 w-3 mb-2" />
+                            </p>
+                        </CardTitle>
+                        <CardDescription className="text-xs">
+                            The Consumer Price Index (CPI), calculated by the Bureau of Labor
+                            Statistics (BLS), measures the monthly change in price for a figurative
+                            basket of goods and services. These items can change over time. CPI is a
+                            weighted average of prices and is representative of aggregate consumer
+                            spending. It is used as a metric for inflation and deflation. The CPI
+                            accounts for <b>substitution effects—consumers</b>&apos; tendency to
+                            shift spending away from products and product categories that have grown
+                            relatively more expensive with time. <br />
+                            <br />
+                            In our opinion CPI is only a fraction of the whole picture of real
+                            inflation and might be understated compared to reality. It still remains
+                            a valuable indicator of the general price level and inflation trends in
+                            an economy.
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
             </section>
         </div>
     );

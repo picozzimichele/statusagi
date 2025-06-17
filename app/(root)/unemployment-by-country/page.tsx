@@ -315,6 +315,7 @@ export default async function Page({ searchParams }: Props) {
                     </div>
                 </Card>
             </section>
+            {/* Methodology Description */}
             <section className="flex flex-col w-full gap-4">
                 <Card className="flex w-full h-full dark:bg-gray-900">
                     <CardHeader>
