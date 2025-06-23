@@ -92,11 +92,6 @@ export default async function page({ searchParams }: Props) {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
             const rate2023 = entry["2023 [YR2023]"];
-            const seriesName = entry["Series Name"];
-
-            console.log(
-                `Processing data for ${countryName} (${countryAlpha3}) in year ${year} with series "${seriesName}"`
-            );
 
             return {
                 country: countryName,
@@ -104,6 +99,8 @@ export default async function page({ searchParams }: Props) {
                 rate: parseFloat(Number(rate2023.toString().replace(",", ".")).toFixed(1)),
             };
         });
+
+        console.log("New Dataset:", newDataset);
 
         // Return early if no topN is specified or is less than or equal to 0
         if (!topN || topN <= 0) {
@@ -120,12 +117,9 @@ export default async function page({ searchParams }: Props) {
 
     function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: ISOJsonCountryT[]) {
         const cleanedData = getTopCountries(data, currentLastDataYear.toString());
-        console.log("Cleaned Data:", cleanedData);
 
         const mergedData = cleanedData.map((entry) => {
             const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.Alpha3);
-
-            console.log(match, "MATCH");
 
             if (match) {
                 return {
@@ -143,8 +137,6 @@ export default async function page({ searchParams }: Props) {
                 };
             }
         });
-
-        console.log("Merged Data:", mergedData);
 
         return mergedData;
     }
@@ -177,7 +169,7 @@ export default async function page({ searchParams }: Props) {
         dataCurrentCountry[dataCurrentCountry.length - 1]?.rate -
         dataCurrentCountry[dataCurrentCountry.length - 2]?.rate;
 
-    const topCountries = getTopCountries(data, currentLastDataYear.toString(), 10);
+    const topCountries = getTopCountries(filteredData, currentLastDataYear.toString(), 10);
 
     const mapData = mergeDataWithIsoCodes(data, isoCountryData);
 
@@ -289,7 +281,7 @@ export default async function page({ searchParams }: Props) {
                     {/* Top Countries Chart */}
                     <ChartBarMixed
                         title="Top 10 Countries"
-                        description={`By inflation rate in ${currentLastDataYear}`}
+                        description={`By debt level in ${currentLastDataYear}`}
                         chartData={topCountries.map((entry, index) => ({
                             country: entry.country,
                             rate: entry.rate,
@@ -328,24 +320,21 @@ export default async function page({ searchParams }: Props) {
                     <CardHeader>
                         <CardTitle className="text-sm">
                             <p className="flex items-center gap-1">
-                                Inflation Rate Consumer Price Index (CPI)
+                                Central government debt, total (% of GDP)
                                 <Info className="h-3 w-3 mb-2" />
                             </p>
                         </CardTitle>
                         <CardDescription className="text-xs">
-                            The Consumer Price Index (CPI), calculated by the Bureau of Labor
-                            Statistics (BLS), measures the monthly change in price for a figurative
-                            basket of goods and services. These items can change over time. CPI is a
-                            weighted average of prices and is representative of aggregate consumer
-                            spending. It is used as a metric for inflation and deflation. The CPI
-                            accounts for <b>substitution effects—consumers</b>&apos; tendency to
-                            shift spending away from products and product categories that have grown
-                            relatively more expensive with time. <br />
+                            General government debt is the gross debt of the general government as a
+                            percentage of GDP. Debt is calculated as the sum of the following
+                            liability categories where applicable: currency and deposits; debt
+                            securities, loans; insurance, pensions and standardised guarantee
+                            schemes, and other accounts payable.
                             <br />
-                            In our opinion CPI is only a fraction of the whole picture of real
-                            inflation and might be understated compared to reality. It still remains
-                            a valuable indicator of the general price level and inflation trends in
-                            an economy.
+                            <br /> A key indicator for the sustainability of government finance,
+                            changes in government debt over time primarily reflect the impact of
+                            past government deficits. This indicator is measured as a percentage of
+                            GDP.
                         </CardDescription>
                     </CardHeader>
                 </Card>
