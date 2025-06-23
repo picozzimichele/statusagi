@@ -315,8 +315,9 @@ export default async function page({ searchParams }: Props) {
                             labelName={"Debt Level"}
                             legend={{
                                 show: true,
-                                legendRate: [2, 5, 7],
+                                legendRate: [100, 150, 170],
                             }}
+                            rateYear="2023"
                         />
                     </div>
                 </Card>
