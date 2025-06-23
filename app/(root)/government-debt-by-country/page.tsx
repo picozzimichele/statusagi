@@ -145,6 +145,7 @@ export default async function page({ searchParams }: Props) {
     const allSeriesNames = getAllSeriesNames(data);
     const filteredData = data.filter((entry) => entry["Series Name"] === seriesSelected);
     const allCountries = getAllCountries(filteredData);
+    const isRateSeries = seriesSelected === "Central government debt, total (% of GDP)";
 
     const allSeriesNamesTransformed = allSeriesNames.map((series) => ({
         value: series,
@@ -237,9 +238,7 @@ export default async function page({ searchParams }: Props) {
                             chartConfig={chartConfig}
                             cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
                             cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
-                            isPercentage={
-                                seriesSelected !== "Central government debt, total (current LCU)"
-                            }
+                            isPercentage={isRateSeries}
                         />
                     )}
                 </div>

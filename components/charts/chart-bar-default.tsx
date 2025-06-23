@@ -80,6 +80,9 @@ export function ChartBarDefault({
                                 position="top"
                                 offset={12}
                                 className="fill-foreground hidden md:block text-[8px]"
+                                formatter={(value) =>
+                                    `${isPercentage ? value + "%" : formatLargeNumber(value, true)}`
+                                }
                             />
                         </Bar>
                     </BarChart>

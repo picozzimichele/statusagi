@@ -5,19 +5,19 @@ export function calculatePercentageChange(x: number, y: number): number {
     return ((y - x) / x) * 100;
 }
 
-export function formatLargeNumber(num: number | string | any): string {
+export function formatLargeNumber(num: number | string | any, short?: boolean): string {
     if (typeof num === "string") {
         num = parseFloat(num);
     }
 
     if (num >= 1e12) {
-        return (num / 1e12).toFixed(2) + " Trillion";
+        return (num / 1e12).toFixed(2) + ` ${short ? "T" : "Trillion"}`;
     } else if (num >= 1e9) {
-        return (num / 1e9).toFixed(2) + " Billion";
+        return (num / 1e9).toFixed(2) + ` ${short ? "B" : "Billion"}`;
     } else if (num >= 1e6) {
-        return (num / 1e6).toFixed(2) + " Million";
+        return (num / 1e6).toFixed(2) + ` ${short ? "M" : "Million"}`;
     } else if (num >= 1e3) {
-        return (num / 1e3).toFixed(2) + " Thousand";
+        return (num / 1e3).toFixed(2) + ` ${short ? "K" : "Thousand"}`;
     } else {
         return num.toString();
     }
