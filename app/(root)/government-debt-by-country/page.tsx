@@ -237,6 +237,9 @@ export default async function page({ searchParams }: Props) {
                             chartConfig={chartConfig}
                             cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
                             cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
+                            isPercentage={
+                                seriesSelected !== "Central government debt, total (current LCU)"
+                            }
                         />
                     )}
                 </div>
@@ -285,7 +288,7 @@ export default async function page({ searchParams }: Props) {
                     {/* Top Countries Chart */}
                     <ChartBarMixed
                         title="Top 10 Countries"
-                        description={`By debt level in ${currentLastDataYear}`}
+                        description={`By debt level in ${currentLastDataYear} % of GDP`}
                         chartData={topCountries.map((entry, index) => ({
                             country: entry.country,
                             rate: entry.rate,
