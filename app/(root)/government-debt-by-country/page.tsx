@@ -10,6 +10,15 @@ type ChartEntry = {
     rate: number;
 };
 
+type ISOJsonCountryCheck = {
+    Country: string;
+    "Alpha-2": string;
+    "Alpha-3": string;
+    Numeric: number;
+    Latitude?: number;
+    Longitude?: number;
+};
+
 type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };

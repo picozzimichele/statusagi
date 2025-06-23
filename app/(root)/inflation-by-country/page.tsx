@@ -48,7 +48,7 @@ export default async function Page({ searchParams }: Props) {
     const data = await parseLocalJSON("/lib/data/inflation.json");
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
 
-    const currentLastDataYear = 2023;
+    const currentLastDataYear = 2024;
     const startingCountry = "United States";
     const startingSeries = "Inflation, consumer prices (annual %)";
 
