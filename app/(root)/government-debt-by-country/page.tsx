@@ -169,7 +169,11 @@ export default async function page({ searchParams }: Props) {
         dataCurrentCountry[dataCurrentCountry.length - 1]?.rate -
         dataCurrentCountry[dataCurrentCountry.length - 2]?.rate;
 
-    const topCountries = getTopCountries(filteredData, currentLastDataYear.toString(), 10);
+    const topCountries = getTopCountries(
+        data.filter((entry) => entry["Series Name"] === startingSeries),
+        currentLastDataYear.toString(),
+        10
+    );
 
     const mapData = mergeDataWithIsoCodes(data, isoCountryData);
 
