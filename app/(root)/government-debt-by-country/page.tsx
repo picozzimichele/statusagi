@@ -125,6 +125,8 @@ export default async function page({ searchParams }: Props) {
         const mergedData = cleanedData.map((entry) => {
             const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.Alpha3);
 
+            console.log(match, "MATCH");
+
             if (match) {
                 return {
                     Country: entry.country,
@@ -141,6 +143,8 @@ export default async function page({ searchParams }: Props) {
                 };
             }
         });
+
+        console.log("Merged Data:", mergedData);
 
         return mergedData;
     }
@@ -182,7 +186,7 @@ export default async function page({ searchParams }: Props) {
             {" "}
             {/* Title and section header */}
             <div className="flex w-full">
-                <p className="font-medium">Inflation rate by country</p>
+                <p className="font-medium">Debt rate by country</p>
                 <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
             </div>
             {/* Country Selection */}
@@ -216,7 +220,7 @@ export default async function page({ searchParams }: Props) {
                         <Card className="flex w-full">
                             <CardHeader>
                                 <CardTitle>
-                                    No inflation data found for the selected country {country}.
+                                    No debt data found for the selected country {country}.
                                 </CardTitle>
                                 <CardDescription>
                                     Try a new seach by selectin another country from the available
@@ -235,10 +239,8 @@ export default async function page({ searchParams }: Props) {
                             dataKeyBar="rate"
                             chartData={dataCurrentCountry}
                             chartConfig={chartConfig}
-                            cardTitle={`Inflation Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of Consumer Prices`}
+                            cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
+                            cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
                         />
                     )}
                 </div>
@@ -300,9 +302,9 @@ export default async function page({ searchParams }: Props) {
             <section className="flex flex-col w-full gap-4">
                 <Card className="flex w-full h-full">
                     <CardHeader>
-                        <CardTitle>Global Inflation Overview</CardTitle>
+                        <CardTitle>Global Debt Overview</CardTitle>
                         <CardDescription>
-                            Interactive world map showing Inflation rates by country{" "}
+                            Interactive world map showing Debt levels by country{" "}
                             {currentLastDataYear}
                         </CardDescription>
                     </CardHeader>
@@ -310,7 +312,7 @@ export default async function page({ searchParams }: Props) {
                     <div className="flex w-[90%] h-full mx-auto">
                         <WorldMapInteractive
                             countryData={mapData}
-                            labelName={"Inflation Rate"}
+                            labelName={"Debt Level"}
                             legend={{
                                 show: true,
                                 legendRate: [2, 5, 7],

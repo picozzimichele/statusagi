@@ -7,10 +7,12 @@ export default function WorldMapInteractive({
     countryData,
     legend,
     labelName,
+    rateYear = "2024",
 }: {
     countryData?: any;
     legend: { show: boolean; legendRate: number[] };
     labelName?: string;
+    rateYear?: string;
 }) {
     // CONSTANTS
     const hoverColor = "text-[#80D8C3]"; // Define the hover color
@@ -24,12 +26,17 @@ export default function WorldMapInteractive({
     } | null>(null);
 
     // FUNCTIONS
-    function getCountryData({ countryData, countryId }: { countryData?: any; countryId?: string }) {
-        const country = countryData.find((item) => item["Alpha-2"] === countryId?.toUpperCase());
-        return country
-            ? { country: country["Country"] || null, rate: country["2024"] || null }
-            : null;
-    }
+    const getCountryData = useCallback(
+        ({ countryData, countryId }: { countryData?: any; countryId?: string }) => {
+            const country = countryData?.find(
+                (item) => item["Alpha-2"] === countryId?.toUpperCase()
+            );
+            return country
+                ? { country: country["Country"] || null, rate: country[rateYear] || null }
+                : null;
+        },
+        [rateYear]
+    );
 
     const handleMouseOver = (e: React.MouseEvent<SVGElement>) => {
         const target = e.target as SVGElement;
@@ -92,7 +99,7 @@ export default function WorldMapInteractive({
                 });
             }
         },
-        [countryData, getColorFromRate]
+        [countryData, getColorFromRate, getCountryData]
     );
 
     return (
