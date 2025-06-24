@@ -188,7 +188,7 @@ export default async function page({ searchParams }: Props) {
                 <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
             </div>
             {/* Country Selection */}
-            <div className="flex w-full gap-3">
+            <div className="flex w-full gap-3 flex-col md:flex-row">
                 <Combobox
                     initialValue="Select Country..."
                     currentParam={country as string}
