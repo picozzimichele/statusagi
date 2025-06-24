@@ -13,6 +13,7 @@ import {
     Info,
 } from "lucide-react";
 import Link from "next/link";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -251,8 +252,16 @@ export default async function page({ searchParams }: Props) {
                                 {dataCurrentCountry.length === 0 && "No data available"}
                                 {dataCurrentCountry.length > 0 && percentageChangeOverLastYear && (
                                     <span>
-                                        Trending {percentageChangeOverLastYear > 0 ? "up" : "down"}️
-                                        by {percentageChangeOverLastYear.toFixed(1)}%
+                                        {isRateSeries
+                                            ? `Trending ${
+                                                  percentageChangeOverLastYear > 0 ? "up" : "down"
+                                              }️
+                                        by ${percentageChangeOverLastYear.toFixed(1)}%`
+                                            : `Trending ${
+                                                  percentageChangeOverLastYear > 0 ? "up" : "down"
+                                              }️ by ${formatLargeNumber(
+                                                  percentageChangeOverLastYear
+                                              )}`}
                                     </span>
                                 )}
                             </CardTitle>
