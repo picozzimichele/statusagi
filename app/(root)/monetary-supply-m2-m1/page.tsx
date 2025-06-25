@@ -4,6 +4,7 @@ import { ChartLineDefault } from "@/components/charts/chart-line-default";
 import { ChartConfig } from "@/components/ui/chart";
 import { CircleDollarSign, TextSearch, PiggyBank, Info } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
@@ -54,22 +55,30 @@ export default async function page() {
                 <CircleDollarSign className="ml-2 h-6 w-6 text-orange-500" />
             </div>
             <section className="flex w-full h-full gap-4 flex-col lg:flex-row">
-                {/* M1 Monetary Supply Chart */}
-                <ChartLineDefault
-                    chartData={chartDataM1}
-                    chartConfig={chartConfigM1}
-                    title="M1 Monetary Supply"
-                    cardDescription="1959 - April 2025"
-                    dataKeyLine="M1SL"
-                />
-                {/* M2 Monetary Supply Chart */}
-                <ChartLineDefault
-                    chartData={chartDataM2}
-                    chartConfig={chartConfigM2}
-                    title="M2 Monetary Supply"
-                    cardDescription="1959 - April 2025"
-                    dataKeyLine="M2SL"
-                />
+                <ResizablePanelGroup direction="horizontal" className="gap-4">
+                    {/* M1 Monetary Supply Chart */}
+                    <ResizablePanel defaultSize={50}>
+                        <ChartLineDefault
+                            chartData={chartDataM1}
+                            chartConfig={chartConfigM1}
+                            title="M1 Monetary Supply"
+                            cardDescription="1959 - April 2025"
+                            dataKeyLine="M1SL"
+                        />
+                    </ResizablePanel>
+                    {/* Resizable Handle */}
+                    <ResizableHandle withHandle />
+                    {/* M2 Monetary Supply Chart */}
+                    <ResizablePanel defaultSize={50}>
+                        <ChartLineDefault
+                            chartData={chartDataM2}
+                            chartConfig={chartConfigM2}
+                            title="M2 Monetary Supply"
+                            cardDescription="1959 - April 2025"
+                            dataKeyLine="M2SL"
+                        />
+                    </ResizablePanel>
+                </ResizablePanelGroup>
             </section>
             <section className="flex w-full h-full gap-4 flex-col lg:flex-row">
                 {/* Source Card */}
