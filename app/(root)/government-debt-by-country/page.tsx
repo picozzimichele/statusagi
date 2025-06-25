@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { formatLargeNumber } from "@/utils/utilsFunctions";
+import PageTitle from "@/components/title/PageTitle";
 
 type CountryData = {
     [key: string]: string;
@@ -183,10 +184,10 @@ export default async function page({ searchParams }: Props) {
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {" "}
             {/* Title and section header */}
-            <div className="flex w-full">
-                <p className="font-medium">Debt rate by country</p>
-                <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
-            </div>
+            <PageTitle
+                title="Debt rate by country"
+                svg={<ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />}
+            />
             {/* Country Selection */}
             <div className="flex w-full gap-3 flex-col md:flex-row">
                 <Combobox

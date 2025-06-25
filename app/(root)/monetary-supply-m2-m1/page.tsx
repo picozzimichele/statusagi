@@ -7,6 +7,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/comp
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import ShareComponent from "@/components/share/ShareComponent";
+import PageTitle from "@/components/title/PageTitle";
 
 export default async function page() {
     // Load the data from a local JSON file
@@ -50,20 +52,20 @@ export default async function page() {
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
-            <div className="flex w-full">
-                <p className="font-medium">Monetary Supply USD</p>
-                <CircleDollarSign className="ml-2 h-6 w-6 text-orange-500" />
-            </div>
-            <section className="flex w-full h-full gap-4 flex-col lg:flex-row">
+            <PageTitle
+                title="Monetary Supply USD"
+                svg={<CircleDollarSign className="h-6 w-6 text-orange-500" />}
+            />
+            <section className="flex w-full h-full gap-4 flex-col md:flex-row">
                 <ResizablePanelGroup
                     direction="horizontal"
-                    className="gap-4 !flex-col lg:!flex-row"
+                    className="gap-4 !flex-col md:!flex-row"
                 >
                     {/* M1 Monetary Supply Chart */}
                     <ResizablePanel
                         defaultSize={50}
                         minSize={25}
-                        className="!basis-auto lg:!basis-0"
+                        className="!basis-auto md:!basis-0"
                     >
                         <ChartLineDefault
                             chartData={chartDataM1}
@@ -74,12 +76,12 @@ export default async function page() {
                         />
                     </ResizablePanel>
                     {/* Resizable Handle */}
-                    <ResizableHandle withHandle className="hidden lg:flex" />
+                    <ResizableHandle withHandle className="hidden md:flex" />
                     {/* M2 Monetary Supply Chart */}
                     <ResizablePanel
                         defaultSize={50}
                         minSize={25}
-                        className="!basis-auto lg:!basis-0"
+                        className="!basis-auto md:!basis-0"
                     >
                         <ChartLineDefault
                             chartData={chartDataM2}
