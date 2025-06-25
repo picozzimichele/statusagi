@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
     Card,
@@ -17,6 +17,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 export const description = "A line chart";
 
@@ -29,7 +30,7 @@ const chartConfig = {
 
 export function ChartLineDefault({ chartData }: { chartData: any[] }) {
     return (
-        <Card>
+        <Card className="flex flex-1 border-0">
             <CardHeader>
                 <CardTitle>Line Chart</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
@@ -52,6 +53,17 @@ export function ChartLineDefault({ chartData }: { chartData: any[] }) {
                             tickMargin={8}
                             tickFormatter={(value) => value.slice(value.length - 4)}
                         />
+                        <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            tickFormatter={(value) => value}
+                            label={{
+                                value: "Billions of Dollars",
+                                angle: -90,
+                                position: "insideLeft",
+                            }}
+                        />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Line
                             dataKey="M2SL"
@@ -63,14 +75,6 @@ export function ChartLineDefault({ chartData }: { chartData: any[] }) {
                     </LineChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="text-muted-foreground leading-none">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     );
 }

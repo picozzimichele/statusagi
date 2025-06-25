@@ -13,7 +13,7 @@ export default async function page() {
             month: "short",
             year: "numeric",
         }),
-        M2SL: parseFloat(item.M2SL.replace(",", "")),
+        M2SL: parseFloat(item.M2SL.replace(",", ".")),
     }));
 
     console.log("Parsed chart data", chartData);
