@@ -21,19 +21,24 @@ import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 export const description = "A line chart";
 
-const chartConfig = {
-    M2SL: {
-        label: "M2 Monetary Supply",
-        color: "var(--chart-1)",
-    },
-} satisfies ChartConfig;
-
-export function ChartLineDefault({ chartData }: { chartData: any[] }) {
+export function ChartLineDefault({
+    chartData,
+    chartConfig,
+    title = "M2 Monetary Supply",
+    cardDescription,
+    dataKeyLine = "M2SL",
+}: {
+    chartData: any[];
+    chartConfig: ChartConfig;
+    title: string;
+    cardDescription?: string;
+    dataKeyLine?: string;
+}) {
     return (
         <Card className="flex flex-1 border-0">
             <CardHeader>
-                <CardTitle>Line Chart</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{cardDescription}</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
@@ -75,7 +80,7 @@ export function ChartLineDefault({ chartData }: { chartData: any[] }) {
                             }
                         />
                         <Line
-                            dataKey="M2SL"
+                            dataKey={dataKeyLine}
                             type="natural"
                             stroke="var(--chart-1)"
                             strokeWidth={2}

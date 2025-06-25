@@ -81,8 +81,8 @@ const data = {
                     url: "/government-debt-by-country",
                 },
                 {
-                    title: "M2 Monetary Supply",
-                    url: "/m2-monetary-supply",
+                    title: "Monetary Supply M2/M1",
+                    url: "/monetary-supply-m2-m1",
                 },
             ],
         },
