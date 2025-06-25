@@ -80,6 +80,10 @@ const data = {
                     title: "Government Debt",
                     url: "/government-debt-by-country",
                 },
+                {
+                    title: "M2 Monetary Supply",
+                    url: "/m2-monetary-supply",
+                },
             ],
         },
     ],

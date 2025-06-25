@@ -44,7 +44,7 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
-    // Load the unemployment data from a local JSON file
+    // Load the data from a local JSON file
     const data = await parseLocalJSON("/lib/data/inflation.json");
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
 
