@@ -9,8 +9,10 @@ import {
     Command,
     Frame,
     GalleryVerticalEnd,
+    LifeBuoy,
     Map,
     PieChart,
+    Send,
     Settings2,
     SquareTerminal,
 } from "lucide-react";
@@ -33,6 +35,7 @@ import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { Collapsible, CollapsibleTrigger } from "@radix-ui/react-collapsible";
 import Link from "next/link";
+import { NavSecondary } from "./nav-secondary";
 
 // This is sample data.
 const data = {
@@ -77,7 +80,23 @@ const data = {
                     title: "Government Debt",
                     url: "/government-debt-by-country",
                 },
+                {
+                    title: "Monetary Supply M2/M1",
+                    url: "/monetary-supply-m2-m1",
+                },
             ],
+        },
+    ],
+    navSecondary: [
+        {
+            title: "Support",
+            url: "mailto:michele.g.picozzi@gmail.com",
+            icon: LifeBuoy,
+        },
+        {
+            title: "Feedback",
+            url: "mailto:michele.g.picozzi@gmail.com",
+            icon: Send,
         },
     ],
     projects: [
@@ -105,6 +124,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarHeader>{/* <TeamSwitcher teams={data.teams} /> */}</SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
+                <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

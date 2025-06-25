@@ -13,6 +13,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/comp
 import Link from "next/link";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
+import PageTitle from "@/components/title/PageTitle";
 
 type CountryData = {
     [key: string]: string;
@@ -189,10 +190,10 @@ export default async function Page({ searchParams }: Props) {
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {/* Title and section header */}
-            <div className="flex w-full">
-                <p className="font-medium">Unemployment rate by country</p>
-                <ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />
-            </div>
+            <PageTitle
+                title="Unemployment rate by country"
+                svg={<ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />}
+            />
             {/* Country Selection */}
             <div className="flex w-full">
                 <Combobox
@@ -310,6 +311,7 @@ export default async function Page({ searchParams }: Props) {
                             labelName={"Unemployment Rate"}
                             legend={{
                                 show: true,
+                                legendRate: [4, 7, 10],
                             }}
                         />
                     </div>

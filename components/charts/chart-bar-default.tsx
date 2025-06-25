@@ -10,6 +10,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 const chartDataExample = [
     { month: "1980", desktop: 7.175 },
@@ -34,6 +35,7 @@ export function ChartBarDefault({
     dataKeyBar,
     chartData,
     chartConfig,
+    isPercentage = true,
 }: {
     cardTitle?: string;
     cardDescription?: string;
@@ -41,6 +43,7 @@ export function ChartBarDefault({
     dataKeyBar: string;
     chartData?: any[];
     chartConfig: ChartConfig;
+    isPercentage?: boolean;
 }) {
     return (
         <Card className="flex flex-1 border-0">
@@ -66,7 +69,9 @@ export function ChartBarDefault({
                                 <ChartTooltipContent
                                     className="w-[200px]"
                                     hideLabel={false}
-                                    valueFormatter={(value) => `${value}%`}
+                                    valueFormatter={(value) =>
+                                        `${isPercentage ? value + "%" : formatLargeNumber(value)}`
+                                    }
                                 />
                             }
                         />
@@ -75,6 +80,9 @@ export function ChartBarDefault({
                                 position="top"
                                 offset={12}
                                 className="fill-foreground hidden md:block text-[8px]"
+                                formatter={(value) =>
+                                    `${isPercentage ? value + "%" : formatLargeNumber(value, true)}`
+                                }
                             />
                         </Bar>
                     </BarChart>

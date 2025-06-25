@@ -1,25 +1,31 @@
 import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
+import { ChartBarDefault } from "@/components/charts/chart-bar-default";
+import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
+import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
+import { Combobox } from "@/components/shadcn/combobox";
+import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import {
     ChartNoAxesColumnIncreasing,
     FolderSearch,
-    Info,
-    TextSearch,
     TrendingUp,
+    TextSearch,
+    Info,
 } from "lucide-react";
-import { Combobox } from "@/components/shadcn/combobox";
-import { ChartBarDefault } from "@/components/charts/chart-bar-default";
-import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
-import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import Link from "next/link";
-import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
 
 type CountryData = {
     [key: string]: string;
 };
 
-type MetadataEntry = {
+type ChartEntry = {
+    year: string;
+    rate: number;
+};
+
+type ISOJsonCountryT = {
     Country: string;
     "Alpha-2": string;
     "Alpha-3": string;
@@ -28,42 +34,30 @@ type MetadataEntry = {
     Longitude?: number;
 };
 
-type ChartEntry = {
-    year: string;
-    rate: number;
-};
-
-type MergedEntry = {
-    Country: string;
-    "Alpha-2": string;
-    "Alpha-3": string;
-    "2024": string | null;
-};
-
 type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function Page({ searchParams }: Props) {
-    // Load the data from a local JSON file
-    const data = await parseLocalJSON("/lib/data/inflation.json");
+export default async function page({ searchParams }: Props) {
+    // Load the government debt data from a local JSON file
+    const data = await parseLocalJSON("/lib/data/government-debt-by-country.json");
     const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
 
-    const currentLastDataYear = 2024;
+    const currentLastDataYear = 2023;
     const startingCountry = "United States";
-    const startingSeries = "Inflation, consumer prices (annual %)";
-
-    const chartConfig = {
-        rate: {
-            label: "Inflation Rate",
-            color: "#BDDDE4",
-        },
-    };
+    const startingSeries = "Central government debt, total (% of GDP)";
 
     const { country } = await searchParams;
     const { series } = (await searchParams) || startingSeries;
 
     const seriesSelected = series && series?.length > 0 ? series : startingSeries;
+
+    const chartConfig = {
+        rate: {
+            label: seriesSelected,
+            color: "#BDDDE4",
+        },
+    };
 
     // This gets all the series names from the data
     function getAllSeriesNames(data: CountryData[]): string[] {
@@ -76,7 +70,7 @@ export default async function Page({ searchParams }: Props) {
     }
 
     // Function to extract unemployment rates for a specific country
-    function getInflationRateByCountry(dataset: CountryData[], countryName: string): ChartEntry[] {
+    function getDataByCountry(dataset: CountryData[], countryName: string): ChartEntry[] {
         const target = dataset.find((entry) => entry["Country Name"] === countryName);
 
         if (!target) {
@@ -88,7 +82,7 @@ export default async function Page({ searchParams }: Props) {
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
-                const rate = parseFloat(Number(rateStr.replace(",", ".")).toFixed(1));
+                const rate = parseFloat(Number(rateStr.toString().replace(",", ".")).toFixed(1));
                 return { year, rate };
             });
 
@@ -99,14 +93,16 @@ export default async function Page({ searchParams }: Props) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2024 = entry["2024 [YR2024]"];
+            const rate2023 = entry["2023 [YR2023]"];
 
             return {
                 country: countryName,
                 Alpha3: countryAlpha3,
-                rate: parseFloat(Number(rate2024.replace(",", ".")).toFixed(1)),
+                rate: parseFloat(Number(rate2023.toString().replace(",", ".")).toFixed(1)),
             };
         });
+
+        console.log("New Dataset:", newDataset);
 
         // Return early if no topN is specified or is less than or equal to 0
         if (!topN || topN <= 0) {
@@ -121,7 +117,7 @@ export default async function Page({ searchParams }: Props) {
         return sorted;
     }
 
-    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: MetadataEntry[]) {
+    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: ISOJsonCountryT[]) {
         const cleanedData = getTopCountries(data, currentLastDataYear.toString());
 
         const mergedData = cleanedData.map((entry) => {
@@ -132,14 +128,14 @@ export default async function Page({ searchParams }: Props) {
                     Country: entry.country,
                     "Alpha-2": match["Alpha-2"],
                     "Alpha-3": match["Alpha-3"],
-                    "2024": isNaN(entry.rate) ? "N/A" : entry.rate,
+                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
                 };
             } else {
                 return {
                     Country: entry.country,
                     "Alpha-2": "No Match",
                     "Alpha-3": entry.Alpha3,
-                    "2024": isNaN(entry.rate) ? "N/A" : entry.rate,
+                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
                 };
             }
         });
@@ -151,6 +147,7 @@ export default async function Page({ searchParams }: Props) {
     const allSeriesNames = getAllSeriesNames(data);
     const filteredData = data.filter((entry) => entry["Series Name"] === seriesSelected);
     const allCountries = getAllCountries(filteredData);
+    const isRateSeries = seriesSelected === "Central government debt, total (% of GDP)";
 
     const allSeriesNamesTransformed = allSeriesNames.map((series) => ({
         value: series,
@@ -162,22 +159,24 @@ export default async function Page({ searchParams }: Props) {
         label: country,
     }));
 
-    const inlationRateCurrentCountry = getInflationRateByCountry(
+    const dataCurrentCountry = getDataByCountry(
         filteredData,
         (country as string) || (startingCountry as string)
     );
 
-    const beginningYear = inlationRateCurrentCountry[0]?.year || "1975";
-    const previousYear =
-        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.year || "2023";
-    const endingYear =
-        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 1]?.year || "2024";
+    const beginningYear = dataCurrentCountry[0]?.year || "1975";
+    const previousYear = dataCurrentCountry[dataCurrentCountry.length - 2]?.year || "2023";
+    const endingYear = dataCurrentCountry[dataCurrentCountry.length - 1]?.year || "2024";
 
     const percentageChangeOverLastYear =
-        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 1]?.rate -
-        inlationRateCurrentCountry[inlationRateCurrentCountry.length - 2]?.rate;
+        dataCurrentCountry[dataCurrentCountry.length - 1]?.rate -
+        dataCurrentCountry[dataCurrentCountry.length - 2]?.rate;
 
-    const topCountries = getTopCountries(data, currentLastDataYear.toString(), 10);
+    const topCountries = getTopCountries(
+        data.filter((entry) => entry["Series Name"] === startingSeries),
+        currentLastDataYear.toString(),
+        10
+    );
 
     const mapData = mergeDataWithIsoCodes(data, isoCountryData);
 
@@ -186,7 +185,7 @@ export default async function Page({ searchParams }: Props) {
             {" "}
             {/* Title and section header */}
             <PageTitle
-                title="Inflation rate by country"
+                title="Debt rate by country"
                 svg={<ChartNoAxesColumnIncreasing className="ml-2 h-6 w-6 text-orange-500" />}
             />
             {/* Country Selection */}
@@ -216,11 +215,11 @@ export default async function Page({ searchParams }: Props) {
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
                     {/* If no unemployment data is found for the selected country */}
-                    {inlationRateCurrentCountry.length === 0 && (
+                    {dataCurrentCountry.length === 0 && (
                         <Card className="flex w-full">
                             <CardHeader>
                                 <CardTitle>
-                                    No inflation data found for the selected country {country}.
+                                    No debt data found for the selected country {country}.
                                 </CardTitle>
                                 <CardDescription>
                                     Try a new seach by selectin another country from the available
@@ -233,16 +232,15 @@ export default async function Page({ searchParams }: Props) {
                         </Card>
                     )}
                     {/* Display the chart */}
-                    {inlationRateCurrentCountry.length > 0 && (
+                    {dataCurrentCountry.length > 0 && (
                         <ChartBarDefault
                             dataKeyXAxis="year"
                             dataKeyBar="rate"
-                            chartData={inlationRateCurrentCountry}
+                            chartData={dataCurrentCountry}
                             chartConfig={chartConfig}
-                            cardTitle={`Inflation Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of Consumer Prices`}
+                            cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
+                            cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
+                            isPercentage={isRateSeries}
                         />
                     )}
                 </div>
@@ -252,18 +250,24 @@ export default async function Page({ searchParams }: Props) {
                         <CardHeader>
                             <CardTitle>
                                 {/* TODO handle NaN Case */}
-                                {inlationRateCurrentCountry.length === 0 && "No data available"}
-                                {inlationRateCurrentCountry.length > 0 &&
-                                    percentageChangeOverLastYear && (
-                                        <span>
-                                            Trending{" "}
-                                            {percentageChangeOverLastYear > 0 ? "up" : "down"}️ by{" "}
-                                            {percentageChangeOverLastYear.toFixed(1)}%
-                                        </span>
-                                    )}
+                                {dataCurrentCountry.length === 0 && "No data available"}
+                                {dataCurrentCountry.length > 0 && percentageChangeOverLastYear && (
+                                    <span>
+                                        {isRateSeries
+                                            ? `Trending ${
+                                                  percentageChangeOverLastYear > 0 ? "up" : "down"
+                                              }️
+                                        by ${percentageChangeOverLastYear.toFixed(1)}%`
+                                            : `Trending ${
+                                                  percentageChangeOverLastYear > 0 ? "up" : "down"
+                                              }️ by ${formatLargeNumber(
+                                                  percentageChangeOverLastYear
+                                              )}`}
+                                    </span>
+                                )}
                             </CardTitle>
                             <CardDescription>
-                                {inlationRateCurrentCountry.length > 0 &&
+                                {dataCurrentCountry.length > 0 &&
                                     `Compared to the previous period: ${previousYear} to ${endingYear}`}
                             </CardDescription>
                             <CardAction>
@@ -293,7 +297,7 @@ export default async function Page({ searchParams }: Props) {
                     {/* Top Countries Chart */}
                     <ChartBarMixed
                         title="Top 10 Countries"
-                        description={`By inflation rate in ${currentLastDataYear}`}
+                        description={`By debt level in ${currentLastDataYear} % of GDP`}
                         chartData={topCountries.map((entry, index) => ({
                             country: entry.country,
                             rate: entry.rate,
@@ -306,9 +310,9 @@ export default async function Page({ searchParams }: Props) {
             <section className="flex flex-col w-full gap-4">
                 <Card className="flex w-full h-full">
                     <CardHeader>
-                        <CardTitle>Global Inflation Overview</CardTitle>
+                        <CardTitle>Global Debt Overview</CardTitle>
                         <CardDescription>
-                            Interactive world map showing Inflation rates by country{" "}
+                            Interactive world map showing Debt levels by country{" "}
                             {currentLastDataYear}
                         </CardDescription>
                     </CardHeader>
@@ -316,11 +320,12 @@ export default async function Page({ searchParams }: Props) {
                     <div className="flex w-[90%] h-full mx-auto">
                         <WorldMapInteractive
                             countryData={mapData}
-                            labelName={"Inflation Rate"}
+                            labelName={"Debt Level"}
                             legend={{
                                 show: true,
-                                legendRate: [2, 5, 7],
+                                legendRate: [100, 150, 170],
                             }}
+                            rateYear="2023"
                         />
                     </div>
                 </Card>
@@ -331,24 +336,21 @@ export default async function Page({ searchParams }: Props) {
                     <CardHeader>
                         <CardTitle className="text-sm">
                             <p className="flex items-center gap-1">
-                                Inflation Rate Consumer Price Index (CPI)
+                                Central government debt, total (% of GDP)
                                 <Info className="h-3 w-3 mb-2" />
                             </p>
                         </CardTitle>
                         <CardDescription className="text-xs">
-                            The Consumer Price Index (CPI), calculated by the Bureau of Labor
-                            Statistics (BLS), measures the monthly change in price for a figurative
-                            basket of goods and services. These items can change over time. CPI is a
-                            weighted average of prices and is representative of aggregate consumer
-                            spending. It is used as a metric for inflation and deflation. The CPI
-                            accounts for <b>substitution effects—consumers</b>&apos; tendency to
-                            shift spending away from products and product categories that have grown
-                            relatively more expensive with time. <br />
+                            General government debt is the gross debt of the general government as a
+                            percentage of GDP. Debt is calculated as the sum of the following
+                            liability categories where applicable: currency and deposits; debt
+                            securities, loans; insurance, pensions and standardised guarantee
+                            schemes, and other accounts payable.
                             <br />
-                            In our opinion CPI is only a fraction of the whole picture of real
-                            inflation and might be understated compared to reality. It still remains
-                            a valuable indicator of the general price level and inflation trends in
-                            an economy.
+                            <br /> A key indicator for the sustainability of government finance,
+                            changes in government debt over time primarily reflect the impact of
+                            past government deficits. This indicator is measured as a percentage of
+                            GDP.
                         </CardDescription>
                     </CardHeader>
                 </Card>
