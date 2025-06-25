@@ -55,9 +55,16 @@ export default async function page() {
                 <CircleDollarSign className="ml-2 h-6 w-6 text-orange-500" />
             </div>
             <section className="flex w-full h-full gap-4 flex-col lg:flex-row">
-                <ResizablePanelGroup direction="horizontal" className="gap-4">
+                <ResizablePanelGroup
+                    direction="horizontal"
+                    className="gap-4 !flex-col lg:!flex-row"
+                >
                     {/* M1 Monetary Supply Chart */}
-                    <ResizablePanel defaultSize={50}>
+                    <ResizablePanel
+                        defaultSize={50}
+                        minSize={25}
+                        className="!basis-auto lg:!basis-0"
+                    >
                         <ChartLineDefault
                             chartData={chartDataM1}
                             chartConfig={chartConfigM1}
@@ -67,9 +74,13 @@ export default async function page() {
                         />
                     </ResizablePanel>
                     {/* Resizable Handle */}
-                    <ResizableHandle withHandle />
+                    <ResizableHandle withHandle className="hidden lg:flex" />
                     {/* M2 Monetary Supply Chart */}
-                    <ResizablePanel defaultSize={50}>
+                    <ResizablePanel
+                        defaultSize={50}
+                        minSize={25}
+                        className="!basis-auto lg:!basis-0"
+                    >
                         <ChartLineDefault
                             chartData={chartDataM2}
                             chartConfig={chartConfigM2}
