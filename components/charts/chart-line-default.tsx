@@ -41,7 +41,7 @@ export function ChartLineDefault({ chartData }: { chartData: any[] }) {
                         accessibilityLayer
                         data={chartData}
                         margin={{
-                            left: 12,
+                            left: 20,
                             right: 12,
                         }}
                     >
@@ -62,9 +62,18 @@ export function ChartLineDefault({ chartData }: { chartData: any[] }) {
                                 value: "Billions of Dollars",
                                 angle: -90,
                                 position: "insideLeft",
+                                offset: -10,
                             }}
                         />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                        <ChartTooltip
+                            cursor={false}
+                            content={
+                                <ChartTooltipContent
+                                    className="w-[200px]"
+                                    valueFormatter={(value) => `${value} Bil $`}
+                                />
+                            }
+                        />
                         <Line
                             dataKey="M2SL"
                             type="natural"
