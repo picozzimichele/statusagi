@@ -2,7 +2,7 @@ import React from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartLineDefault } from "@/components/charts/chart-line-default";
 import { ChartConfig } from "@/components/ui/chart";
-import { CircleDollarSign, TextSearch, PiggyBank } from "lucide-react";
+import { CircleDollarSign, TextSearch, PiggyBank, Info } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -81,9 +81,9 @@ export default async function page() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="hover:underline"
-                                href="https://databank.worldbank.org/source/world-development-indicators"
+                                href="https://fred.stlouisfed.org"
                             >
-                                World Bank Group
+                                Federal Reserve Bank of St. Louis
                             </Link>
                         </CardDescription>
                         <CardAction>
@@ -123,6 +123,50 @@ export default async function page() {
                         <CardAction>
                             <PiggyBank className="h-4 w-4" />
                         </CardAction>
+                    </CardHeader>
+                </Card>
+            </section>
+            {/* Methodology Description */}
+            <section className="flex flex-col w-full gap-4">
+                <Card className="flex w-full h-full dark:bg-gray-900">
+                    <CardHeader>
+                        <CardTitle className="text-sm">
+                            <p className="flex items-center gap-1">
+                                Measuring Monetary Supply
+                                <Info className="h-3 w-3 mb-2" />
+                            </p>
+                        </CardTitle>
+                        <CardDescription className="text-xs">
+                            <b>M1 money supply</b> includes coins and currency in circulation—the
+                            coins and bills that circulate in an economy that are not held by the
+                            U.S. Treasury, at the Federal Reserve Bank, or in bank vaults. Closely
+                            related to currency are checkable deposits, also known as demand
+                            deposits. These are the amounts held in checking accounts. They are
+                            called demand deposits or checkable deposits because the banking
+                            institution must give the deposit holder his money “on demand” when a
+                            check is written or a debit card is used. These items together—currency,
+                            and checking accounts in banks—make up the definition of money known as
+                            M1, which is measured daily by the Federal Reserve System. Traveler’s
+                            checks are also included in M1, but have decreased in use over the
+                            recent past.
+                            <br />
+                            <br />
+                            <b>M2 money supply</b> includes everything in M1 but also adds other
+                            types of deposits. For example, M2 includes savings deposits in banks,
+                            which are bank accounts on which you cannot write a check directly, but
+                            from which you can easily withdraw the money at an automatic teller
+                            machine or bank. Many banks and other financial institutions also offer
+                            a chance to invest in money market funds, where the deposits of many
+                            individual investors are pooled together and invested in a safe way,
+                            such as short-term government bonds. Another ingredient of M2 is the
+                            relatively small (that is, less than about $100,000) certificates of
+                            deposit (CDs) or time deposits, which are accounts that the depositor
+                            has committed to leaving in the bank for a certain period of time,
+                            ranging from a few months to a few years, in exchange for a higher
+                            interest rate. In short, all these types of M2 are money that you can
+                            withdraw and spend, but which require a greater effort to do so than the
+                            items in M1.
+                        </CardDescription>
                     </CardHeader>
                 </Card>
             </section>
