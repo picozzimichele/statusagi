@@ -40,8 +40,8 @@ type Props = {
 
 export default async function page({ searchParams }: Props) {
     // Load the government debt data from a local JSON file
-    const data = await parseLocalJSON("public/data/government-debt-by-country.json");
-    const isoCountryData = await parseLocalJSON("public/data/iso-country-list.json");
+    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
+    const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
