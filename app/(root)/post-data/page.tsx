@@ -13,7 +13,7 @@ export default async function page() {
                 title="Post Data to Database"
                 svg={<Database className="h-6 w-6 text-orange-500" />}
             />
-            <PostData />
+            <PostData dataInfo={JSON.stringify(data)} />
         </div>
     );
 }
