@@ -1,5 +1,4 @@
 import React from "react";
-import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
@@ -15,6 +14,7 @@ import {
 import Link from "next/link";
 import { formatLargeNumber } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
+import parseLocalJSON from "@/utils/parseLocalJSON";
 
 type CountryData = {
     [key: string]: string;
