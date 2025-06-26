@@ -8,11 +8,15 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import PageTitle from "@/components/title/PageTitle";
+import { getData } from "@/lib/actions/data.actions";
 
 export default async function page() {
     // Load the data from a local JSON file
     const dataM2 = await parseLocalJSON("lib/data/M2-24062025.json");
     const dataM1 = await parseLocalJSON("lib/data/M1-24062025.json");
+
+    const dataMongoDB = await getData();
+    console.log("Data from MongoDB:", dataMongoDB);
 
     const chartDataM2 = dataM2.map((item) => ({
         ...item,
