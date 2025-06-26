@@ -102,8 +102,6 @@ export default async function page({ searchParams }: Props) {
             };
         });
 
-        console.log("New Dataset:", newDataset);
-
         // Return early if no topN is specified or is less than or equal to 0
         if (!topN || topN <= 0) {
             return newDataset;

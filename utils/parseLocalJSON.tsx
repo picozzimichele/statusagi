@@ -7,9 +7,7 @@ async function parseLocalJSON(jsonPath: string) {
     try {
         const pathToJSON = jsonPath;
         const filePath = path.join(process.cwd(), pathToJSON);
-        console.log("Reading JSON file from:", filePath);
         const file = await fs.readFile(filePath, "utf8");
-        console.log("File read successfully, parsing JSON...");
         const data = await JSON.parse(file);
         return data;
     } catch (error) {

@@ -13,10 +13,13 @@ export async function createData(data: any) {
     }
 }
 
-export async function getData() {
+export async function getDataById({ dataId }: { dataId: string }) {
     try {
         connectToDB();
-        console.log("Connected to the database successfully");
+
+        const data = await Data.findOne({ _id: dataId });
+
+        return { data: { ...data, _id: data._id.toString() } };
     } catch (error: any) {
         console.log(error);
     }
