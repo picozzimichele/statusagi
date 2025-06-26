@@ -1,6 +1,17 @@
 "use server";
 
 import { connectToDB } from "@/lib/mongodb";
+import Data from "../models/data.models";
+
+export async function createData(data: any) {
+    try {
+        connectToDB();
+        const newReview = await Data.create({ ...data });
+        return JSON.parse(JSON.stringify(newReview._id));
+    } catch (error: any) {
+        console.log(error);
+    }
+}
 
 export async function getData() {
     try {
