@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/comp
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import ShareComponent from "@/components/share/ShareComponent";
 import PageTitle from "@/components/title/PageTitle";
 
 export default async function page() {
