@@ -14,7 +14,11 @@ export default async function page() {
     const dataM2 = await parseLocalJSON("lib/data/M2-24062025.json");
     const dataM1 = await parseLocalJSON("lib/data/M1-24062025.json");
 
-    const country = await parseLocalJSON("lib/data/iso-country-list.json");
+    const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
+    const dataTest = await parseLocalJSON("lib/data/inflation-by-country.json");
+
+    console.log("ISO Country Data:", isoCountryData);
+    console.log("Test Data:", dataTest);
 
     const chartDataM2 = dataM2.map((item) => ({
         ...item,
