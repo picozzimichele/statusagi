@@ -1,6 +1,5 @@
 import PostData from "@/components/data/PostData";
 import PageTitle from "@/components/title/PageTitle";
-import { Button } from "@/components/ui/button";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { Database } from "lucide-react";
 import React from "react";
