@@ -11,8 +11,8 @@ import PageTitle from "@/components/title/PageTitle";
 
 export default async function page() {
     // Load the data from a local JSON file
-    const dataM2 = await parseLocalJSON("/lib/data/M2-24062025.json");
-    const dataM1 = await parseLocalJSON("/lib/data/M1-24062025.json");
+    const dataM2 = await parseLocalJSON("public/data/M2-24062025.json");
+    const dataM1 = await parseLocalJSON("public/data/M1-24062025.json");
 
     const chartDataM2 = dataM2.map((item) => ({
         ...item,

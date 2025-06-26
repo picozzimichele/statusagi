@@ -46,8 +46,8 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
     // Load the data from a local JSON file
-    const data = await parseLocalJSON("/lib/data/inflation.json");
-    const isoCountryData = await parseLocalJSON("/lib/data/iso-country-list.json");
+    const data = await parseLocalJSON("public/data/inflation-by-country.json");
+    const isoCountryData = await parseLocalJSON("public/data/iso-country-list.json");
 
     const currentLastDataYear = 2024;
     const startingCountry = "United States";
