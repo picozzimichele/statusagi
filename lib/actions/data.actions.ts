@@ -19,7 +19,7 @@ export async function getDataById({ dataId }: { dataId: string }) {
 
         const data = await Data.findOne({ _id: dataId });
 
-        return { data: { ...data, _id: data._id.toString() } };
+        return data;
     } catch (error: any) {
         console.log(error);
     }

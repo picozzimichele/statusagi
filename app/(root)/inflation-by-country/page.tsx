@@ -14,6 +14,8 @@ import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import Link from "next/link";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
+import { getDataById } from "@/lib/actions/data.actions";
+import { transformDocToArray } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -46,8 +48,13 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
     // Load the data from a local JSON file
-    const data = await parseLocalJSON("lib/data/inflation-by-country.json");
     const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
+    const dataMongoDBInflation = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
+    const dataStringifyIndlation = JSON.parse(JSON.stringify(dataMongoDBInflation));
+    const transformedDataInflation = transformDocToArray(dataStringifyIndlation);
+    const data = transformedDataInflation as CountryData[];
+
+    console.log(transformedDataInflation, "transformedData");
 
     const currentLastDataYear = 2024;
     const startingCountry = "United States";
