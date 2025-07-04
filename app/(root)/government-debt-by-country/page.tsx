@@ -16,6 +16,8 @@ import PageTitle from "@/components/title/PageTitle";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { getDataById } from "@/lib/actions/data.actions";
 import ChartBarPage from "@/components/pages/ChartBarPage";
+import ChartLoading from "@/components/loading/ChartLoading";
+import { ParamButton } from "@/components/button/ParamButton";
 
 type CountryData = {
     [key: string]: string;
@@ -125,6 +127,7 @@ export default async function page({ searchParams }: Props) {
 
     function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: ISOJsonCountryT[]) {
         const cleanedData = getTopCountries(data, currentLastDataYear.toString());
+        console.log("mergeDataWithIsoCodes");
 
         const mergedData = cleanedData.map((entry) => {
             const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.Alpha3);
@@ -219,7 +222,7 @@ export default async function page({ searchParams }: Props) {
             </div>
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
-                <Suspense fallback={<div className="text-5xl animate-pulse">Loading...</div>}>
+                <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
                     <ChartBarPage countryParam={country as string} seriesParam={series as string} />
                 </Suspense>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
