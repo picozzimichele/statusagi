@@ -2,5 +2,21 @@
     {
         "id": "685d8030a4374acca0b25ec9",
         "name": "inflation-by-country.json"
+    },
+    {
+        "id": "",
+        "name": "iso-country-list.json"
+    },
+    {
+        "id": "6867d5ba1812f46bf215a5e2",
+        "name": "government-debt-by-country.json"
+    },
+    {
+        "id": "",
+        "name": "gdp-by-country.json"
+    },
+    {
+        "id": "",
+        "name": "population-by-country.json"
     }
 ]

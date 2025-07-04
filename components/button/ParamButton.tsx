@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 
-export const ParamButton = ({ dropDownData, selectedParamName = "value" }) => {
+export const ParamButton = ({ children, dropDownData, selectedParamName, href }) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
@@ -10,7 +10,7 @@ export const ParamButton = ({ dropDownData, selectedParamName = "value" }) => {
         const newParams = new URLSearchParams(searchParams.toString());
 
         // Update or set the param
-        newParams.set(selectedParamName, dropDownData.value);
+        newParams.set(selectedParamName, "Algeria");
 
         // Replace URL without triggering a server fetch
         window.history.replaceState(
@@ -25,8 +25,8 @@ export const ParamButton = ({ dropDownData, selectedParamName = "value" }) => {
     };
 
     return (
-        <button onClick={handleClick} className="w-full hover:cursor-pointer">
-            TEST BUTTON {dropDownData.label}
+        <button onClick={handleClick} className="w-full">
+            {children}
         </button>
     );
 };

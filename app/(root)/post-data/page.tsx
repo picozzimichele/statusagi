@@ -1,4 +1,3 @@
-import { ParamButton } from "@/components/button/ParamButton";
 import PostData from "@/components/data/PostData";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
@@ -10,11 +9,9 @@ type Props = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function page({ searchParams }: Props) {
-    const data = await parseLocalJSON("lib/data/inflation-by-country.json");
-    const dataInflationMongoDB = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
-
-    //window.history.replaceState(null, "", pathname + "?" + newSearchParams.toString())
+export default async function page() {
+    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
+    console.log(data);
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -23,7 +20,6 @@ export default async function page({ searchParams }: Props) {
                 svg={<Database className="h-6 w-6 text-orange-500" />}
             />
             <PostData dataInfo={JSON.stringify(data)} />
-            <ParamButton dropDownData={{ value: "test" }} />
         </div>
     );
 }

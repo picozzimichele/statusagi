@@ -47,11 +47,15 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
-    // Load the data from a local JSON file
+    // Load the data from MongoDB
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
+    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
+    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
     const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
+
     const dataMongoDBInflation = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
-    const dataStringifyIndlation = JSON.parse(JSON.stringify(dataMongoDBInflation));
-    const transformedDataInflation = transformDocToArray(dataStringifyIndlation);
+    const dataStringifyInflation = JSON.parse(JSON.stringify(dataMongoDBInflation));
+    const transformedDataInflation = transformDocToArray(dataStringifyInflation);
     const data = transformedDataInflation as CountryData[];
 
     const currentLastDataYear = 2024;
