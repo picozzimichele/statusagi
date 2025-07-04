@@ -40,7 +40,7 @@ type Props = {
 };
 
 export default async function page({ searchParams }: Props) {
-    // Load the government debt data from a local JSON file
+    // Load the government debt data from MongoDB
     const dataMongoDBDebt = await getDataById({ dataId: "6867d5ba1812f46bf215a5e2" });
     const dataStringifyDebt = JSON.parse(JSON.stringify(dataMongoDBDebt));
     const transformedDataDebt = transformDocToArray(dataStringifyDebt);

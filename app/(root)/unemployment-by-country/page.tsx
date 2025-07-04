@@ -54,8 +54,11 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
-    // Load the unemployment data from a local JSON file
-    const data = await parseLocalJSON("lib/data/unemployment-by-country.json");
+    // Load the government debt data from MongoDB
+    const dataMongoDBUnemployment = await getDataById({ dataId: "6867d9581812f46bf215a5f8" });
+    const dataStringifyUnemployment = JSON.parse(JSON.stringify(dataMongoDBUnemployment));
+    const transformedDataUnemployment = transformDocToArray(dataStringifyUnemployment);
+    const data = transformedDataUnemployment as CountryData[];
 
     const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
     const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
