@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default async function page() {
-    const data = await parseLocalJSON("lib/data/iso-country-list.json");
+    const data = await parseLocalJSON("lib/data/unemployment-by-country.json");
     console.log(data);
 
     return (

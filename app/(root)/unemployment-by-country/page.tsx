@@ -14,6 +14,8 @@ import Link from "next/link";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
+import { getDataById } from "@/lib/actions/data.actions";
+import { transformDocToArray } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -54,7 +56,12 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
     // Load the unemployment data from a local JSON file
     const data = await parseLocalJSON("lib/data/unemployment-by-country.json");
-    const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
+
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
+    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
+    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
+    const isoCountryData = transformedDataIsoCountry as MetadataEntry[];
+
     const { country } = await searchParams;
     const currentLastDataYear = 2024;
     const startingCountry = "United States";
