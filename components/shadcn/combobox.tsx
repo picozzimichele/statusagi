@@ -81,6 +81,7 @@ export function Combobox({
                                     key={dropDownData.value}
                                     className="w-full"
                                     scroll={false}
+                                    shallow={true}
                                     href={`?${new URLSearchParams({
                                         ...href,
                                         [selectedParamName || ""]: dropDownData.value,

@@ -12,9 +12,10 @@ import {
     Info,
 } from "lucide-react";
 import Link from "next/link";
-import { formatLargeNumber } from "@/utils/utilsFunctions";
+import { formatLargeNumber, transformDocToArray } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
 import parseLocalJSON from "@/utils/parseLocalJSON";
+import { getDataById } from "@/lib/actions/data.actions";
 
 type CountryData = {
     [key: string]: string;
@@ -39,9 +40,16 @@ type Props = {
 };
 
 export default async function page({ searchParams }: Props) {
-    // Load the government debt data from a local JSON file
-    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
-    const isoCountryData = await parseLocalJSON("lib/data/iso-country-list.json");
+    // Load the government debt data from MongoDB
+    const dataMongoDBDebt = await getDataById({ dataId: "6867d5ba1812f46bf215a5e2" });
+    const dataStringifyDebt = JSON.parse(JSON.stringify(dataMongoDBDebt));
+    const transformedDataDebt = transformDocToArray(dataStringifyDebt);
+    const data = transformedDataDebt as CountryData[];
+
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
+    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
+    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
+    const isoCountryData = transformedDataIsoCountry as ISOJsonCountryT[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -101,8 +109,6 @@ export default async function page({ searchParams }: Props) {
                 rate: parseFloat(Number(rate2023.toString().replace(",", ".")).toFixed(1)),
             };
         });
-
-        console.log("New Dataset:", newDataset);
 
         // Return early if no topN is specified or is less than or equal to 0
         if (!topN || topN <= 0) {

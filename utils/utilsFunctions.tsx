@@ -22,3 +22,9 @@ export function formatLargeNumber(num: number | string | any, short?: boolean): 
         return num.toString();
     }
 }
+
+export function transformDocToArray(doc) {
+    return Object.entries(doc)
+        .filter(([key]) => !["_id", "createdAt", "updatedAt", "__v"].includes(key))
+        .map(([_, value]) => value);
+}
