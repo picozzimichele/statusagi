@@ -1,5 +1,4 @@
-import React from "react";
-import { ChartBarDefault } from "@/components/charts/chart-bar-default";
+import React, { Suspense } from "react";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import { Combobox } from "@/components/shadcn/combobox";
@@ -16,6 +15,7 @@ import { formatLargeNumber, transformDocToArray } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { getDataById } from "@/lib/actions/data.actions";
+import ChartBarPage from "@/components/pages/ChartBarPage";
 
 type CountryData = {
     [key: string]: string;
@@ -219,37 +219,9 @@ export default async function page({ searchParams }: Props) {
             </div>
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
-                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {dataCurrentCountry.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No debt data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {dataCurrentCountry.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={dataCurrentCountry}
-                            chartConfig={chartConfig}
-                            cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
-                            isPercentage={isRateSeries}
-                        />
-                    )}
-                </div>
+                <Suspense fallback={<div className="text-5xl animate-pulse">Loading...</div>}>
+                    <ChartBarPage countryParam={country as string} seriesParam={series as string} />
+                </Suspense>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}
                     <Card className="flex w-full">
