@@ -54,8 +54,6 @@ export default async function Page({ searchParams }: Props) {
     const transformedDataInflation = transformDocToArray(dataStringifyIndlation);
     const data = transformedDataInflation as CountryData[];
 
-    console.log(transformedDataInflation, "transformedData");
-
     const currentLastDataYear = 2024;
     const startingCountry = "United States";
     const startingSeries = "Inflation, consumer prices (annual %)";
