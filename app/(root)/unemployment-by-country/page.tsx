@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
@@ -16,6 +16,8 @@ import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
 import { transformDocToArray } from "@/utils/utilsFunctions";
+import ChartLoading from "@/components/loading/ChartLoading";
+import ChartBarPage from "@/components/pages/ChartBarPage";
 
 type CountryData = {
     [key: string]: string;
@@ -54,16 +56,13 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
+    const mongoDBChartId = "686ba801732e155ab8bc92f7"; // Unemployment rate by country
     // Load the government debt data from MongoDB
-    const dataMongoDBUnemployment = await getDataById({ dataId: "6867d9581812f46bf215a5f8" });
-    const dataStringifyUnemployment = JSON.parse(JSON.stringify(dataMongoDBUnemployment));
-    const transformedDataUnemployment = transformDocToArray(dataStringifyUnemployment);
-    const data = transformedDataUnemployment as CountryData[];
+    const dataMongoDBUnemployment = await getDataById({ dataId: mongoDBChartId });
+    const data = dataMongoDBUnemployment?.entries as CountryData[];
 
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as MetadataEntry[];
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
+    const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
     const { country } = await searchParams;
     const currentLastDataYear = 2024;
@@ -77,7 +76,7 @@ export default async function Page({ searchParams }: Props) {
     };
 
     function getAllCountries(data: CountryData[]): string[] {
-        return data.map((entry) => entry.Country).filter(Boolean);
+        return data.map((entry) => entry["Country Name"]).filter(Boolean);
     }
 
     // Function to extract unemployment rates for a specific country
@@ -85,7 +84,7 @@ export default async function Page({ searchParams }: Props) {
         dataset: CountryData[],
         countryName: string
     ): UnemploymentEntry[] {
-        const target = dataset.find((entry) => entry.Country === countryName);
+        const target = dataset.find((entry) => entry["Country Name"] === countryName);
 
         if (!target) {
             return [];
@@ -119,7 +118,7 @@ export default async function Page({ searchParams }: Props) {
     ): { country: string; rate: number }[] {
         const countryRates: { country: string; rate: number }[] = [];
         dataset.forEach((entry) => {
-            const countryName = entry.Country;
+            const countryName = entry["Country Name"];
             for (const key in entry) {
                 // Check if key is a year and value is a valid number
                 if (
@@ -127,7 +126,9 @@ export default async function Page({ searchParams }: Props) {
                     parseInt(key) === currentLastDataYear &&
                     entry[key] &&
                     !isNaN(Number(entry[key])) &&
-                    entry[key] !== "NA"
+                    entry[key] !== "n/a" &&
+                    entry[key] !== "NA" &&
+                    entry[key] !== ""
                 ) {
                     countryRates.push({
                         country: countryName,
@@ -148,7 +149,9 @@ export default async function Page({ searchParams }: Props) {
         isoCountryData: MetadataEntry[];
     }) {
         const returnMergedData = countryData.map((entry) => {
-            const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.ISO);
+            const match = isoCountryData.find(
+                (isoEntry) => isoEntry["Alpha-3"] === entry["Country Code"]
+            );
 
             if (match) {
                 return {
@@ -161,7 +164,7 @@ export default async function Page({ searchParams }: Props) {
                 return {
                     Country: entry.Country,
                     "Alpha-2": "No Match",
-                    "Alpha-3": entry.ISO,
+                    "Alpha-3": entry["Country Code"],
                     "2024": entry["2024"] || null, // Use 2024 data or null if not available
                 } as MergedEntry;
             }
@@ -219,36 +222,17 @@ export default async function Page({ searchParams }: Props) {
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {unemploymentRates.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No unemployment data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {unemploymentRates.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={unemploymentRates}
-                            chartConfig={chartConfig}
-                            cardTitle={`Unemployment Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
+                    <Suspense key={`${country}`} fallback={<ChartLoading />}>
+                        <ChartBarPage
+                            isPercentage={true}
+                            countryParam={country as string}
+                            countryFieldName="Country Name"
+                            seriesId={mongoDBChartId}
+                            startingSeries="Unemployment rate"
+                            startingCountry={startingCountry}
+                            chartTitle="unemployment"
                         />
-                    )}
+                    </Suspense>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}

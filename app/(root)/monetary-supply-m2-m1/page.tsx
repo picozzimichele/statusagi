@@ -9,19 +9,14 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
-import { transformDocToArray } from "@/utils/utilsFunctions";
 
 export default async function page() {
     // Load the data from a MongoDB collection
-    const dataMongoDBM2 = await getDataById({ dataId: "6867d93e1812f46bf215a5f4" });
-    const dataStringifyM2 = JSON.parse(JSON.stringify(dataMongoDBM2));
-    const transformedDataM2 = transformDocToArray(dataStringifyM2);
-    const dataM2 = transformedDataM2 as { date: string; M2SL: string }[];
+    const dataMongoDBM2 = await getDataById({ dataId: "686ba791732e155ab8bc92f5" });
+    const dataM2 = dataMongoDBM2?.entries as { date: string; M2SL: string }[];
 
-    const dataMongoDBM1 = await getDataById({ dataId: "6867d77c1812f46bf215a5ea" });
-    const dataStringifyM1 = JSON.parse(JSON.stringify(dataMongoDBM1));
-    const transformedDataM1 = transformDocToArray(dataStringifyM1);
-    const dataM1 = transformedDataM1 as { date: string; M1SL: string }[];
+    const dataMongoDBM1 = await getDataById({ dataId: "686ba733732e155ab8bc92f3" });
+    const dataM1 = dataMongoDBM1?.entries as { date: string; M1SL: string }[];
 
     const chartDataM2 = dataM2.map((item) => ({
         ...item,

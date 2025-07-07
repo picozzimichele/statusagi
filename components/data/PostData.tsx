@@ -16,7 +16,7 @@ export default function PostData({ dataInfo }: { dataInfo?: string }) {
         try {
             console.log("Data uploaded:", dataInfoParsed);
             // Call the server action to upload data
-            const dataId = await createData(dataInfoParsed);
+            const dataId = await createData({ entries: dataInfoParsed });
             toast.success("Data uploaded successfully!", {
                 description: `Data ID: ${dataId}`,
             });
@@ -28,7 +28,9 @@ export default function PostData({ dataInfo }: { dataInfo?: string }) {
 
     return (
         <div>
-            <Button onClick={() => uploadData()}>Upload Data</Button>
+            <Button disabled onClick={uploadData}>
+                Upload Data
+            </Button>
         </div>
     );
 }

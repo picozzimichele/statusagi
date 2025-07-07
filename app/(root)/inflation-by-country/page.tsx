@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import {
     ChartNoAxesColumnIncreasing,
@@ -16,6 +16,8 @@ import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
 import { transformDocToArray } from "@/utils/utilsFunctions";
+import ChartLoading from "@/components/loading/ChartLoading";
+import ChartBarPage from "@/components/pages/ChartBarPage";
 
 type CountryData = {
     [key: string]: string;
@@ -47,27 +49,17 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
+    const mongoDBChartId = "686ba61f732e155ab8bc92eb";
     // Load the data from MongoDB
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as MetadataEntry[];
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
+    const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
-    const dataMongoDBInflation = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
-    const dataStringifyInflation = JSON.parse(JSON.stringify(dataMongoDBInflation));
-    const transformedDataInflation = transformDocToArray(dataStringifyInflation);
-    const data = transformedDataInflation as CountryData[];
+    const dataMongoDBInflation = await getDataById({ dataId: mongoDBChartId });
+    const data = dataMongoDBInflation?.entries as CountryData[];
 
     const currentLastDataYear = 2024;
     const startingCountry = "United States";
     const startingSeries = "Inflation, consumer prices (annual %)";
-
-    const chartConfig = {
-        rate: {
-            label: "Inflation Rate",
-            color: "#BDDDE4",
-        },
-    };
 
     const { country } = await searchParams;
     const { series } = (await searchParams) || startingSeries;
@@ -93,7 +85,7 @@ export default async function Page({ searchParams }: Props) {
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length)
+            .slice(0, Object.keys(target).length - 4)
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
@@ -108,7 +100,7 @@ export default async function Page({ searchParams }: Props) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2024 = entry["2024 [YR2024]"];
+            const rate2024 = entry["2024"];
 
             return {
                 country: countryName,
@@ -224,36 +216,17 @@ export default async function Page({ searchParams }: Props) {
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {inlationRateCurrentCountry.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No inflation data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {inlationRateCurrentCountry.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={inlationRateCurrentCountry}
-                            chartConfig={chartConfig}
-                            cardTitle={`Inflation Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of Consumer Prices`}
+                    <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
+                        <ChartBarPage
+                            countryParam={country as string}
+                            countryFieldName="Country Name"
+                            seriesParam={series as string}
+                            seriesId={mongoDBChartId}
+                            startingSeries={startingSeries}
+                            startingCountry={startingCountry}
+                            chartTitle="inflation"
                         />
-                    )}
+                    </Suspense>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}

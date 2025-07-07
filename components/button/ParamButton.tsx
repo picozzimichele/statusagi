@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 
-export const ParamButton = ({ children, dropDownData, selectedParamName, href }) => {
+export const ParamButton = ({ children, selectedParamName }) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 

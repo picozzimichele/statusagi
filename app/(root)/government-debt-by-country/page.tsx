@@ -1,21 +1,16 @@
-import React from "react";
-import { ChartBarDefault } from "@/components/charts/chart-bar-default";
+import React, { Suspense } from "react";
 import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import { Combobox } from "@/components/shadcn/combobox";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
-import {
-    ChartNoAxesColumnIncreasing,
-    FolderSearch,
-    TrendingUp,
-    TextSearch,
-    Info,
-} from "lucide-react";
+import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, Info } from "lucide-react";
 import Link from "next/link";
 import { formatLargeNumber, transformDocToArray } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
-import parseLocalJSON from "@/utils/parseLocalJSON";
 import { getDataById } from "@/lib/actions/data.actions";
+import ChartBarPage from "@/components/pages/ChartBarPage";
+import ChartLoading from "@/components/loading/ChartLoading";
+import WorldMapPage from "@/components/maps/WorldMapPage";
 
 type CountryData = {
     [key: string]: string;
@@ -26,7 +21,7 @@ type ChartEntry = {
     rate: number;
 };
 
-type ISOJsonCountryT = {
+type MetadataEntry = {
     Country: string;
     "Alpha-2": string;
     "Alpha-3": string;
@@ -41,15 +36,9 @@ type Props = {
 
 export default async function page({ searchParams }: Props) {
     // Load the government debt data from MongoDB
-    const dataMongoDBDebt = await getDataById({ dataId: "6867d5ba1812f46bf215a5e2" });
-    const dataStringifyDebt = JSON.parse(JSON.stringify(dataMongoDBDebt));
-    const transformedDataDebt = transformDocToArray(dataStringifyDebt);
-    const data = transformedDataDebt as CountryData[];
-
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as ISOJsonCountryT[];
+    const mongoDBChartId = "686ba2cb732e155ab8bc92b1";
+    const dataMongoDBDebt = await getDataById({ dataId: mongoDBChartId });
+    const data = dataMongoDBDebt?.entries as CountryData[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -59,13 +48,6 @@ export default async function page({ searchParams }: Props) {
     const { series } = (await searchParams) || startingSeries;
 
     const seriesSelected = series && series?.length > 0 ? series : startingSeries;
-
-    const chartConfig = {
-        rate: {
-            label: seriesSelected,
-            color: "#BDDDE4",
-        },
-    };
 
     // This gets all the series names from the data
     function getAllSeriesNames(data: CountryData[]): string[] {
@@ -86,7 +68,7 @@ export default async function page({ searchParams }: Props) {
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length)
+            .slice(0, Object.keys(target).length - 4)
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
@@ -101,7 +83,7 @@ export default async function page({ searchParams }: Props) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2023 = entry["2023 [YR2023]"];
+            const rate2023 = entry["2023"];
 
             return {
                 country: countryName,
@@ -121,32 +103,6 @@ export default async function page({ searchParams }: Props) {
             .slice(0, topN);
 
         return sorted;
-    }
-
-    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: ISOJsonCountryT[]) {
-        const cleanedData = getTopCountries(data, currentLastDataYear.toString());
-
-        const mergedData = cleanedData.map((entry) => {
-            const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.Alpha3);
-
-            if (match) {
-                return {
-                    Country: entry.country,
-                    "Alpha-2": match["Alpha-2"],
-                    "Alpha-3": match["Alpha-3"],
-                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
-                };
-            } else {
-                return {
-                    Country: entry.country,
-                    "Alpha-2": "No Match",
-                    "Alpha-3": entry.Alpha3,
-                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
-                };
-            }
-        });
-
-        return mergedData;
     }
 
     // Filtering the data
@@ -184,8 +140,6 @@ export default async function page({ searchParams }: Props) {
         10
     );
 
-    const mapData = mergeDataWithIsoCodes(data, isoCountryData);
-
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
             {" "}
@@ -220,35 +174,18 @@ export default async function page({ searchParams }: Props) {
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {dataCurrentCountry.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No debt data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {dataCurrentCountry.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={dataCurrentCountry}
-                            chartConfig={chartConfig}
-                            cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
+                    <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
+                        <ChartBarPage
+                            countryParam={country as string}
+                            countryFieldName="Country Name"
+                            seriesParam={series as string}
+                            seriesId={mongoDBChartId}
+                            startingSeries={startingSeries}
+                            startingCountry={startingCountry}
+                            chartTitle="government Debt"
                             isPercentage={isRateSeries}
                         />
-                    )}
+                    </Suspense>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}
@@ -324,15 +261,7 @@ export default async function page({ searchParams }: Props) {
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
                     <div className="flex w-[90%] h-full mx-auto">
-                        <WorldMapInteractive
-                            countryData={mapData}
-                            labelName={"Debt Level"}
-                            legend={{
-                                show: true,
-                                legendRate: [100, 150, 170],
-                            }}
-                            rateYear="2023"
-                        />
+                        <WorldMapPage />
                     </div>
                 </Card>
             </section>
