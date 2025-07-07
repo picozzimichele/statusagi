@@ -219,6 +219,7 @@ export default async function Page({ searchParams }: Props) {
                     <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
                         <ChartBarPage
                             countryParam={country as string}
+                            countryFieldName="Country Name"
                             seriesParam={series as string}
                             seriesId={mongoDBChartId}
                             startingSeries={startingSeries}

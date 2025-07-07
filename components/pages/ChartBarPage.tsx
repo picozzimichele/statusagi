@@ -8,6 +8,7 @@ import { capitalizeFirstLetter } from "@/utils/utilsFunctions";
 
 export default async function ChartBarPage({
     countryParam,
+    countryFieldName,
     seriesParam,
     seriesId,
     startingSeries,
@@ -15,6 +16,7 @@ export default async function ChartBarPage({
     chartTitle,
 }: {
     countryParam?: string;
+    countryFieldName?: string; // Optional field name for country filtering
     seriesParam?: string;
     seriesId: string;
     startingSeries?: string;
@@ -39,9 +41,12 @@ export default async function ChartBarPage({
     const dataMongoDB = await getDataByIdFiltered({
         dataId: seriesId,
         country: country,
+        countryFieldName: countryFieldName,
         seriesName: series,
     });
     const dataFiltered = dataMongoDB.entries as CountryData[];
+
+    console.log("dataFiltered", dataFiltered);
 
     function getCleanData(dataset: CountryData[]): ChartEntry[] {
         const target = dataset[0];

@@ -16,6 +16,7 @@ export async function createData(data: any) {
 interface GetDataByIdParams {
     dataId: string;
     country?: string;
+    countryFieldName?: string;
     seriesName?: string;
 }
 
@@ -33,19 +34,24 @@ export async function getDataById({ dataId }: { dataId: string }) {
     }
 }
 
-export async function getDataByIdFiltered({ dataId, country, seriesName }: GetDataByIdParams) {
+export async function getDataByIdFiltered({
+    dataId,
+    country,
+    countryFieldName,
+    seriesName,
+}: GetDataByIdParams) {
     try {
         await connectToDB();
 
         const matchConditions: any[] = [];
 
-        if (country) {
+        if (country && country?.length > 0) {
             matchConditions.push({
-                $eq: ["$$entry.Country Name", country],
+                $eq: [{ $getField: { field: countryFieldName, input: "$$entry" } }, country],
             });
         }
 
-        if (seriesName) {
+        if (seriesName && seriesName?.length > 0) {
             matchConditions.push({
                 $eq: ["$$entry.Series Name", seriesName],
             });

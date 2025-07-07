@@ -61,6 +61,8 @@ export default async function Page({ searchParams }: Props) {
     const dataMongoDBUnemployment = await getDataById({ dataId: mongoDBChartId });
     const data = dataMongoDBUnemployment?.entries as CountryData[];
 
+    console.log("data", data);
+
     const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
     const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
@@ -221,6 +223,7 @@ export default async function Page({ searchParams }: Props) {
                     <Suspense key={`${country}`} fallback={<ChartLoading />}>
                         <ChartBarPage
                             countryParam={country as string}
+                            countryFieldName="Country"
                             seriesId={mongoDBChartId}
                             startingCountry={startingCountry}
                             chartTitle="unemployment"
