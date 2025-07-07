@@ -85,6 +85,15 @@ export async function getDataByIdFiltered({
     }
 }
 
+// TODO:implement this function to get top countries by value
+export async function getTopCountriesByValue({ dataId }: { dataId: string }) {
+    try {
+        await connectToDB();
+    } catch (error: any) {
+        console.log(error);
+    }
+}
+
 export async function replaceData({ dataId, newData }: { dataId: string; newData: any }) {
     try {
         await connectToDB();

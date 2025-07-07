@@ -30,7 +30,7 @@ export default async function WorldMapPage() {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2023 = entry["2023 [YR2023]"];
+            const rate2023 = entry["2023"];
 
             return {
                 country: countryName,
