@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import parseLocalJSON from "@/utils/parseLocalJSON";
 import { ChartBarDefault } from "@/components/charts/chart-bar-default";
 import { Combobox } from "@/components/shadcn/combobox";
@@ -16,6 +16,8 @@ import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
 import { transformDocToArray } from "@/utils/utilsFunctions";
+import ChartLoading from "@/components/loading/ChartLoading";
+import ChartBarPage from "@/components/pages/ChartBarPage";
 
 type CountryData = {
     [key: string]: string;
@@ -54,8 +56,9 @@ type Props = {
 };
 
 export default async function Page({ searchParams }: Props) {
+    const mongoDBChartId = "686ba801732e155ab8bc92f7"; // Unemployment rate by country
     // Load the government debt data from MongoDB
-    const dataMongoDBUnemployment = await getDataById({ dataId: "686ba801732e155ab8bc92f7" });
+    const dataMongoDBUnemployment = await getDataById({ dataId: mongoDBChartId });
     const data = dataMongoDBUnemployment?.entries as CountryData[];
 
     const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
@@ -215,36 +218,14 @@ export default async function Page({ searchParams }: Props) {
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
-                    {/* If no unemployment data is found for the selected country */}
-                    {unemploymentRates.length === 0 && (
-                        <Card className="flex w-full">
-                            <CardHeader>
-                                <CardTitle>
-                                    No unemployment data found for the selected country {country}.
-                                </CardTitle>
-                                <CardDescription>
-                                    Try a new seach by selectin another country from the available
-                                    list
-                                </CardDescription>
-                                <CardAction>
-                                    <FolderSearch className="h-4 w-4" />
-                                </CardAction>
-                            </CardHeader>
-                        </Card>
-                    )}
-                    {/* Display the chart */}
-                    {unemploymentRates.length > 0 && (
-                        <ChartBarDefault
-                            dataKeyXAxis="year"
-                            dataKeyBar="rate"
-                            chartData={unemploymentRates}
-                            chartConfig={chartConfig}
-                            cardTitle={`Unemployment Rate in ${
-                                (country as string) || "United States"
-                            }`}
-                            cardDescription={`From ${beginningYear} to ${endingYear} in % of the total labor force`}
+                    <Suspense key={`${country}`} fallback={<ChartLoading />}>
+                        <ChartBarPage
+                            countryParam={country as string}
+                            seriesId={mongoDBChartId}
+                            startingCountry={startingCountry}
+                            chartTitle="unemployment"
                         />
-                    )}
+                    </Suspense>
                 </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}

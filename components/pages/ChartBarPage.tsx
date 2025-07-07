@@ -72,7 +72,7 @@ export default async function ChartBarPage({
     const endingYear = dataCurrentCountry[dataCurrentCountry.length - 1]?.year || "2024";
 
     return (
-        <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+        <>
             {/* If no unemployment data is found for the selected country */}
             {dataCurrentCountry.length === 0 && (
                 <Card className="flex w-full">
@@ -103,6 +103,6 @@ export default async function ChartBarPage({
                     isPercentage={isRateSeries}
                 />
             )}
-        </div>
+        </>
     );
 }

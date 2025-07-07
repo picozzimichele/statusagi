@@ -215,16 +215,18 @@ export default async function Page({ searchParams }: Props) {
             </div>
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
-                <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
-                    <ChartBarPage
-                        countryParam={country as string}
-                        seriesParam={series as string}
-                        seriesId={mongoDBChartId}
-                        startingSeries={startingSeries}
-                        startingCountry={startingCountry}
-                        chartTitle="inflation"
-                    />
-                </Suspense>
+                <div className="flex flex-1 lg:max-w-3/4 shrink-0">
+                    <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
+                        <ChartBarPage
+                            countryParam={country as string}
+                            seriesParam={series as string}
+                            seriesId={mongoDBChartId}
+                            startingSeries={startingSeries}
+                            startingCountry={startingCountry}
+                            chartTitle="inflation"
+                        />
+                    </Suspense>
+                </div>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}
                     <Card className="flex w-full">
