@@ -11,12 +11,19 @@ export default async function ChartBarPage({
     seriesId,
     startingSeries,
     startingCountry,
+    chartBarProps,
 }: {
     countryParam?: string;
     seriesParam?: string;
     seriesId: string;
     startingSeries?: string;
     startingCountry?: string;
+    chartBarProps?: {
+        dataKeyXAxis: string;
+        dataKeyBar: string;
+        cardTitle: string;
+        cardDescription: string;
+    };
 }) {
     const country = countryParam || startingCountry;
     const series = seriesParam || startingSeries;

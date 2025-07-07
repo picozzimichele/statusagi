@@ -28,7 +28,9 @@ export default function PostData({ dataInfo }: { dataInfo?: string }) {
 
     return (
         <div>
-            <Button onClick={uploadData}>Upload Data</Button>
+            <Button disabled onClick={uploadData}>
+                Upload Data
+            </Button>
         </div>
     );
 }
