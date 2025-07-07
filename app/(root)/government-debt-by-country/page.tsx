@@ -3,21 +3,13 @@ import { ChartBarMixed } from "@/components/charts/chart-bar-mixed";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import { Combobox } from "@/components/shadcn/combobox";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "@/components/ui/card";
-import {
-    ChartNoAxesColumnIncreasing,
-    FolderSearch,
-    TrendingUp,
-    TextSearch,
-    Info,
-} from "lucide-react";
+import { ChartNoAxesColumnIncreasing, TrendingUp, TextSearch, Info } from "lucide-react";
 import Link from "next/link";
 import { formatLargeNumber, transformDocToArray } from "@/utils/utilsFunctions";
 import PageTitle from "@/components/title/PageTitle";
-import parseLocalJSON from "@/utils/parseLocalJSON";
 import { getDataById } from "@/lib/actions/data.actions";
 import ChartBarPage from "@/components/pages/ChartBarPage";
 import ChartLoading from "@/components/loading/ChartLoading";
-import { ParamButton } from "@/components/button/ParamButton";
 
 type CountryData = {
     [key: string]: string;
@@ -43,10 +35,8 @@ type Props = {
 
 export default async function page({ searchParams }: Props) {
     // Load the government debt data from MongoDB
-    const dataMongoDBDebt = await getDataById({ dataId: "6867d5ba1812f46bf215a5e2" });
-    const dataStringifyDebt = JSON.parse(JSON.stringify(dataMongoDBDebt));
-    const transformedDataDebt = transformDocToArray(dataStringifyDebt);
-    const data = transformedDataDebt as CountryData[];
+    const dataMongoDBDebt = await getDataById({ dataId: "686ba2cb732e155ab8bc92b1" });
+    const data = dataMongoDBDebt.entries as CountryData[];
 
     const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
     const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));

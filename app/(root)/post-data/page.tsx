@@ -1,3 +1,4 @@
+import FetchData from "@/components/data/FetchData";
 import PostData from "@/components/data/PostData";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
@@ -10,7 +11,7 @@ type Props = {
 };
 
 export default async function page() {
-    const data = await parseLocalJSON("lib/data/unemployment-by-country.json");
+    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
     console.log(data);
 
     return (
@@ -20,6 +21,7 @@ export default async function page() {
                 svg={<Database className="h-6 w-6 text-orange-500" />}
             />
             <PostData dataInfo={JSON.stringify(data)} />
+            <FetchData dataId="6867d5ba1812f46bf215a5e2" />
         </div>
     );
 }

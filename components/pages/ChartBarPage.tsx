@@ -14,10 +14,8 @@ export default async function ChartBarPage({
     seriesParam?: string;
 }) {
     // Load the government debt data from MongoDB
-    const dataMongoDB = await getDataById({ dataId: "6867d5ba1812f46bf215a5e2" });
-    const dataStringify = JSON.parse(JSON.stringify(dataMongoDB));
-    const transformedData = transformDocToArray(dataStringify);
-    const data = transformedData as CountryData[];
+    const dataMongoDB = await getDataById({ dataId: "686ba2cb732e155ab8bc92b1" });
+    const data = dataMongoDB.entries as CountryData[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
