@@ -20,7 +20,7 @@ type ChartEntry = {
     rate: number;
 };
 
-type ISOJsonCountryT = {
+type MetadataEntry = {
     Country: string;
     "Alpha-2": string;
     "Alpha-3": string;
@@ -40,7 +40,7 @@ export default async function page({ searchParams }: Props) {
     const data = dataMongoDBDebt?.entries as CountryData[];
 
     const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
-    const isoCountryData = dataMongoDBIsoCountry?.entries as ISOJsonCountryT[];
+    const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -114,7 +114,7 @@ export default async function page({ searchParams }: Props) {
         return sorted;
     }
 
-    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: ISOJsonCountryT[]) {
+    function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: MetadataEntry[]) {
         const cleanedData = getTopCountries(data, currentLastDataYear.toString());
         console.log("mergeDataWithIsoCodes");
 

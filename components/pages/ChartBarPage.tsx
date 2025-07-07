@@ -3,7 +3,7 @@ import React from "react";
 import { ChartBarDefault } from "../charts/chart-bar-default";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "../ui/card";
 import { ChartEntry, CountryData } from "@/types/alltypes";
-import { getDataById } from "@/lib/actions/data.actions";
+import { getDataById, getDataByIdFiltered } from "@/lib/actions/data.actions";
 
 export default async function ChartBarPage({
     countryParam,
@@ -15,8 +15,18 @@ export default async function ChartBarPage({
     seriesId: string;
 }) {
     // Load the government debt data from MongoDB
-    const dataMongoDB = await getDataById({ dataId: seriesId });
-    const data = dataMongoDB.entries as CountryData[];
+    const mongoDBDebtId = "686ba2cb732e155ab8bc92b1";
+    const dataMongoDBDebt = await getDataById({ dataId: mongoDBDebtId });
+    const data = dataMongoDBDebt?.entries as CountryData[];
+
+    const dataMongoDB = await getDataByIdFiltered({
+        dataId: seriesId,
+        country: countryParam,
+        seriesName: seriesParam,
+    });
+    const dataTEST = dataMongoDB as CountryData[];
+
+    console.log(dataTEST, "DATA FROM THE CHART");
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -65,20 +75,8 @@ export default async function ChartBarPage({
     }
 
     // Filtering the data
-    const allSeriesNames = getAllSeriesNames(data);
     const filteredData = data.filter((entry) => entry["Series Name"] === seriesSelected);
-    const allCountries = getAllCountries(filteredData);
     const isRateSeries = seriesSelected === "Central government debt, total (% of GDP)";
-
-    const allSeriesNamesTransformed = allSeriesNames.map((series) => ({
-        value: series,
-        label: series,
-    }));
-
-    const allCountriesTransformed = allCountries.map((country) => ({
-        value: country,
-        label: country,
-    }));
 
     const dataCurrentCountry = getDataByCountry(
         filteredData,
