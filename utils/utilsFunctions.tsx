@@ -28,3 +28,7 @@ export function transformDocToArray(doc) {
         .filter(([key]) => !["_id", "createdAt", "updatedAt", "__v"].includes(key))
         .map(([_, value]) => value);
 }
+
+export function capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

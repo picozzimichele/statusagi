@@ -4,6 +4,7 @@ import { ChartBarDefault } from "../charts/chart-bar-default";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "../ui/card";
 import { ChartEntry, CountryData } from "@/types/alltypes";
 import { getDataById, getDataByIdFiltered } from "@/lib/actions/data.actions";
+import { capitalizeFirstLetter } from "@/utils/utilsFunctions";
 
 export default async function ChartBarPage({
     countryParam,
@@ -11,19 +12,14 @@ export default async function ChartBarPage({
     seriesId,
     startingSeries,
     startingCountry,
-    chartBarProps,
+    chartTitle,
 }: {
     countryParam?: string;
     seriesParam?: string;
     seriesId: string;
     startingSeries?: string;
     startingCountry?: string;
-    chartBarProps?: {
-        dataKeyXAxis: string;
-        dataKeyBar: string;
-        cardTitle: string;
-        cardDescription: string;
-    };
+    chartTitle: string;
 }) {
     const country = countryParam || startingCountry;
     const series = seriesParam || startingSeries;
@@ -82,7 +78,7 @@ export default async function ChartBarPage({
                 <Card className="flex w-full">
                     <CardHeader>
                         <CardTitle>
-                            No debt data found for the selected country {country}.
+                            No {chartTitle} data found for the selected country {country}.
                         </CardTitle>
                         <CardDescription>
                             Try a new seach by selectin another country from the available list
@@ -100,8 +96,10 @@ export default async function ChartBarPage({
                     dataKeyBar="rate"
                     chartData={dataCurrentCountry}
                     chartConfig={chartConfig}
-                    cardTitle={`Debt Rate in ${(country as string) || "United States"}`}
-                    cardDescription={`From ${beginningYear} to ${endingYear} in % of GDP`}
+                    cardTitle={`${capitalizeFirstLetter(chartTitle)} Rate in ${
+                        (country as string) || "United States"
+                    }`}
+                    cardDescription={`From ${beginningYear} to ${endingYear}`}
                     isPercentage={isRateSeries}
                 />
             )}

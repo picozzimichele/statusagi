@@ -180,6 +180,7 @@ export default async function page({ searchParams }: Props) {
                         seriesId={mongoDBChartId}
                         startingSeries={startingSeries}
                         startingCountry={startingCountry}
+                        chartTitle="debt"
                     />
                 </Suspense>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
