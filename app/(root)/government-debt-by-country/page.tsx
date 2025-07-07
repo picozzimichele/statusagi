@@ -126,8 +126,6 @@ export default async function page({ searchParams }: Props) {
         (country as string) || (startingCountry as string)
     );
 
-    console.log("dataCurrentCountry", dataCurrentCountry);
-
     const beginningYear = dataCurrentCountry[0]?.year || "1975";
     const previousYear = dataCurrentCountry[dataCurrentCountry.length - 2]?.year || "2023";
     const endingYear = dataCurrentCountry[dataCurrentCountry.length - 1]?.year || "2024";

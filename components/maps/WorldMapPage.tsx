@@ -26,11 +26,34 @@ export default async function WorldMapPage() {
 
     const currentLastDataYear = 2023;
 
+    function getMostRecentYear(entry, year) {
+        const current = entry[`${year}`];
+        if (current !== null && current !== undefined && current !== "" && current !== "..") {
+            return current;
+        }
+        const previous = entry[`${year - 1}`];
+        if (previous !== null && previous !== undefined && previous !== "" && previous !== "..") {
+            return previous;
+        }
+
+        const previous2 = entry[`${year - 2}`];
+        if (
+            previous2 !== null &&
+            previous2 !== undefined &&
+            previous2 !== "" &&
+            previous2 !== ".."
+        ) {
+            return previous2;
+        }
+
+        return ""; // nothing found in 2023 or 2022
+    }
+
     function getTopCountries(dataset: CountryData[], year: string, topN?: number) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2023 = entry["2023"];
+            const rate2023 = getMostRecentYear(entry, year);
 
             return {
                 country: countryName,
