@@ -40,8 +40,6 @@ export default async function page({ searchParams }: Props) {
     const dataMongoDBDebt = await getDataById({ dataId: mongoDBChartId });
     const data = dataMongoDBDebt?.entries as CountryData[];
 
-    console.log(data, "dataMongoDB");
-
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
     const startingSeries = "Central government debt, total (% of GDP)";
@@ -70,7 +68,7 @@ export default async function page({ searchParams }: Props) {
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length)
+            .slice(0, Object.keys(target).length - 4)
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
@@ -82,7 +80,6 @@ export default async function page({ searchParams }: Props) {
     }
 
     function getTopCountries(dataset: CountryData[], year: string, topN?: number) {
-        console.log("dataset", dataset);
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
@@ -128,6 +125,8 @@ export default async function page({ searchParams }: Props) {
         filteredData,
         (country as string) || (startingCountry as string)
     );
+
+    console.log("dataCurrentCountry", dataCurrentCountry);
 
     const beginningYear = dataCurrentCountry[0]?.year || "1975";
     const previousYear = dataCurrentCountry[dataCurrentCountry.length - 2]?.year || "2023";
@@ -185,7 +184,7 @@ export default async function page({ searchParams }: Props) {
                             seriesId={mongoDBChartId}
                             startingSeries={startingSeries}
                             startingCountry={startingCountry}
-                            chartTitle="debt"
+                            chartTitle="government Debt"
                             isPercentage={isRateSeries}
                         />
                     </Suspense>
