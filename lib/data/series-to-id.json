@@ -1,10 +1,10 @@
 [
     {
-        "id": "685d8030a4374acca0b25ec9",
+        "id": "686ba61f732e155ab8bc92eb",
         "name": "inflation-by-country.json"
     },
     {
-        "id": "6867d6461812f46bf215a5e4",
+        "id": "686ba68f732e155ab8bc92f1",
         "name": "iso-country-list.json"
     },
     {
@@ -12,15 +12,16 @@
         "name": "government-debt-by-country.json"
     },
     {
-        "id": "6867d77c1812f46bf215a5ea",
+        "id": "686ba733732e155ab8bc92f3",
         "name": "M1-24062025.json"
     },
     {
-        "id": "6867d93e1812f46bf215a5f4",
+        "id": "686ba791732e155ab8bc92f5",
         "name": "M2-24062025.json"
     },
     {
-        "id": "6867d9581812f46bf215a5f8",
+        "id": "686ba801732e155ab8bc92f7",
+        "old": "6867d9581812f46bf215a5f8",
         "name": "unemployment-by-country.json"
     }
 ]

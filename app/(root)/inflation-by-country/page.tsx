@@ -48,15 +48,11 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
     // Load the data from MongoDB
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as MetadataEntry[];
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
+    const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
-    const dataMongoDBInflation = await getDataById({ dataId: "685d8030a4374acca0b25ec9" });
-    const dataStringifyInflation = JSON.parse(JSON.stringify(dataMongoDBInflation));
-    const transformedDataInflation = transformDocToArray(dataStringifyInflation);
-    const data = transformedDataInflation as CountryData[];
+    const dataMongoDBInflation = await getDataById({ dataId: "686ba61f732e155ab8bc92eb" });
+    const data = dataMongoDBInflation?.entries as CountryData[];
 
     const currentLastDataYear = 2024;
     const startingCountry = "United States";

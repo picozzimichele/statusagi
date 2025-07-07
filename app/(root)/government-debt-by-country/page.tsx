@@ -35,13 +35,12 @@ type Props = {
 
 export default async function page({ searchParams }: Props) {
     // Load the government debt data from MongoDB
-    const dataMongoDBDebt = await getDataById({ dataId: "686ba2cb732e155ab8bc92b1" });
-    const data = dataMongoDBDebt.entries as CountryData[];
+    const mongoDBDebtId = "686ba2cb732e155ab8bc92b1";
+    const dataMongoDBDebt = await getDataById({ dataId: mongoDBDebtId });
+    const data = dataMongoDBDebt?.entries as CountryData[];
 
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as ISOJsonCountryT[];
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
+    const isoCountryData = dataMongoDBIsoCountry?.entries as ISOJsonCountryT[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -213,7 +212,11 @@ export default async function page({ searchParams }: Props) {
             {/* Chart */}
             <section className="flex w-full gap-4 flex-col lg:flex-row">
                 <Suspense key={`${country}${series}`} fallback={<ChartLoading />}>
-                    <ChartBarPage countryParam={country as string} seriesParam={series as string} />
+                    <ChartBarPage
+                        countryParam={country as string}
+                        seriesParam={series as string}
+                        seriesId={mongoDBDebtId}
+                    />
                 </Suspense>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">
                     {/* First Card */}

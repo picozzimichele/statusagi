@@ -55,15 +55,11 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
     // Load the government debt data from MongoDB
-    const dataMongoDBUnemployment = await getDataById({ dataId: "6867d9581812f46bf215a5f8" });
-    const dataStringifyUnemployment = JSON.parse(JSON.stringify(dataMongoDBUnemployment));
-    const transformedDataUnemployment = transformDocToArray(dataStringifyUnemployment);
-    const data = transformedDataUnemployment as CountryData[];
+    const dataMongoDBUnemployment = await getDataById({ dataId: "686ba801732e155ab8bc92f7" });
+    const data = dataMongoDBUnemployment?.entries as CountryData[];
 
-    const dataMongoDBIsoCountry = await getDataById({ dataId: "6867d6461812f46bf215a5e4" });
-    const dataStringifyIsoCountry = JSON.parse(JSON.stringify(dataMongoDBIsoCountry));
-    const transformedDataIsoCountry = transformDocToArray(dataStringifyIsoCountry);
-    const isoCountryData = transformedDataIsoCountry as MetadataEntry[];
+    const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
+    const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
 
     const { country } = await searchParams;
     const currentLastDataYear = 2024;

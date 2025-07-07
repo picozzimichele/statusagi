@@ -4,17 +4,18 @@ import { ChartBarDefault } from "../charts/chart-bar-default";
 import { Card, CardHeader, CardTitle, CardDescription, CardAction } from "../ui/card";
 import { ChartEntry, CountryData } from "@/types/alltypes";
 import { getDataById } from "@/lib/actions/data.actions";
-import { transformDocToArray } from "@/utils/utilsFunctions";
 
 export default async function ChartBarPage({
     countryParam,
     seriesParam,
+    seriesId,
 }: {
     countryParam?: string;
     seriesParam?: string;
+    seriesId: string;
 }) {
     // Load the government debt data from MongoDB
-    const dataMongoDB = await getDataById({ dataId: "686ba2cb732e155ab8bc92b1" });
+    const dataMongoDB = await getDataById({ dataId: seriesId });
     const data = dataMongoDB.entries as CountryData[];
 
     const currentLastDataYear = 2023;
