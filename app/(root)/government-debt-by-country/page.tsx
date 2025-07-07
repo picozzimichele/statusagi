@@ -216,6 +216,8 @@ export default async function page({ searchParams }: Props) {
                         countryParam={country as string}
                         seriesParam={series as string}
                         seriesId={mongoDBDebtId}
+                        startingSeries={startingSeries}
+                        startingCountry={startingCountry}
                     />
                 </Suspense>
                 <div className="flex flex-col items-start gap-2 w-full lg:w-1/4 justify-between">

@@ -9,29 +9,17 @@ export default async function ChartBarPage({
     countryParam,
     seriesParam,
     seriesId,
+    startingSeries,
+    startingCountry,
 }: {
     countryParam?: string;
     seriesParam?: string;
     seriesId: string;
+    startingSeries?: string;
+    startingCountry?: string;
 }) {
-    // Load the government debt data from MongoDB
-    // Filtering the data by country and series in MongoDB directly
-    // If no country is provided, it will use the default country
-    // If no series is provided, it will use the default series
-    const dataMongoDB = await getDataByIdFiltered({
-        dataId: seriesId,
-        country: countryParam,
-        seriesName: seriesParam,
-    });
-    const dataFiltered = dataMongoDB.entries as CountryData[];
-
-    const currentLastDataYear = 2023;
-    const startingCountry = "United States";
-    const startingSeries = "Central government debt, total (% of GDP)";
-
-    const country = countryParam;
+    const country = countryParam || startingCountry;
     const series = seriesParam || startingSeries;
-
     const seriesSelected = series && series?.length > 0 ? series : startingSeries;
 
     const chartConfig = {
@@ -40,6 +28,17 @@ export default async function ChartBarPage({
             color: "#BDDDE4",
         },
     };
+
+    // Load the government debt data from MongoDB
+    // Filtering the data by country and series in MongoDB directly
+    // If no country is provided, it will use the default country
+    // If no series is provided, it will use the default series
+    const dataMongoDB = await getDataByIdFiltered({
+        dataId: seriesId,
+        country: country,
+        seriesName: series,
+    });
+    const dataFiltered = dataMongoDB.entries as CountryData[];
 
     function getCleanData(dataset: CountryData[]): ChartEntry[] {
         const target = dataset[0];
@@ -57,7 +56,6 @@ export default async function ChartBarPage({
                 return { year, rate };
             });
 
-        console.log(newTarget, "NEW TARGET DATA CLEANED");
         return newTarget;
     }
 
