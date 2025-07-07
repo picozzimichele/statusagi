@@ -118,7 +118,7 @@ export default async function Page({ searchParams }: Props) {
     ): { country: string; rate: number }[] {
         const countryRates: { country: string; rate: number }[] = [];
         dataset.forEach((entry) => {
-            const countryName = entry.Country;
+            const countryName = entry["Country Name"];
             for (const key in entry) {
                 // Check if key is a year and value is a valid number
                 if (
@@ -126,7 +126,9 @@ export default async function Page({ searchParams }: Props) {
                     parseInt(key) === currentLastDataYear &&
                     entry[key] &&
                     !isNaN(Number(entry[key])) &&
-                    entry[key] !== "NA"
+                    entry[key] !== "n/a" &&
+                    entry[key] !== "NA" &&
+                    entry[key] !== ""
                 ) {
                     countryRates.push({
                         country: countryName,
@@ -147,7 +149,9 @@ export default async function Page({ searchParams }: Props) {
         isoCountryData: MetadataEntry[];
     }) {
         const returnMergedData = countryData.map((entry) => {
-            const match = isoCountryData.find((isoEntry) => isoEntry["Alpha-3"] === entry.ISO);
+            const match = isoCountryData.find(
+                (isoEntry) => isoEntry["Alpha-3"] === entry["Country Code"]
+            );
 
             if (match) {
                 return {
@@ -160,7 +164,7 @@ export default async function Page({ searchParams }: Props) {
                 return {
                     Country: entry.Country,
                     "Alpha-2": "No Match",
-                    "Alpha-3": entry.ISO,
+                    "Alpha-3": entry["Country Code"],
                     "2024": entry["2024"] || null, // Use 2024 data or null if not available
                 } as MergedEntry;
             }
