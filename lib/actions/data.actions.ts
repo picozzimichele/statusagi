@@ -4,6 +4,13 @@ import { connectToDB } from "@/lib/mongodb";
 import Data from "../models/data.models";
 import * as mongoose from "mongoose";
 
+interface GetDataByIdParams {
+    dataId: string;
+    country?: string;
+    countryFieldName?: string;
+    seriesName?: string;
+}
+
 export async function createData(data: any) {
     try {
         await connectToDB();
@@ -12,12 +19,6 @@ export async function createData(data: any) {
     } catch (error: any) {
         console.log(error);
     }
-}
-interface GetDataByIdParams {
-    dataId: string;
-    country?: string;
-    countryFieldName?: string;
-    seriesName?: string;
 }
 
 export async function getDataById({ dataId }: { dataId: string }) {
@@ -79,6 +80,16 @@ export async function getDataByIdFiltered({
         ]);
 
         return data[0] || null;
+    } catch (error: any) {
+        console.log(error);
+    }
+}
+
+export async function replaceData({ dataId, newData }: { dataId: string; newData: any }) {
+    try {
+        await connectToDB();
+
+        const dataReplaced = await Data.replaceOne({ _id: dataId }, { ...newData });
     } catch (error: any) {
         console.log(error);
     }

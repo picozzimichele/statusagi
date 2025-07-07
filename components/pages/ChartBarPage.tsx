@@ -56,7 +56,7 @@ export default async function ChartBarPage({
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length)
+            .slice(0, Object.keys(target).length - 4)
             .filter(([_, rateStr]) => rateStr !== ".." && rateStr !== "" && rateStr !== "NA")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
