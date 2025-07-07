@@ -15,18 +15,15 @@ export default async function ChartBarPage({
     seriesId: string;
 }) {
     // Load the government debt data from MongoDB
-    const mongoDBDebtId = "686ba2cb732e155ab8bc92b1";
-    const dataMongoDBDebt = await getDataById({ dataId: mongoDBDebtId });
-    const data = dataMongoDBDebt?.entries as CountryData[];
-
+    // Filtering the data by country and series in MongoDB directly
+    // If no country is provided, it will use the default country
+    // If no series is provided, it will use the default series
     const dataMongoDB = await getDataByIdFiltered({
         dataId: seriesId,
         country: countryParam,
         seriesName: seriesParam,
     });
-    const dataTEST = dataMongoDB as CountryData[];
-
-    console.log(dataTEST, "DATA FROM THE CHART");
+    const dataFiltered = dataMongoDB.entries as CountryData[];
 
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
@@ -44,19 +41,8 @@ export default async function ChartBarPage({
         },
     };
 
-    // This gets all the series names from the data
-    function getAllSeriesNames(data: CountryData[]): string[] {
-        return Array.from(new Set(data.map((entry) => entry["Series Name"]))).filter(Boolean);
-    }
-
-    // This is needed for the dropdown to have the list of all countries
-    function getAllCountries(data: CountryData[]): string[] {
-        return data.map((entry) => entry["Country Name"]).filter(Boolean);
-    }
-
-    // Function to extract unemployment rates for a specific country
-    function getDataByCountry(dataset: CountryData[], countryName: string): ChartEntry[] {
-        const target = dataset.find((entry) => entry["Country Name"] === countryName);
+    function getCleanData(dataset: CountryData[]): ChartEntry[] {
+        const target = dataset[0];
 
         if (!target) {
             return [];
@@ -71,17 +57,14 @@ export default async function ChartBarPage({
                 return { year, rate };
             });
 
+        console.log(newTarget, "NEW TARGET DATA CLEANED");
         return newTarget;
     }
 
-    // Filtering the data
-    const filteredData = data.filter((entry) => entry["Series Name"] === seriesSelected);
-    const isRateSeries = seriesSelected === "Central government debt, total (% of GDP)";
+    const dataCurrentCountry = getCleanData(dataFiltered);
 
-    const dataCurrentCountry = getDataByCountry(
-        filteredData,
-        (country as string) || (startingCountry as string)
-    );
+    // Filtering the data
+    const isRateSeries = seriesSelected === "Central government debt, total (% of GDP)";
 
     const beginningYear = dataCurrentCountry[0]?.year || "1975";
     const previousYear = dataCurrentCountry[dataCurrentCountry.length - 2]?.year || "2023";
