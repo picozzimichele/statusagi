@@ -220,6 +220,7 @@ export default async function Page({ searchParams }: Props) {
                 <div className="flex flex-1 lg:max-w-3/4 shrink-0">
                     <Suspense key={`${country}`} fallback={<ChartLoading />}>
                         <ChartBarPage
+                            isPercentage={true}
                             countryParam={country as string}
                             countryFieldName="Country Name"
                             seriesId={mongoDBChartId}

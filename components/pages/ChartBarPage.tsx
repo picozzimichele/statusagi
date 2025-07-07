@@ -14,6 +14,7 @@ export default async function ChartBarPage({
     startingSeries,
     startingCountry,
     chartTitle,
+    isPercentage,
 }: {
     countryParam?: string;
     countryFieldName?: string; // Optional field name for country filtering
@@ -22,6 +23,7 @@ export default async function ChartBarPage({
     startingSeries?: string;
     startingCountry?: string;
     chartTitle: string;
+    isPercentage?: boolean; // Optional prop to indicate if the chart data is a percentage
 }) {
     const country = countryParam || startingCountry;
     const series = seriesParam || startingSeries;
@@ -45,8 +47,6 @@ export default async function ChartBarPage({
         seriesName: series,
     });
     const dataFiltered = dataMongoDB.entries as CountryData[];
-
-    console.log("dataFiltered", dataFiltered);
 
     function getCleanData(dataset: CountryData[]): ChartEntry[] {
         const target = dataset[0];
@@ -105,7 +105,7 @@ export default async function ChartBarPage({
                         (country as string) || "United States"
                     }`}
                     cardDescription={`From ${beginningYear} to ${endingYear}`}
-                    isPercentage={isRateSeries}
+                    isPercentage={isPercentage}
                 />
             )}
         </>

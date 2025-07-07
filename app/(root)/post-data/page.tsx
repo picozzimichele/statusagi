@@ -11,11 +11,11 @@ type Props = {
 };
 
 export default async function page() {
-    const mongoDBId = "686ba801732e155ab8bc92f7";
-    const data = await parseLocalJSON("lib/data/unemployment-by-country.json");
+    const mongoDBId = "686ba2cb732e155ab8bc92b1";
+    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
     const dataMongoDB = await getDataById({ dataId: mongoDBId });
-    //console.log(dataMongoDB, "MONGODB DATA");
-    //console.log(data, "LOCAL DATA");
+    console.log(dataMongoDB, "MONGODB DATA");
+    console.log(data, "LOCAL DATA");
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">

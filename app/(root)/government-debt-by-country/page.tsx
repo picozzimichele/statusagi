@@ -40,6 +40,8 @@ export default async function page({ searchParams }: Props) {
     const dataMongoDBDebt = await getDataById({ dataId: mongoDBChartId });
     const data = dataMongoDBDebt?.entries as CountryData[];
 
+    console.log(data, "dataMongoDB");
+
     const currentLastDataYear = 2023;
     const startingCountry = "United States";
     const startingSeries = "Central government debt, total (% of GDP)";
@@ -79,31 +81,32 @@ export default async function page({ searchParams }: Props) {
         return newTarget;
     }
 
-    function getTopCountries(dataset: CountryData[], year: string, topN?: number) {
-        const newDataset = dataset.map((entry) => {
-            const countryName = entry["Country Name"];
-            const countryAlpha3 = entry["Country Code"];
-            const rate2023 = entry["2023 [YR2023]"];
+    // function getTopCountries(dataset: CountryData[], year: string, topN?: number) {
+    //     console.log("dataset", dataset);
+    //     const newDataset = dataset.map((entry) => {
+    //         const countryName = entry["Country Name"];
+    //         const countryAlpha3 = entry["Country Code"];
+    //         const rate2023 = entry["2023"];
 
-            return {
-                country: countryName,
-                Alpha3: countryAlpha3,
-                rate: parseFloat(Number(rate2023.toString().replace(",", ".")).toFixed(1)),
-            };
-        });
+    //         return {
+    //             country: countryName,
+    //             Alpha3: countryAlpha3,
+    //             rate: parseFloat(Number(rate2023.toString().replace(",", ".")).toFixed(1)),
+    //         };
+    //     });
 
-        // Return early if no topN is specified or is less than or equal to 0
-        if (!topN || topN <= 0) {
-            return newDataset;
-        }
+    //     // Return early if no topN is specified or is less than or equal to 0
+    //     if (!topN || topN <= 0) {
+    //         return newDataset;
+    //     }
 
-        const sorted = newDataset
-            .filter((entry) => !isNaN(entry.rate))
-            .sort((a, b) => b.rate - a.rate)
-            .slice(0, topN);
+    //     const sorted = newDataset
+    //         .filter((entry) => !isNaN(entry.rate))
+    //         .sort((a, b) => b.rate - a.rate)
+    //         .slice(0, topN);
 
-        return sorted;
-    }
+    //     return sorted;
+    // }
 
     // Filtering the data
     const allSeriesNames = getAllSeriesNames(data);
@@ -134,11 +137,11 @@ export default async function page({ searchParams }: Props) {
         dataCurrentCountry[dataCurrentCountry.length - 1]?.rate -
         dataCurrentCountry[dataCurrentCountry.length - 2]?.rate;
 
-    const topCountries = getTopCountries(
-        data.filter((entry) => entry["Series Name"] === startingSeries),
-        currentLastDataYear.toString(),
-        10
-    );
+    // const topCountries = getTopCountries(
+    //     data.filter((entry) => entry["Series Name"] === startingSeries),
+    //     currentLastDataYear.toString(),
+    //     10
+    // );
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
@@ -183,6 +186,7 @@ export default async function page({ searchParams }: Props) {
                             startingSeries={startingSeries}
                             startingCountry={startingCountry}
                             chartTitle="debt"
+                            isPercentage={isRateSeries}
                         />
                     </Suspense>
                 </div>
@@ -237,7 +241,7 @@ export default async function page({ searchParams }: Props) {
                         </CardHeader>
                     </Card>
                     {/* Top Countries Chart */}
-                    <ChartBarMixed
+                    {/* <ChartBarMixed
                         title="Top 10 Countries"
                         description={`By debt level in ${currentLastDataYear} % of GDP`}
                         chartData={topCountries.map((entry, index) => ({
@@ -245,7 +249,7 @@ export default async function page({ searchParams }: Props) {
                             rate: entry.rate,
                             fill: `var(--chart-3)`, // Assuming you have CSS variables for colors
                         }))}
-                    />
+                    /> */}
                 </div>
             </section>
             {/* World Map */}
@@ -259,9 +263,7 @@ export default async function page({ searchParams }: Props) {
                         </CardDescription>
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
-                    <div className="flex w-[90%] h-full mx-auto">
-                        <WorldMapPage />
-                    </div>
+                    <div className="flex w-[90%] h-full mx-auto">{/* <WorldMapPage /> */}</div>
                 </Card>
             </section>
             {/* Methodology Description */}
