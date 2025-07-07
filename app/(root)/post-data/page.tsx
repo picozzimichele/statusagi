@@ -11,8 +11,8 @@ type Props = {
 };
 
 export default async function page() {
-    const mongoDBId = "686ba2cb732e155ab8bc92b1";
-    const data = await parseLocalJSON("lib/data/government-debt-by-country.json");
+    const mongoDBId = "686ba61f732e155ab8bc92eb";
+    const data = await parseLocalJSON("lib/data/inflation-by-country.json");
     const dataMongoDB = await getDataById({ dataId: mongoDBId });
     console.log(dataMongoDB, "MONGODB DATA");
     console.log(data, "LOCAL DATA");

@@ -76,7 +76,7 @@ export default async function Page({ searchParams }: Props) {
     };
 
     function getAllCountries(data: CountryData[]): string[] {
-        return data.map((entry) => entry.Country).filter(Boolean);
+        return data.map((entry) => entry["Country Name"]).filter(Boolean);
     }
 
     // Function to extract unemployment rates for a specific country
@@ -84,7 +84,7 @@ export default async function Page({ searchParams }: Props) {
         dataset: CountryData[],
         countryName: string
     ): UnemploymentEntry[] {
-        const target = dataset.find((entry) => entry.Country === countryName);
+        const target = dataset.find((entry) => entry["Country Name"] === countryName);
 
         if (!target) {
             return [];

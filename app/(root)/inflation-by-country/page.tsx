@@ -85,7 +85,7 @@ export default async function Page({ searchParams }: Props) {
         }
 
         const newTarget = Object.entries(target)
-            .slice(4, Object.keys(target).length)
+            .slice(0, Object.keys(target).length - 4)
             .filter(([_, rateStr]) => rateStr !== "..")
             .map(([yearStr, rateStr]) => {
                 const year = parseInt(yearStr).toString();
@@ -100,7 +100,7 @@ export default async function Page({ searchParams }: Props) {
         const newDataset = dataset.map((entry) => {
             const countryName = entry["Country Name"];
             const countryAlpha3 = entry["Country Code"];
-            const rate2024 = entry["2024 [YR2024]"];
+            const rate2024 = entry["2024"];
 
             return {
                 country: countryName,
