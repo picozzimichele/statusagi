@@ -47,23 +47,23 @@ export default async function page() {
                     </div>
                 </Card>
             </section>
-            <div className="flex w-full relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table className="w-full text-sm text-left">
+            <div className="flex w-full relative overflow-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-left lg:whitespace-nowrap">
                     <thead className="text-xs uppercase">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-2 md:px-6 py-3 text-left">
                                 Country
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-2 md:px-6 py-3 text-left">
                                 Series
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right">
+                            <th scope="col" className="px-2 md:px-6 py-3 text-right">
                                 2022
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right">
+                            <th scope="col" className="px-2 md:px-6 py-3 text-right">
                                 2023
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right">
+                            <th scope="col" className="px-2 md:px-6 py-3 text-right">
                                 2024
                             </th>
                         </tr>
@@ -71,17 +71,19 @@ export default async function page() {
                     <tbody>
                         {data.map((entry, index) => (
                             <tr key={index} className="border-b">
-                                <th scope="row" className="px-6 py-4 font-medium">
+                                <th className="px-2 md:px-6 py-2 md:py-4 text-[10px] sm:text-xs md:text-sm">
                                     {entry["Country Name"]}
                                 </th>
-                                <td className="px-6 py-4">{entry["Series Name"]}</td>
-                                <td className="px-6 py-4 text-right">
+                                <td className="px-2 md:px-6 py-2 md:py-4 text-[10px] sm:text-xs md:text-sm">
+                                    {entry["Series Name"]}
+                                </td>
+                                <td className="px-2 md:px-6 py-2 md:py-4 text-[10px] sm:text-xs md:text-sm text-right">
                                     {formatLargeNumber(entry["2022"], true)}
                                 </td>
-                                <td className="px-6 py-4 text-right">
+                                <td className="px-2 md:px-6 py-2 md:py-4 text-[10px] sm:text-xs md:text-sm text-right">
                                     {formatLargeNumber(entry["2023"], true)}
                                 </td>
-                                <td className="px-6 py-4 text-right">
+                                <td className="px-2 md:px-6 py-2 md:py-4 text-[10px] sm:text-xs md:text-sm text-right">
                                     {formatLargeNumber(entry["2024"], true)}
                                 </td>
                             </tr>
