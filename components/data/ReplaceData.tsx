@@ -32,7 +32,9 @@ export default function ReplaceData({ dataInfo, dataId }: { dataInfo: string; da
 
     return (
         <div>
-            <Button onClick={callReplaceData}>Replace Data</Button>
+            <Button disabled onClick={callReplaceData}>
+                Replace Data
+            </Button>
         </div>
     );
 }
