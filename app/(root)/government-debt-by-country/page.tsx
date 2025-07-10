@@ -142,7 +142,6 @@ export default async function page({ searchParams }: Props) {
 
     return (
         <div className="flex w-full flex-col items-start gap-4 p-4 max-w-7xl mx-auto">
-            {" "}
             {/* Title and section header */}
             <PageTitle
                 title="Debt rate by country"

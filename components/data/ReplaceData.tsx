@@ -4,7 +4,15 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { replaceData } from "@/lib/actions/data.actions";
 
-export default function ReplaceData({ dataInfo, dataId }: { dataInfo: string; dataId: string }) {
+export default function ReplaceData({
+    dataInfo,
+    dataId,
+    disabled,
+}: {
+    dataInfo: string;
+    dataId: string;
+    disabled?: boolean;
+}) {
     const dataInfoParsed = dataInfo ? JSON.parse(dataInfo) : null;
 
     const callReplaceData = async () => {
@@ -32,7 +40,7 @@ export default function ReplaceData({ dataInfo, dataId }: { dataInfo: string; da
 
     return (
         <div>
-            <Button disabled onClick={callReplaceData}>
+            <Button disabled={disabled} onClick={callReplaceData}>
                 Replace Data
             </Button>
         </div>

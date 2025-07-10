@@ -69,6 +69,10 @@ const data = {
             isActive: true,
             items: [
                 {
+                    title: "Net Migration",
+                    url: "/net-migration-by-country",
+                },
+                {
                     title: "Unemployment Rate",
                     url: "/unemployment-by-country",
                 },

@@ -4,6 +4,10 @@
         "name": "inflation-by-country.json"
     },
     {
+        "id": "686fbd2e80587170605182d0",
+        "name": "net-migration-by-country.json"
+    },
+    {
         "id": "686ba68f732e155ab8bc92f1",
         "name": "iso-country-list.json"
     },

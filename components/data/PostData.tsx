@@ -4,7 +4,13 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { createData } from "@/lib/actions/data.actions";
 
-export default function PostData({ dataInfo }: { dataInfo?: string }) {
+export default function PostData({
+    dataInfo,
+    disabled,
+}: {
+    dataInfo?: string;
+    disabled?: boolean;
+}) {
     const dataInfoParsed = dataInfo ? JSON.parse(dataInfo) : null;
 
     const uploadData = async () => {
@@ -28,7 +34,7 @@ export default function PostData({ dataInfo }: { dataInfo?: string }) {
 
     return (
         <div>
-            <Button disabled onClick={uploadData}>
+            <Button disabled={disabled} onClick={uploadData}>
                 Upload Data
             </Button>
         </div>
