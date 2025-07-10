@@ -10,14 +10,21 @@ export function formatLargeNumber(num: number | string | any, short?: boolean): 
         num = parseFloat(num);
     }
 
-    if (num >= 1e12) {
-        return (num / 1e12).toFixed(2) + ` ${short ? "T" : "Trillion"}`;
-    } else if (num >= 1e9) {
-        return (num / 1e9).toFixed(2) + ` ${short ? "B" : "Billion"}`;
-    } else if (num >= 1e6) {
-        return (num / 1e6).toFixed(2) + ` ${short ? "M" : "Million"}`;
-    } else if (num >= 1e3) {
-        return (num / 1e3).toFixed(2) + ` ${short ? "K" : "Thousand"}`;
+    if (isNaN(num)) {
+        return "N/A";
+    }
+
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? "-" : "";
+
+    if (absNum >= 1e12) {
+        return `${sign}${(absNum / 1e12).toFixed(2)} ${short ? "T" : "Trillion"}`;
+    } else if (absNum >= 1e9) {
+        return `${sign}${(absNum / 1e9).toFixed(2)} ${short ? "B" : "Billion"}`;
+    } else if (absNum >= 1e6) {
+        return `${sign}${(absNum / 1e6).toFixed(2)} ${short ? "M" : "Million"}`;
+    } else if (absNum >= 1e3) {
+        return `${sign}${(absNum / 1e3).toFixed(2)} ${short ? "K" : "Thousand"}`;
     } else {
         return num.toString();
     }

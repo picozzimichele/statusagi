@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from "react";
 import WorldMapSvg from "@/public/svg/WorldMapSvg";
 import LegendInput from "./LegendInput";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 export default function WorldMapInteractive({
     countryData,
@@ -124,7 +125,7 @@ export default function WorldMapInteractive({
                             <span className="font-mono font-medium">
                                 {isPercentage
                                     ? tooltip?.rate.toString().slice(0, 4) + "%"
-                                    : tooltip?.rate}
+                                    : formatLargeNumber(tooltip?.rate)}
                             </span>
                         </div>
                     )}
