@@ -260,7 +260,7 @@ export default async function page({ searchParams }: Props) {
                     </CardHeader>
                     {/* Here you would include your WorldMapInteractive component */}
                     <div className="flex w-[90%] h-full mx-auto">
-                        <WorldMapPage />
+                        <WorldMapPage mongoDBMapId={mongoDBChartId} isPercentage={true} />
                     </div>
                 </Card>
             </section>

@@ -15,16 +15,33 @@ type CountryData = {
     [key: string]: string;
 };
 
-export default async function WorldMapPage() {
+export default async function WorldMapPage({
+    mongoDBMapId,
+    labelName = "Debt Level",
+    legend = {
+        show: true,
+        legendRate: [100, 150, 170],
+    },
+    rateYear = "2023",
+    isPercentage,
+}: {
+    mongoDBMapId: string;
+    labelName?: string;
+    legend?: {
+        show: boolean;
+        legendRate: number[];
+    };
+    rateYear?: string;
+    isPercentage: boolean;
+}) {
     // Load the government debt data from MongoDB
-    const mongoDBDebtId = "686ba2cb732e155ab8bc92b1";
-    const dataMongoDBDebt = await getDataById({ dataId: mongoDBDebtId });
-    const data = dataMongoDBDebt?.entries as CountryData[];
+    const dataMongoDBMapData = await getDataById({ dataId: mongoDBMapId });
+    const data = dataMongoDBMapData?.entries as CountryData[];
+
+    console.log(data, "Data dataMongoDBMapData");
 
     const dataMongoDBIsoCountry = await getDataById({ dataId: "686ba68f732e155ab8bc92f1" });
     const isoCountryData = dataMongoDBIsoCountry?.entries as MetadataEntry[];
-
-    const currentLastDataYear = 2023;
 
     function getMostRecentYear(entry, year) {
         const current = entry[`${year}`];
@@ -76,7 +93,7 @@ export default async function WorldMapPage() {
     }
 
     function mergeDataWithIsoCodes(data: CountryData[], isoCountryData: MetadataEntry[]) {
-        const cleanedData = getTopCountries(data, currentLastDataYear.toString());
+        const cleanedData = getTopCountries(data, rateYear.toString());
         console.log("mergeDataWithIsoCodes");
 
         const mergedData = cleanedData.map((entry) => {
@@ -87,14 +104,14 @@ export default async function WorldMapPage() {
                     Country: entry.country,
                     "Alpha-2": match["Alpha-2"],
                     "Alpha-3": match["Alpha-3"],
-                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
+                    [rateYear]: isNaN(entry.rate) ? "N/A" : entry.rate,
                 };
             } else {
                 return {
                     Country: entry.country,
                     "Alpha-2": "No Match",
                     "Alpha-3": entry.Alpha3,
-                    "2023": isNaN(entry.rate) ? "N/A" : entry.rate,
+                    [rateYear]: isNaN(entry.rate) ? "N/A" : entry.rate,
                 };
             }
         });
@@ -104,15 +121,15 @@ export default async function WorldMapPage() {
 
     const mapData = mergeDataWithIsoCodes(data, isoCountryData);
 
+    console.log("mapData", mapData);
+
     return (
         <WorldMapInteractive
             countryData={mapData}
-            labelName={"Debt Level"}
-            legend={{
-                show: true,
-                legendRate: [100, 150, 170],
-            }}
-            rateYear="2023"
+            labelName={labelName}
+            legend={legend}
+            rateYear={rateYear}
+            isPercentage={isPercentage} // Assuming the rate is a percentage
         />
     );
 }

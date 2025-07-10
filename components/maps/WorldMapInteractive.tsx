@@ -8,11 +8,13 @@ export default function WorldMapInteractive({
     legend,
     labelName,
     rateYear = "2024",
+    isPercentage, // Add a prop to determine if the rate is a percentage
 }: {
     countryData?: any;
     legend: { show: boolean; legendRate: number[] };
     labelName?: string;
     rateYear?: string;
+    isPercentage: boolean; // Add a prop to determine if the rate is a percentage
 }) {
     // CONSTANTS
     const hoverColor = "text-[#80D8C3]"; // Define the hover color
@@ -120,7 +122,9 @@ export default function WorldMapInteractive({
                             />
                             <span className="ml-2 text-muted-foreground">{labelName}:</span>
                             <span className="font-mono font-medium">
-                                {tooltip?.rate.toString().slice(0, 4)}%
+                                {isPercentage
+                                    ? tooltip?.rate.toString().slice(0, 4) + "%"
+                                    : tooltip?.rate}
                             </span>
                         </div>
                     )}
@@ -134,16 +138,22 @@ export default function WorldMapInteractive({
             {/* Legend */}
             {legend?.show && (
                 <div className="flex gap-2 items-center pt-10 md:pt-16">
-                    <LegendInput color="bg-green-200" text={`Less than ${legend.legendRate[0]}%`} />
+                    <LegendInput
+                        color="bg-green-200"
+                        text={`Less than ${legend.legendRate[0]}${isPercentage ? "%" : ""}`}
+                    />
                     <LegendInput
                         color="bg-yellow-200"
-                        text={`Less than ${legend.legendRate[1]}%`}
+                        text={`Less than ${legend.legendRate[1]}${isPercentage ? "%" : ""}`}
                     />
                     <LegendInput
                         color="bg-orange-300"
-                        text={`Less than ${legend.legendRate[2]}%`}
+                        text={`Less than ${legend.legendRate[2]}${isPercentage ? "%" : ""}`}
                     />
-                    <LegendInput color="bg-red-400" text={`${legend.legendRate[2]}% or more`} />
+                    <LegendInput
+                        color="bg-red-400"
+                        text={`${legend.legendRate[2]}${isPercentage ? "%" : ""} or more`}
+                    />
                     <LegendInput color="bg-gray-200" text="No data" />
                 </div>
             )}
