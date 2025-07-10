@@ -4,6 +4,7 @@ import PageTitle from "@/components/title/PageTitle";
 import { Bird } from "lucide-react";
 import WorldMapPage from "@/components/maps/WorldMapPage";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { formatLargeNumber } from "@/utils/utilsFunctions";
 
 type CountryData = {
     [key: string]: string;
@@ -74,9 +75,15 @@ export default async function page() {
                                     {entry["Country Name"]}
                                 </th>
                                 <td className="px-6 py-4">{entry["Series Name"]}</td>
-                                <td className="px-6 py-4 text-right">{entry["2022"]}</td>
-                                <td className="px-6 py-4 text-right">{entry["2023"]}</td>
-                                <td className="px-6 py-4 text-right">{entry["2024"]}</td>
+                                <td className="px-6 py-4 text-right">
+                                    {formatLargeNumber(entry["2022"], true)}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    {formatLargeNumber(entry["2023"], true)}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    {formatLargeNumber(entry["2024"], true)}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
