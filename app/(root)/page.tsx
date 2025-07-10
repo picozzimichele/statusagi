@@ -139,8 +139,10 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
-                    <button
-                        data-slot="button"
+                    <a
+                        href="https://github.com/picozzimichele/statusagi"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md has-[&gt;svg]:px-4 cursor-pointer gap-2 px-4 sm:px-8 py-3 text-sm sm:text-base font-medium shadow-lg transition-all duration-300 flex-1 sm:flex-none dark:bg-white dark:text-black dark:hover:bg-gray-100"
                     >
                         <svg
@@ -160,9 +162,9 @@ export default function Home() {
                             <path d="M9 18c-4.51 2-5-2-7-2"></path>
                         </svg>
                         Contribute Here!
-                    </button>
+                    </a>
                     <button
-                        data-slot="button"
+                        onClick={toggleSidebar}
                         className="inline-flex items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md has-[&gt;svg]:px-4 cursor-pointer gap-2 px-4 sm:px-8 py-3 text-sm sm:text-base font-medium shadow-lg transition-all duration-300 flex-1 sm:flex-none bg-slate-950 text-white hover:bg-slate-900"
                     >
                         <svg
