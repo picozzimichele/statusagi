@@ -1,80 +1,80 @@
+"use client";
+import { useSidebar } from "@/components/ui/sidebar";
+
 export default function Home() {
+    const { toggleSidebar } = useSidebar();
     return (
         <div className="flex w-full">
             {/* Pearl Mist Background with Top Glow */}
             <div
-                className="absolute inset-0 z-[-1]"
+                className="absolute inset-0 z-[-1] dark:bg-black"
                 style={{
                     background:
-                        "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.15), transparent 70%), #000000",
+                        "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(226, 232, 240, 0.15), transparent 70%)",
                 }}
             />
             {/* Your Content/Components */}
             <section className="w-[95%] text-center relative overflow-hidden flex flex-col items-center justify-center max-w-7xl mx-auto">
-                <div className="mb-6 sm:mb-8 md:mb-10 flex justify-center mt-8">
-                    <a
-                        href="https://github.com/picozzimichele/statusagi"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex"
+                <div
+                    onClick={toggleSidebar}
+                    className="mb-6 sm:mb-8 md:mb-10 flex justify-center mt-8 hover:cursor-pointer"
+                >
+                    <span
+                        data-slot="badge"
+                        className="inline-flex items-center justify-center font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive overflow-hidden gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm rounded-full shadow-lg backdrop-blur-md transition-all duration-300 border dark:bg-black/40 dark:border-white/20 dark:text-white dark:hover:bg-black/50"
                     >
-                        <span
-                            data-slot="badge"
-                            className="inline-flex items-center justify-center font-medium w-fit whitespace-nowrap shrink-0 [&amp;&gt;svg]:size-3 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive overflow-hidden [a&amp;]:hover:bg-secondary/90 gap-2 py-2 px-3 sm:px-4 text-xs sm:text-sm rounded-full shadow-lg backdrop-blur-md transition-all duration-300 border bg-black/40 border-white/20 text-white hover:bg-black/50"
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </div>
+                        <span className="font-medium">5+ New Indicators</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-zap h-3 w-3 text-orange-500"
+                            aria-hidden="true"
                         >
-                            <div className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </div>
-                            <span className="font-medium">5+ New Indicators</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="lucide lucide-zap h-3 w-3 text-orange-500"
-                                aria-hidden="true"
-                            >
-                                <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
-                            </svg>
-                            <span className="hidden sm:inline-flex items-center">Read More</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="lucide lucide-arrow-right h-3 w-3"
-                                aria-hidden="true"
-                            >
-                                <path d="M5 12h14"></path>
-                                <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                        </span>
-                    </a>
+                            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
+                        </svg>
+                        <span className="hidden sm:inline-flex items-center">Explore</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-arrow-right h-3 w-3"
+                            aria-hidden="true"
+                        >
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </span>
                 </div>
                 <div className="mb-6 sm:mb-8">
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-1 sm:mb-3">
-                        <span className="font-medium transition-colors duration-300 text-white">
+                        <span className="font-medium transition-colors duration-300 dark:text-white">
                             Real World Statistics
                         </span>
                     </h1>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight">
-                        <span className="bg-gradient-to-r bg-[200%_auto] bg-clip-text leading-tight text-transparent transition-all duration-300 from-neutral-100 via-slate-400 to-neutral-400">
+                        <span className="bg-gradient-to-r bg-[200%_auto] bg-clip-text leading-tight text-transparent transition-all duration-300 dark:from-neutral-100 dark:via-slate-400 dark:to-neutral-400 from-neutral-400 via-slate-600 to-neutral-400">
                             At your fingertips
                         </span>
                     </h2>
                 </div>
-                <p className="text-sm md:text-lg mb-6 sm:mb-8 max-w-lg mx-auto leading-relaxed transition-colors duration-300 px-4 sm:px-0 text-gray-200">
+                <p className="text-sm md:text-lg mb-6 sm:mb-8 max-w-lg mx-auto leading-relaxed transition-colors duration-300 px-4 sm:px-0 dark:text-gray-200">
                     Professional-Grade Insights & Global Trends - Made Clear.
                     <span className="block">
                         Make Smarter Investment and Research Decisions with Clarity and Confidence.
@@ -141,7 +141,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
                     <button
                         data-slot="button"
-                        className="inline-flex items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md has-[&gt;svg]:px-4 cursor-pointer gap-2 px-4 sm:px-8 py-3 text-sm sm:text-base font-medium shadow-lg transition-all duration-300 flex-1 sm:flex-none bg-white text-black hover:bg-gray-100"
+                        className="inline-flex items-center justify-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md has-[&gt;svg]:px-4 cursor-pointer gap-2 px-4 sm:px-8 py-3 text-sm sm:text-base font-medium shadow-lg transition-all duration-300 flex-1 sm:flex-none dark:bg-white dark:text-black dark:hover:bg-gray-100"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -185,28 +185,28 @@ export default function Home() {
                         Browse Statistics
                     </button>
                 </div>
-                <div className="flex items-center justify-center gap-6 sm:gap-8 md:gap-12 mt-12 sm:mt-16 md:mt-18 pt-6 sm:pt-8 border-t transition-all duration-300 border-white/20">
+                <div className="flex items-center justify-center gap-6 sm:gap-8 md:gap-12 mt-12 sm:mt-16 md:mt-18 pt-6 sm:pt-8 border-t transition-all duration-300 dark:border-white/20">
                     <div className="text-center">
-                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 text-white">
+                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 dark:text-white">
                             100+
                         </div>
-                        <div className="text-xs sm:text-sm transition-colors duration-300 text-gray-300">
+                        <div className="text-xs sm:text-sm transition-colors duration-300 dark:text-gray-300">
                             Countries
                         </div>
                     </div>
                     <div className="text-center">
-                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 text-white">
+                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 dark:text-white">
                             100%
                         </div>
-                        <div className="text-xs sm:text-sm transition-colors duration-300 text-gray-300">
+                        <div className="text-xs sm:text-sm transition-colors duration-300 dark:text-gray-300">
                             Human Curated
                         </div>
                     </div>
                     <div className="text-center">
-                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 text-white">
+                        <div className="text-xl sm:text-2xl font-bold transition-colors duration-300 dark:text-white">
                             Real
                         </div>
-                        <div className="text-xs sm:text-sm transition-colors duration-300 text-gray-300">
+                        <div className="text-xs sm:text-sm transition-colors duration-300 dark:text-gray-300">
                             Data
                         </div>
                     </div>
