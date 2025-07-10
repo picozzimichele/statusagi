@@ -15,7 +15,6 @@ import Link from "next/link";
 import WorldMapInteractive from "@/components/maps/WorldMapInteractive";
 import PageTitle from "@/components/title/PageTitle";
 import { getDataById } from "@/lib/actions/data.actions";
-import { transformDocToArray } from "@/utils/utilsFunctions";
 import ChartLoading from "@/components/loading/ChartLoading";
 import ChartBarPage from "@/components/pages/ChartBarPage";
 
